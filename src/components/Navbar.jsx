@@ -65,7 +65,9 @@ const Navbar = () => {
                         ))}
                     </ol>
                     <motion.a
-                        href="/resume.pdf"
+                        href="/Hetav_Shah_GN_Dec_2025.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.5 }}
@@ -105,8 +107,11 @@ const Navbar = () => {
                         ))}
                         <li>
                             <a
-                                href="/resume.pdf"
-                                className="inline-block border border-teal-400 text-teal-400 px-8 py-3 rounded mt-4 hover:bg-teal-400/10"
+                                href="/Hetav_Shah_GN_Dec_2025.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="border border-teal-400 text-teal-400 px-6 py-3 rounded hover:bg-teal-400/10 transition-colors font-mono inline-block"
+                                onClick={() => setIsOpen(false)}
                             >
                                 Resume
                             </a>

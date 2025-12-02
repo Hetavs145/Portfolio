@@ -78,7 +78,9 @@ const Hero = () => {
                         Check out my work!
                     </MagneticButton>
                     <MagneticButton
-                        href="/resume.pdf"
+                        href="/Hetav_Shah_GN_Dec_2025.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="bg-teal-400 text-navy-900 px-8 py-4 rounded border border-teal-400 hover:bg-teal-300 transition-colors font-mono text-sm font-bold inline-block"
                     >
                         Get Resume
