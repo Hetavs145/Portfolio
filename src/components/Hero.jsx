@@ -49,7 +49,10 @@ const Hero = () => {
                     transition={{ duration: 0.5, delay: 0.5 }}
                     className="max-w-xl mb-10"
                 >
-                    <div className="text-slate text-lg leading-relaxed mb-4">
+                    <div
+                        className="text-slate text-lg leading-relaxed mb-4"
+                        style={{ textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 2px 2px 0 #000' }}
+                    >
                         I build <span className="text-teal-400">Full-Stack systems</span>, <span className="text-teal-400">Real-Time apps</span>, and <span className="text-teal-400">Applied ML solutions</span>.
                     </div>
                     <div className="h-8 overflow-hidden relative">
