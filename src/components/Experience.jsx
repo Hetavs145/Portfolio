@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Briefcase } from 'lucide-react';
 
-const ExperienceCard = ({ job, index }) => {
+const ExperienceCard = ({ job, index, isSingle }) => {
     const [ref, inView] = useInView({
         triggerOnce: true,
         threshold: 0.2,
@@ -12,21 +12,25 @@ const ExperienceCard = ({ job, index }) => {
     return (
         <motion.div
             ref={ref}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0, x: isSingle ? 0 : (index % 2 === 0 ? -50 : 50), y: isSingle ? 20 : 0 }}
+            animate={inView ? { opacity: 1, x: 0, y: 0 } : {}}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className={`mb-12 flex justify-between items-center w-full ${index % 2 === 0 ? 'flex-row-reverse' : ''
-                }`}
+            className={`mb-12 flex flex-col md:flex-row items-center w-full 
+                ${isSingle ? 'justify-center' : (index % 2 === 0 ? 'md:flex-row-reverse' : '')}`}
         >
-            <div className="order-1 w-5/12"></div>
-            <div className="z-20 flex items-center order-1 bg-navy-800 shadow-xl w-12 h-12 rounded-full border-2 border-teal-400 justify-center">
+            {!isSingle && <div className="order-1 w-full md:w-5/12 hidden md:block"></div>}
+
+            <div className={`z-20 flex items-center order-1 bg-navy-800 shadow-xl w-12 h-12 rounded-full border-2 border-teal-400 justify-center 
+                ${isSingle ? 'mb-4 md:mb-0 md:mr-6' : 'absolute left-8 md:static transform -translate-x-1/2 md:translate-x-0'}`}>
                 <Briefcase size={20} className="text-teal-400" />
             </div>
-            <div className="order-1 w-5/12 px-6 py-4 bg-navy-800/50 backdrop-blur-sm rounded-lg border border-teal-400/20 shadow-lg hover:border-teal-400/50 transition-colors">
+
+            <div className={`order-1 px-6 py-4 bg-navy-800/50 backdrop-blur-sm rounded-lg border border-teal-400/20 shadow-lg hover:border-teal-400/50 transition-colors
+                ${isSingle ? 'w-full md:w-8/12 text-center md:text-left' : 'w-full md:w-5/12 ml-16 md:ml-0'}`}>
                 <h3 className="mb-1 font-bold text-slate-lighter text-xl">{job.role}</h3>
                 <h4 className="mb-2 font-mono text-teal-400 text-sm">{job.company}</h4>
                 <p className="mb-4 text-sm text-slate-light font-mono">{job.period}</p>
-                <ul className="list-disc list-inside text-slate text-sm space-y-2">
+                <ul className={`list-disc list-inside text-slate text-sm space-y-2 ${isSingle ? 'inline-block text-left' : ''}`}>
                     {job.description.map((desc, i) => (
                         <li key={i}>{desc}</li>
                     ))}
@@ -40,40 +44,19 @@ const Experience = () => {
     const jobs = [
         {
             role: "Full-Stack Developer Intern (Team Lead)",
-            company: "NTS Global Nihon",
+            company: "NTS Global Nihon · Remote",
             period: "Jun 2025 – Aug 2025",
             description: [
-                "Built real-time chat module with Socket.IO, presence sync, and message persistence.",
-                "Implemented role-based authentication, error-handling flows, and Firestore rule security.",
-                "Designed chatbot interaction workflows and integrated inference endpoints for Kaamigo.",
-                "Contributed to UI improvements, onboarding flows, and multi-device app consistency.",
-                "Collaborated on web + mobile integration, Git-based code reviews, and feature ownership."
-            ]
-        },
-        {
-            role: "ML + Full-Stack Intern (Team Lead)",
-            company: "NTS Global Nihon",
-            period: "Jun 2025 – Aug 2025",
-            description: [
-                "Designed inference workflows for a chatbot module (Kaamigo) using structured response pipelines.",
-                "Built secure backend integrations using Firebase Functions & real-time Firestore event triggers.",
-                "Optimized data validation and preprocessing in backend flows to ensure reliable model outputs.",
-                "Collaborated on cross-functional ML + frontend integration for real-time interaction systems."
-            ]
-        },
-        {
-            role: "Software Engineering Intern",
-            company: "NTS Global Nihon",
-            period: "Jun 2025 – Aug 2025",
-            description: [
-                "Rebuilt authentication + onboarding flows using Firebase Auth & structured error handling, improved reliability across platforms.",
-                "Developed real-time chat backend (Socket.IO + Firestore persistence) with online presence tracking & reconnection logic.",
-                "Designed and implemented structured Firestore rules and backend schemas for multi-role app architecture.",
-                "Built chatbot interaction pipelines and integrated inference endpoints for Kaamigo.",
-                "Contributed to multi-team Git workflows, code reviews, and cross-platform integration."
+                "Engineered Firebase-based backend systems including Auth, Firestore rules, and secure session flows.",
+                "Redesigned authentication & onboarding logic, improving stability and reducing login-related issues.",
+                "Developed Kaamigo chatbot modules (RAG based) interaction flows, inference integration, and UI coordination.",
+                "Built real-time chat features with message persistence and user activity sync across devices.",
+                "Contributed to team Git workflows, code reviews, and full-stack development across web + mobile."
             ]
         }
     ];
+
+    const isSingle = jobs.length === 1;
 
     return (
         <section id="experience" className="py-20 relative overflow-hidden">
@@ -90,9 +73,11 @@ const Experience = () => {
                 </motion.div>
 
                 <div className="relative wrap overflow-hidden p-10 h-full">
-                    <div className="border-2-2 absolute border-opacity-20 border-teal-400 h-full border" style={{ left: '50%' }}></div>
+                    {!isSingle && (
+                        <div className="border-2-2 absolute border-opacity-20 border-teal-400 h-full border left-8 md:left-1/2 transform md:-translate-x-1/2"></div>
+                    )}
                     {jobs.map((job, index) => (
-                        <ExperienceCard key={index} job={job} index={index} />
+                        <ExperienceCard key={index} job={job} index={index} isSingle={isSingle} />
                     ))}
                 </div>
             </div>

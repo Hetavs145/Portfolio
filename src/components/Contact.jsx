@@ -21,7 +21,7 @@ const Contact = () => {
 
                     <div className="flex flex-col md:flex-row justify-center items-center gap-6 mb-12">
                         <MagneticButton
-                            href="mailto:hetavs145@gmail.com"
+                            href={`mailto:hetavs145@gmail.com?subject=Let's Connect&body=Hii there,%0D%0A%0D%0AI would like to connect with you.%0D%0A%0D%0AContact No: [Your Phone Number]%0D%0A%0D%0A[Your specific message or inquiry here]`}
                             className="flex items-center space-x-2 border border-teal-400 text-teal-400 px-8 py-4 rounded hover:bg-teal-400/10 transition-colors font-mono inline-block"
                         >
                             <Mail size={20} />

@@ -8,10 +8,15 @@ const RealTimeDemo = () => {
     ]);
     const [input, setInput] = useState('');
     const [isConnected, setIsConnected] = useState(true);
-    const messagesEndRef = useRef(null);
+    const chatContainerRef = useRef(null);
 
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTo({
+                top: chatContainerRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     };
 
     useEffect(() => {
@@ -63,7 +68,7 @@ const RealTimeDemo = () => {
                     </div>
 
                     {/* Chat Messages */}
-                    <div className="h-80 overflow-y-auto p-4 space-y-4 bg-navy-800">
+                    <div ref={chatContainerRef} className="h-80 overflow-y-auto p-4 space-y-4 bg-navy-800">
                         <AnimatePresence>
                             {messages.map((msg) => (
                                 <motion.div
@@ -75,8 +80,8 @@ const RealTimeDemo = () => {
                                 >
                                     <div
                                         className={`max-w-[80%] p-3 rounded-lg text-sm ${msg.sender === 'user'
-                                                ? 'bg-teal-400 text-navy-900 rounded-br-none'
-                                                : 'bg-navy-600 text-slate-lighter rounded-bl-none'
+                                            ? 'bg-teal-400 text-navy-900 rounded-br-none'
+                                            : 'bg-navy-600 text-slate-lighter rounded-bl-none'
                                             }`}
                                     >
                                         {msg.text}
@@ -84,7 +89,6 @@ const RealTimeDemo = () => {
                                 </motion.div>
                             ))}
                         </AnimatePresence>
-                        <div ref={messagesEndRef} />
                     </div>
 
                     {/* Chat Input */}
