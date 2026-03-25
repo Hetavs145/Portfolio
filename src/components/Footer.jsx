@@ -22,7 +22,7 @@ const Footer = () => {
                 Designed & Built by Hetav Shah
             </p>
             <p className="text-xs text-slate-500">
-                &copy; 2025 Hetav Shah. All rights reserved.
+                &copy; 2024–2026 Hetav Shah. All rights reserved.
             </p>
         </footer>
     );
