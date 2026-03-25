@@ -4,9 +4,9 @@ import ProjectCard from './ProjectCard';
 const Projects = () => {
     const projects = [
         {
-            title: 'VaquaH',
-            description: 'Production HVAC/cooling services e-commerce platform with 50+ products, Razorpay checkout, 8 service modules, RAG-powered AI chatbot, voice assistant, and gesture navigation via MediaPipe.',
-            tech: ['React', 'Node.js', 'Express', 'Firebase', 'Razorpay', 'MediaPipe'],
+            title: 'VaquaH Cooling Service',
+            description: 'Full-stack HVAC/Cooling services platform — e-commerce with 50+ products, smart search, coupon system, tiered shipping, wishlist, Razorpay & COD checkout. Includes service booking, AMC plans, appointment tracking, user dashboard, RAG-powered AI chatbot, hands-free voice assistant ("Say VaquaH"), and gesture navigation with virtual cursor, pinch-to-click, and swipe via MediaPipe.',
+            tech: ['React (Vite)', 'Tailwind CSS', 'Node.js', 'Express', 'Firebase', 'Razorpay', 'Google Generative AI', 'MediaPipe', 'Framer Motion'],
             live: 'https://vaquah.in',
             github: 'https://github.com/Hetavs145/VaquaH',
             featured: 'primary',
