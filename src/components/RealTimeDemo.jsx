@@ -4,7 +4,7 @@ import { Send, User, Bot, Loader2 } from 'lucide-react';
 
 const RealTimeDemo = () => {
     const [messages, setMessages] = useState([
-        { id: 1, text: "hey! i'm hetav's portfolio agent. ask me anything about him — skills, projects, experience, whatever.", sender: 'bot' },
+        { id: 1, text: "Hey! I'm Hetav, Ask me anything about my portfolio - skills, projects, experience, whatever.", sender: 'bot' },
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -69,15 +69,14 @@ const RealTimeDemo = () => {
     };
 
     return (
-        <section id="demo" className="py-20 bg-navy-800/50">
+        <section id="demo" className="min-h-screen pt-32 pb-20 bg-navy-800/50 flex items-start justify-center">
             <div className="container mx-auto px-6 md:px-12 lg:px-24">
                 <div className="flex items-center mb-12">
-                    <span className="text-teal-400 font-mono text-xl mr-4">04.</span>
                     <h2 className="text-3xl font-bold text-slate-lighter">Talk to My Agent</h2>
                     <div className="h-px bg-navy-600 flex-grow ml-4"></div>
                 </div>
 
-                <div className="max-w-md mx-auto">
+                <div className="max-w-lg mx-auto">
                     <div className="bg-navy-700 rounded-lg overflow-hidden shadow-xl border border-navy-600">
                         {/* Chat Header */}
                         <div className="bg-navy-900 p-4 flex justify-between items-center border-b border-navy-600">
@@ -92,7 +91,7 @@ const RealTimeDemo = () => {
                         </div>
 
                         {/* Chat Messages */}
-                        <div ref={chatContainerRef} className="h-80 overflow-y-auto p-4 space-y-4 bg-navy-800">
+                        <div ref={chatContainerRef} className="h-[28rem] overflow-y-auto p-4 space-y-4 bg-navy-800">
                             <AnimatePresence>
                                 {messages.map((msg) => (
                                     <motion.div

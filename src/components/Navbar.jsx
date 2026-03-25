@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
+import { Menu, X, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import { useRoute } from '../context/RouteContext';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const { currentPage, setCurrentPage } = useRoute();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -25,14 +27,14 @@ const Navbar = () => {
     return (
         <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass py-4' : 'bg-transparent py-6'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
-                <motion.a
-                    href="#"
+                <motion.button
+                    onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="text-teal-400 font-mono text-xl font-bold"
                 >
                     Hetav
-                </motion.a>
+                </motion.button>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center space-x-8">
@@ -42,12 +44,12 @@ const Navbar = () => {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 0 }}
                         >
-                            <a
-                                href="#hero"
+                            <button
+                                onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); }}
                                 className="text-slate-light hover:text-teal-400 font-mono text-sm transition-colors"
                             >
                                 Home
-                            </a>
+                            </button>
                         </motion.li>
                         {navLinks.map((link, index) => (
                             <motion.li
@@ -58,6 +60,7 @@ const Navbar = () => {
                             >
                                 <a
                                     href={link.href}
+                                    onClick={() => { if (currentPage !== 'home') { setCurrentPage('home'); } }}
                                     className="text-slate-light hover:text-teal-400 font-mono text-sm transition-colors"
                                 >
                                     {link.name}
@@ -65,13 +68,30 @@ const Navbar = () => {
                             </motion.li>
                         ))}
                     </ol>
+                    <motion.button
+                        onClick={() => {
+                            setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
+                            window.scrollTo(0, 0);
+                        }}
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className={`px-4 py-2 rounded font-mono text-sm transition-all duration-300 flex items-center gap-2 ${
+                            currentPage === 'agent'
+                                ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25'
+                                : 'border border-teal-400 text-teal-400 hover:bg-teal-400/10'
+                        }`}
+                    >
+                        <MessageCircle size={14} />
+                        {currentPage === 'agent' ? 'Back Home' : 'Ask Hetav'}
+                    </motion.button>
                     <motion.a
                         href="/Hetav_Shah_Resume.pdf"
                         target="_blank"
                         rel="noopener noreferrer"
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.6 }}
                         className="border border-teal-400 text-teal-400 px-4 py-2 rounded hover:bg-teal-400/10 transition-colors font-mono text-sm"
                     >
                         Resume
@@ -98,7 +118,7 @@ const Navbar = () => {
                             <li key={link.name}>
                                 <a
                                     href={link.href}
-                                    onClick={() => setIsOpen(false)}
+                                    onClick={() => { setCurrentPage('home'); setIsOpen(false); }}
                                     className="text-slate-light hover:text-teal-400 font-mono text-xl block"
                                 >
                                     <span className="text-teal-400 block text-sm mb-2">0{index + 1}.</span>
@@ -106,6 +126,23 @@ const Navbar = () => {
                                 </a>
                             </li>
                         ))}
+                        <li>
+                            <button
+                                onClick={() => {
+                                    setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
+                                    window.scrollTo(0, 0);
+                                    setIsOpen(false);
+                                }}
+                                className={`px-6 py-3 rounded font-mono inline-flex items-center gap-2 transition-all duration-300 ${
+                                    currentPage === 'agent'
+                                        ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25'
+                                        : 'border border-teal-400 text-teal-400 hover:bg-teal-400/10'
+                                }`}
+                            >
+                                <MessageCircle size={16} />
+                                {currentPage === 'agent' ? 'Back Home' : 'Ask Hetav'}
+                            </button>
+                        </li>
                         <li>
                             <a
                                 href="/Hetav_Shah_Resume.pdf"
