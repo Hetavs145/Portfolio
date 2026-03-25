@@ -53,17 +53,18 @@ const Hero = () => {
                         className="text-slate text-lg leading-relaxed mb-4"
                         style={{ textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 2px 2px 0 #000' }}
                     >
-                        I build <span className="text-teal-400">Full-Stack systems</span>, <span className="text-teal-400">Real-Time apps</span>, and <span className="text-teal-400">Applied ML solutions</span>.
+                        I build <span className="text-teal-400">Full-Stack systems</span>, <span className="text-teal-400">Agentic AI pipelines</span>, and <span className="text-teal-400">Real-Time apps</span>.
                     </div>
                     <div className="h-8 overflow-hidden relative">
                         <motion.div
-                            animate={{ y: [0, -32, -64, 0] }}
-                            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", times: [0, 0.33, 0.66, 1] }}
+                            animate={{ y: [0, -32, -64, -96, 0] }}
+                            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", times: [0, 0.25, 0.5, 0.75, 1] }}
                             className="text-xl text-slate-light font-mono"
                         >
                             <div className="h-8 flex items-center">Full-Stack Developer</div>
-                            <div className="h-8 flex items-center">Applied ML Engineer</div>
+                            <div className="h-8 flex items-center">Agentic AI Engineer</div>
                             <div className="h-8 flex items-center">Real-Time Systems</div>
+                            <div className="h-8 flex items-center">Hackathon Winner</div>
                         </motion.div>
                     </div>
                 </motion.div>
@@ -81,7 +82,7 @@ const Hero = () => {
                         Check out my work!
                     </MagneticButton>
                     <MagneticButton
-                        href="/Hetav_Shah_GN_Dec_2025.pdf"
+                        href="/Hetav_Shah_Resume.pdf"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-teal-400 text-navy-900 px-8 py-4 rounded border border-teal-400 hover:bg-teal-300 transition-colors font-mono text-sm font-bold inline-block"

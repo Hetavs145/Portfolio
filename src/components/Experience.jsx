@@ -43,15 +43,13 @@ const ExperienceCard = ({ job, index, isSingle }) => {
 const Experience = () => {
     const jobs = [
         {
-            role: "Full-Stack Developer Intern (Team Lead)",
+            role: "Full-Stack Developer Intern – Team Lead",
             company: "NTS Global Nihon · Remote",
             period: "Jun 2025 – Aug 2025",
             description: [
-                "Engineered Firebase-based backend systems including Auth, Firestore rules, and secure session flows.",
-                "Redesigned authentication & onboarding logic, improving stability and reducing login-related issues.",
-                "Developed Kaamigo chatbot modules (RAG based) interaction flows, inference integration, and UI coordination.",
-                "Built real-time chat features with message persistence and user activity sync across devices.",
-                "Contributed to team Git workflows, code reviews, and full-stack development across web + mobile."
+                "Engineered 3 Firebase backend modules — Authentication, Firestore rules, and session management — across 2 production environments.",
+                "Developed 5 Kaamigo chatbot modules using RAG-based approach with 50+ interaction flows, inference integration, and UI coordination.",
+                "Shipped real-time chat supporting 3 platforms with message persistence and cross-device sync; reviewed 20+ pull requests via Git workflows."
             ]
         }
     ];

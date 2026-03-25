@@ -5,17 +5,43 @@ const Projects = () => {
     const projects = [
         {
             title: 'VaquaH',
-            description: 'Full-Stack AC Services Platform. A comprehensive platform for booking and managing AC services.',
-            tech: ['React', 'Node.js', 'Express', 'MongoDB'],
+            description: 'Production HVAC/cooling services e-commerce platform with 50+ products, Razorpay checkout, 8 service modules, RAG-powered AI chatbot, voice assistant, and gesture navigation via MediaPipe.',
+            tech: ['React', 'Node.js', 'Express', 'Firebase', 'Razorpay', 'MediaPipe'],
             live: 'https://vaquah.in',
             github: 'https://github.com/Hetavs145/VaquaH',
+            featured: 'primary',
+        },
+        {
+            title: 'TrafficMind',
+            description: '6-agent LangGraph multi-agent system for traffic incident command. Parallel fan-out/fan-in orchestration, 250-segment live road network, sub-0.34s response, Digital Twin view, DBSCAN hotspot prediction, and voice chat.',
+            tech: ['LangGraph', 'FastAPI', 'Next.js', 'Groq', 'Gemini', 'WebSocket'],
+            live: null,
+            github: 'https://github.com/Hetavs145/TrafficMind',
+            featured: 'secondary',
+        },
+        {
+            title: 'YouTube Upload Automation',
+            description: 'n8n agentic workflow automating daily YouTube uploads from Google Drive. 90% reduced manual time with LLM-based metadata auto-generation and 100% field compliance.',
+            tech: ['n8n', 'Google Drive API', 'Google Sheets API', 'LLM'],
+            live: null,
+            github: 'https://github.com/Hetavs145/YouTube-Upload-Agent',
+            featured: null,
+        },
+        {
+            title: 'Sign2Text',
+            description: 'Real-time ASL gesture-to-text recognition using MediaPipe hand landmarks and CNN-LSTM sequence model for 26 gestures with smoothing and windowing.',
+            tech: ['Python', 'MediaPipe', 'CNN-LSTM', 'TensorFlow'],
+            live: null,
+            github: 'https://github.com/Hetavs145/Sign2Text',
+            featured: null,
         },
         {
             title: 'Hetchat',
-            description: 'Real-Time Chat App. Features real-time messaging, presence, and reconnection logic.',
+            description: 'Real-Time Chat App with live messaging, presence indicators, and reconnection logic.',
             tech: ['React', 'Socket.IO', 'Node.js'],
             live: null,
             github: 'https://github.com/Hetavs145/Hetchat',
+            featured: null,
         },
         {
             title: 'Drone Path-Finder',
@@ -23,6 +49,7 @@ const Projects = () => {
             tech: ['Python', 'Algorithms', 'Simulation'],
             live: null,
             github: 'https://github.com/Hetavs145/Smart-Delivery-Drone-Path-Finder',
+            featured: null,
         },
         {
             title: 'Spam Detector',
@@ -30,13 +57,7 @@ const Projects = () => {
             tech: ['Python', 'Scikit-learn', 'ML'],
             live: null,
             github: 'https://github.com/Hetavs145/Spam-Email-Detector',
-        },
-        {
-            title: 'Sign2Text',
-            description: 'Gesture Recognition System converting sign language to text.',
-            tech: ['Python', 'OpenCV', 'TensorFlow'],
-            live: null,
-            github: 'https://github.com/Hetavs145/Sign2Text',
+            featured: null,
         },
         {
             title: 'Phishing Detector',
@@ -44,6 +65,7 @@ const Projects = () => {
             tech: ['Python', 'ML', 'Cybersecurity'],
             live: null,
             github: 'https://github.com/Hetavs145/Phishing-detector',
+            featured: null,
         },
         {
             title: 'Kernel Scribe',
@@ -51,6 +73,7 @@ const Projects = () => {
             tech: ['C', 'OS', 'Kernel'],
             live: null,
             github: 'https://github.com/Hetavs145/kernel-scribe-sim',
+            featured: null,
         },
         {
             title: 'Harzino Blog',
@@ -58,6 +81,7 @@ const Projects = () => {
             tech: ['React', 'Gatsby', 'Animation'],
             live: 'https://harzino.com',
             github: null,
+            featured: null,
         },
     ];
 
@@ -65,7 +89,7 @@ const Projects = () => {
         <section id="work" className="py-20">
             <div className="container mx-auto px-6 md:px-12 lg:px-24">
                 <div className="flex items-center mb-12">
-                    <span className="text-teal-400 font-mono text-xl mr-4">02.</span>
+                    <span className="text-teal-400 font-mono text-xl mr-4">03.</span>
                     <h2 className="text-3xl font-bold text-slate-lighter">Some Things I've Built</h2>
                     <div className="h-px bg-navy-600 flex-grow ml-4"></div>
                 </div>

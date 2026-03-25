@@ -11,13 +11,15 @@ const About = () => {
     const { setCursor, resetCursor } = useCursor();
 
     const skills = [
-        "JavaScript (ES6+)",
-        "React",
-        "Node.js",
+        "JavaScript / TypeScript",
         "Python",
-        "TensorFlow",
-        "Three.js",
-        "Tailwind CSS",
+        "React / Next.js",
+        "Node.js / FastAPI",
+        "LangGraph / LangChain",
+        "Groq / Gemini (LLMs)",
+        "TensorFlow / PyTorch",
+        "Firebase",
+        "Docker",
         "Git"
     ];
 
@@ -38,13 +40,13 @@ const About = () => {
                         </div>
 
                         <p className="text-slate mb-4">
-                            I build things that talk, react, adapt — and stay real-time.
+                            Full-stack developer and agentic AI engineer.
                         </p>
                         <p className="text-slate mb-4">
-                            From Firebase-backed systems to ML-driven gestures, from drone pathfinding to chat infrastructure, I love turning ideas into interactive, reliable software. I’ve worked on authentication pipelines, chatbot modules, and socket-powered communication systems, blending engineering with creativity.
+                            I build multi-agent LLM pipelines with LangGraph, production platforms with React & Node.js, and real-time systems that think fast and respond faster. From a 6-agent traffic command system to a full HVAC e-commerce platform — I love shipping things that actually work.
                         </p>
                         <p className="text-slate mb-8">
-                            If it’s a system that needs to think fast and respond faster — I’m in.
+                            Hackathon winner. Strong in cross-functional teams. Always building.
                         </p>
                         <p className="text-slate mb-8">
                             Here are a few technologies I've been working with recently:

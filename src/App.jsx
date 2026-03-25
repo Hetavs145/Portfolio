@@ -9,6 +9,7 @@ import Projects from './components/Projects';
 import RealTimeDemo from './components/RealTimeDemo';
 import Contact from './components/Contact';
 import Experience from './components/Experience';
+import Achievements from './components/Achievements';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Hero />
                     <About />
                     <Experience />
+                    <Achievements />
                     <Projects />
                     <RealTimeDemo />
                     <Contact />

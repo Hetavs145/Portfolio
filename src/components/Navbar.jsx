@@ -17,6 +17,7 @@ const Navbar = () => {
     const navLinks = [
         { name: 'About', href: '#about' },
         { name: 'Experience', href: '#experience' },
+        { name: 'Achievements', href: '#achievements' },
         { name: 'Work', href: '#work' },
         { name: 'Contact', href: '#contact' },
     ];
@@ -65,7 +66,7 @@ const Navbar = () => {
                         ))}
                     </ol>
                     <motion.a
-                        href="/Hetav_Shah_GN_Dec_2025.pdf"
+                        href="/Hetav_Shah_Resume.pdf"
                         target="_blank"
                         rel="noopener noreferrer"
                         initial={{ y: -20, opacity: 0 }}
@@ -107,7 +108,7 @@ const Navbar = () => {
                         ))}
                         <li>
                             <a
-                                href="/Hetav_Shah_GN_Dec_2025.pdf"
+                                href="/Hetav_Shah_Resume.pdf"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="border border-teal-400 text-teal-400 px-6 py-3 rounded hover:bg-teal-400/10 transition-colors font-mono inline-block"

@@ -29,7 +29,7 @@ const ResumeAura = () => {
         window.addEventListener('mousemove', handleMouseMove);
 
         // Resume keywords pool
-        const defaultKeywords = ['Full-Stack', 'ML', 'Real-Time', 'React', 'Node.js', 'Python'];
+        const defaultKeywords = ['Full-Stack', 'Agentic', 'LangGraph', 'Real-Time', 'React', 'Node.js', 'Python', 'LLMs'];
 
         const createParticle = (x, y, text) => {
             const angle = Math.random() * Math.PI * 2;
