@@ -42,7 +42,8 @@ const RealTimeDemo = () => {
             }));
 
         try {
-            const response = await fetch('/api/chat', {
+            const apiBase = import.meta.env.VITE_AGENT_API_URL || '';
+            const response = await fetch(`${apiBase}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ messages: conversationHistory }),
