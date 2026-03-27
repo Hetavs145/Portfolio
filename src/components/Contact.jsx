@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Github, Linkedin, Instagram } from 'lucide-react';
+import { Mail, Phone, Github, Linkedin, Instagram, Youtube } from 'lucide-react';
 import MagneticButton from './MagneticButton';
 
 const Contact = () => {
@@ -38,7 +38,7 @@ const Contact = () => {
 
                     <div className="flex justify-center space-x-8">
                         <a
-                            href="https://github.com/hetavshah"
+                            href="https://github.com/Hetavs145"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-slate-light hover:text-teal-400 hover:-translate-y-1 transition-all"
@@ -46,7 +46,7 @@ const Contact = () => {
                             <Github size={30} />
                         </a>
                         <a
-                            href="https://linkedin.com/in/hetav-shah-26601722b"
+                            href="https://www.linkedin.com/in/hetav-shah-26601722b/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-slate-light hover:text-teal-400 hover:-translate-y-1 transition-all"
@@ -60,6 +60,14 @@ const Contact = () => {
                             className="text-slate-light hover:text-teal-400 hover:-translate-y-1 transition-all"
                         >
                             <Instagram size={30} />
+                        </a>
+                        <a
+                            href="https://www.youtube.com/@NeuroStucks"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-slate-light hover:text-teal-400 hover:-translate-y-1 transition-all"
+                        >
+                            <Youtube size={30} />
                         </a>
                     </div>
                 </motion.div>

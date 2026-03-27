@@ -69,29 +69,29 @@ const RealTimeDemo = () => {
     };
 
     return (
-        <section id="demo" className="min-h-screen pt-32 pb-20 bg-navy-800/50 flex items-start justify-center">
-            <div className="container mx-auto px-6 md:px-12 lg:px-24">
-                <div className="flex items-center mb-12">
-                    <h2 className="text-3xl font-bold text-slate-lighter">Talk to My Agent</h2>
+        <section id="demo" className="min-h-screen pt-24 md:pt-32 pb-10 md:pb-20 bg-navy-800/50 flex items-start justify-center">
+            <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
+                <div className="flex items-center mb-8 md:mb-12">
+                    <h2 className="text-2xl md:text-3xl font-bold text-slate-lighter">Talk to My Agent</h2>
                     <div className="h-px bg-navy-600 flex-grow ml-4"></div>
                 </div>
 
                 <div className="max-w-lg mx-auto">
                     <div className="bg-navy-700 rounded-lg overflow-hidden shadow-xl border border-navy-600">
                         {/* Chat Header */}
-                        <div className="bg-navy-900 p-4 flex justify-between items-center border-b border-navy-600">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-3 h-3 rounded-full bg-teal-400 animate-pulse"></div>
-                                <h3 className="text-slate-lighter font-bold">Hetav's Agent</h3>
+                        <div className="bg-navy-900 p-3 md:p-4 flex justify-between items-center border-b border-navy-600">
+                            <div className="flex items-center space-x-2 md:space-x-3">
+                                <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-teal-400 animate-pulse"></div>
+                                <h3 className="text-slate-lighter font-bold text-sm md:text-base">Hetav's Agent</h3>
                             </div>
                             <div className="flex items-center space-x-2 text-xs text-slate-light font-mono">
                                 <Bot size={14} className="text-teal-400" />
-                                <span>RAG Agent</span>
+                                <span className="hidden sm:inline">RAG Agent</span>
                             </div>
                         </div>
 
                         {/* Chat Messages */}
-                        <div ref={chatContainerRef} className="h-[28rem] overflow-y-auto p-4 space-y-4 bg-navy-800">
+                        <div ref={chatContainerRef} className="h-[calc(100vh-16rem)] sm:h-[calc(100vh-18rem)] md:h-[28rem] overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800">
                             <AnimatePresence>
                                 {messages.map((msg) => (
                                     <motion.div
@@ -142,14 +142,14 @@ const RealTimeDemo = () => {
                         </div>
 
                         {/* Chat Input */}
-                        <form onSubmit={handleSend} className="p-4 bg-navy-900 border-t border-navy-600 flex space-x-2">
+                        <form onSubmit={handleSend} className="p-3 md:p-4 bg-navy-900 border-t border-navy-600 flex space-x-2">
                             <input
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder="Ask about Hetav..."
                                 disabled={isTyping}
-                                className="flex-1 bg-navy-800 text-slate-lighter px-4 py-2 rounded focus:outline-none focus:ring-1 focus:ring-teal-400 disabled:opacity-50"
+                                className="flex-1 bg-navy-800 text-slate-lighter px-3 md:px-4 py-2 rounded text-sm md:text-base focus:outline-none focus:ring-1 focus:ring-teal-400 disabled:opacity-50"
                             />
                             <button
                                 type="submit"

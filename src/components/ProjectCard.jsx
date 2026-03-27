@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, ExternalLink, Folder, Star, Zap } from 'lucide-react';
+import { Github, ExternalLink, Folder, Star, Zap, Youtube } from 'lucide-react';
 import { useCursor } from '../context/CursorContext';
 
 const ProjectCard = ({ project, index }) => {
@@ -56,6 +56,11 @@ const ProjectCard = ({ project, index }) => {
                     {project.github && (
                         <a href={project.github} target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors">
                             <Github size={20} />
+                        </a>
+                    )}
+                    {project.youtube && (
+                        <a href={project.youtube} target="_blank" rel="noopener noreferrer" className="hover:text-red-400 transition-colors">
+                            <Youtube size={20} />
                         </a>
                     )}
                     {project.live && (

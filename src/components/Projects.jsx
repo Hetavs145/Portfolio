@@ -9,6 +9,7 @@ const Projects = () => {
             tech: ['React (Vite)', 'Tailwind CSS', 'Node.js', 'Express', 'Firebase', 'Razorpay', 'Google Generative AI', 'MediaPipe', 'Framer Motion'],
             live: 'https://vaquah.in',
             github: 'https://github.com/Hetavs145/VaquaH',
+            youtube: 'https://www.youtube.com/@NeuroStucks',
             featured: 'primary',
         },
         {

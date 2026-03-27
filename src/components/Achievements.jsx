@@ -91,7 +91,7 @@ const Achievements = () => {
                     className="flex items-center mb-12"
                 >
                     <span className="text-teal-400 font-mono text-xl mr-4">02.</span>
-                    <h2 className="text-3xl font-bold text-slate-lighter">Achievements</h2>
+                    <h2 className="text-3xl font-bold text-slate-lighter">Achievements & Credentials</h2>
                     <div className="h-px bg-navy-600 flex-grow ml-4"></div>
                 </motion.div>
 

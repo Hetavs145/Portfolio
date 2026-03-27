@@ -19,19 +19,19 @@ const Navbar = () => {
     const navLinks = [
         { name: 'About', href: '#about' },
         { name: 'Experience', href: '#experience' },
-        { name: 'Achievements', href: '#achievements' },
+        { name: 'Credentials', href: '#achievements' },
         { name: 'Work', href: '#work' },
         { name: 'Contact', href: '#contact' },
     ];
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass py-4' : 'bg-transparent py-6'}`}>
-            <div className="container mx-auto px-6 flex justify-between items-center">
+        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass py-3 md:py-4' : 'bg-transparent py-4 md:py-6'}`}>
+            <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
                 <motion.button
                     onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-teal-400 font-mono text-xl font-bold"
+                    className="text-teal-400 font-mono text-lg md:text-xl font-bold"
                 >
                     Hetav
                 </motion.button>
@@ -98,10 +98,27 @@ const Navbar = () => {
                     </motion.a>
                 </div>
 
-                {/* Mobile Menu Button */}
-                <div className="md:hidden">
+                {/* Mobile: Ask Hetav icon + Hamburger */}
+                <div className="flex md:hidden items-center gap-3">
+                    <motion.button
+                        onClick={() => {
+                            setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
+                            window.scrollTo(0, 0);
+                            setIsOpen(false);
+                        }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className={`p-2 rounded-lg transition-all duration-300 ${
+                            currentPage === 'agent'
+                                ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25'
+                                : 'border border-teal-400 text-teal-400'
+                        }`}
+                        aria-label="Ask Hetav"
+                    >
+                        <MessageCircle size={20} />
+                    </motion.button>
                     <button onClick={() => setIsOpen(!isOpen)} className="text-teal-400">
-                        {isOpen ? <X size={30} /> : <Menu size={30} />}
+                        {isOpen ? <X size={28} /> : <Menu size={28} />}
                     </button>
                 </div>
             </div>
@@ -113,42 +130,40 @@ const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="fixed inset-0 bg-navy-900/95 backdrop-blur-lg flex flex-col items-center justify-center z-40 md:hidden"
                 >
-                    <ul className="space-y-8 text-center">
+                    <button
+                        onClick={() => setIsOpen(false)}
+                        className="absolute top-5 right-5 text-teal-400"
+                    >
+                        <X size={28} />
+                    </button>
+                    <ul className="space-y-6 text-center w-full px-8">
+                        <li>
+                            <button
+                                onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); setIsOpen(false); }}
+                                className="text-slate-light hover:text-teal-400 font-mono text-lg block w-full"
+                            >
+                                <span className="text-teal-400 block text-xs mb-1 font-mono">00.</span>
+                                Home
+                            </button>
+                        </li>
                         {navLinks.map((link, index) => (
                             <li key={link.name}>
                                 <a
                                     href={link.href}
                                     onClick={() => { setCurrentPage('home'); setIsOpen(false); }}
-                                    className="text-slate-light hover:text-teal-400 font-mono text-xl block"
+                                    className="text-slate-light hover:text-teal-400 font-mono text-lg block"
                                 >
-                                    <span className="text-teal-400 block text-sm mb-2">0{index + 1}.</span>
+                                    <span className="text-teal-400 block text-xs mb-1 font-mono">0{index + 1}.</span>
                                     {link.name}
                                 </a>
                             </li>
                         ))}
-                        <li>
-                            <button
-                                onClick={() => {
-                                    setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
-                                    window.scrollTo(0, 0);
-                                    setIsOpen(false);
-                                }}
-                                className={`px-6 py-3 rounded font-mono inline-flex items-center gap-2 transition-all duration-300 ${
-                                    currentPage === 'agent'
-                                        ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25'
-                                        : 'border border-teal-400 text-teal-400 hover:bg-teal-400/10'
-                                }`}
-                            >
-                                <MessageCircle size={16} />
-                                {currentPage === 'agent' ? 'Back Home' : 'Ask Hetav'}
-                            </button>
-                        </li>
-                        <li>
+                        <li className="pt-4">
                             <a
                                 href="/Hetav_Shah_Resume.pdf"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="border border-teal-400 text-teal-400 px-6 py-3 rounded hover:bg-teal-400/10 transition-colors font-mono inline-block"
+                                className="border border-teal-400 text-teal-400 px-6 py-3 rounded hover:bg-teal-400/10 transition-colors font-mono inline-block text-sm"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Resume
