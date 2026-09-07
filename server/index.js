@@ -71,7 +71,7 @@ app.post('/api/chat', async (req, res) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: 'qwen/qwen3.8-27b',
+                model: 'meta-llama/llama-prompt-guard-2-86m',
                 messages: groqMessages,
                 max_tokens: 120,
                 temperature: 0.75,
