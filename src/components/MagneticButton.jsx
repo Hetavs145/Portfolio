@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-const MagneticButton = ({ children, className, onClick, href }) => {
+const MagneticButton = ({ children, className, onClick, href, ...rest }) => {
     const ref = useRef(null);
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
     const handleMouse = (e) => {
+        if (!ref.current) return;
         const { clientX, clientY } = e;
         const { height, width, left, top } = ref.current.getBoundingClientRect();
         const middleX = clientX - (left + width / 2);
@@ -27,6 +28,9 @@ const MagneticButton = ({ children, className, onClick, href }) => {
             href={href}
             onClick={onClick}
             className={className}
+            // Forward everything else. Without this, `target`/`rel` passed by
+            // callers were silently dropped, so links never opened in a new tab.
+            {...rest}
             onMouseMove={handleMouse}
             onMouseLeave={reset}
             animate={{ x, y }}

@@ -7,7 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "parse:resumes": "node server/scripts/parse-resumes.js",
+    "build:index": "node --env-file=.env server/scripts/build-index.js",
+    "refresh:linkedin": "node --env-file=.env server/scripts/refresh-linkedin.js",
+    "check:links": "node server/scripts/check-links.js",
+    "server": "node --env-file=.env server/index.js",
+    "verify:codec": "node --env-file=.env server/scripts/verify-codec.js",
+    "verify:render": "node server/scripts/verify-render.js"
   },
   "dependencies": {
     "@react-three/drei": "^9.88.0",
@@ -31,6 +38,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
+    "playwright": "^1.63.0",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5",
     "vite": "^5.0.0"

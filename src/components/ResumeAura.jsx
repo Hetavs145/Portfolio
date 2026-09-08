@@ -1,21 +1,53 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useCursor } from '../context/CursorContext';
+import { cursorKeywords } from '../data/profile';
 
+/**
+ * Custom canvas cursor. Renders ONLY on devices with a real pointer.
+ *
+ * On touch devices there is no mousemove, so `mouse` never updated and the eye
+ * sat parked at screen centre spraying keyword particles over the content
+ * forever, at z-50, with rAF running non-stop. Now it simply doesn't mount.
+ */
 const ResumeAura = () => {
     const canvasRef = useRef(null);
     const { cursorState } = useCursor();
-    const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    const mouse = useRef({ x: 0, y: 0 });
+
+    // Keep the latest cursorState in a ref. Reading it through the effect's dep
+    // array tore down and rebuilt the whole animation loop on every hover.
+    const stateRef = useRef(cursorState);
+    stateRef.current = cursorState;
+
+    const [hasFinePointer, setHasFinePointer] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(pointer: fine)');
+        const apply = () => setHasFinePointer(mq.matches);
+        apply();
+        mq.addEventListener('change', apply);
+        return () => mq.removeEventListener('change', apply);
+    }, []);
     const particles = useRef([]);
     const eye = useRef({ angle: 0, scale: 1 });
 
     useEffect(() => {
+        if (!hasFinePointer) return undefined;
+
         const canvas = canvasRef.current;
+        if (!canvas) return undefined;
         const ctx = canvas.getContext('2d');
         let animationFrameId;
 
+        // Size the bitmap to devicePixelRatio, or the cursor is blurry on any
+        // 2x/3x display. clientWidth excludes the scrollbar; innerWidth does not.
         const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const dpr = window.devicePixelRatio || 1;
+            const w = document.documentElement.clientWidth;
+            const h = window.innerHeight;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         };
 
         window.addEventListener('resize', resizeCanvas);
@@ -28,8 +60,6 @@ const ResumeAura = () => {
 
         window.addEventListener('mousemove', handleMouseMove);
 
-        // Resume keywords pool
-        const defaultKeywords = ['Full-Stack', 'Agentic', 'LangGraph', 'Real-Time', 'React', 'Node.js', 'Python', 'LLMs'];
 
         const createParticle = (x, y, text) => {
             const angle = Math.random() * Math.PI * 2;
@@ -47,7 +77,7 @@ const ResumeAura = () => {
         };
 
         const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // cleared in device px before transform applies
 
             // Update Eye
             const dx = mouse.current.x - canvas.width / 2;
@@ -85,10 +115,11 @@ const ResumeAura = () => {
             // Spawn Particles based on state
             if (Math.random() < 0.1) {
                 let text = '';
-                if (cursorState.keywords.length > 0) {
-                    text = cursorState.keywords[Math.floor(Math.random() * cursorState.keywords.length)];
+                if (stateRef.current.keywords.length > 0) {
+                    const kw = stateRef.current.keywords;
+                    text = kw[Math.floor(Math.random() * kw.length)];
                 } else {
-                    text = defaultKeywords[Math.floor(Math.random() * defaultKeywords.length)];
+                    text = cursorKeywords[Math.floor(Math.random() * cursorKeywords.length)];
                 }
                 particles.current.push(createParticle(mouse.current.x, mouse.current.y, text));
             }
@@ -121,11 +152,14 @@ const ResumeAura = () => {
             window.removeEventListener('mousemove', handleMouseMove);
             cancelAnimationFrame(animationFrameId);
         };
-    }, [cursorState]);
+    }, [hasFinePointer]);
+
+    if (!hasFinePointer) return null;
 
     return (
         <canvas
             ref={canvasRef}
+            aria-hidden="true"
             className="fixed top-0 left-0 w-full h-full pointer-events-none z-50 mix-blend-screen"
         />
     );

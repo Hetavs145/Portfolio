@@ -2,10 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Background3D from './Background3D';
 import MagneticButton from './MagneticButton';
+import ResumeDropdown from './ResumeDropdown';
+import { roles } from '../data/profile';
 
 const Hero = () => {
     return (
-        <section id="hero" className="relative h-screen flex items-center justify-center overflow-hidden">
+        <section id="hero" className="relative min-h-[100svh] flex items-center justify-center overflow-hidden py-24">
             <Background3D />
 
             <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-24">
@@ -23,7 +25,7 @@ const Hero = () => {
                     transition={{ duration: 0.5, delay: 0.3 }}
                 >
                     <h2
-                        className="text-5xl md:text-7xl font-bold text-slate-lighter mb-4 tracking-tight glitch-effect"
+                        className="text-4xl sm:text-5xl md:text-7xl font-bold text-slate-lighter mb-4 tracking-tight glitch-effect"
                         data-text="Hetav Shah."
                     >
                         Hetav Shah.
@@ -56,15 +58,22 @@ const Hero = () => {
                         I build <span className="text-teal-400">Full-Stack systems</span>, <span className="text-teal-400">Agentic AI pipelines</span>, and <span className="text-teal-400">Real-Time apps</span>.
                     </div>
                     <div className="h-8 overflow-hidden relative">
+                        {/* Keyframes are derived from `roles`, so adding a role to
+                            src/data/profile.js is the only edit needed. Each item is
+                            32px tall (h-8); the trailing 0 returns to the first. */}
                         <motion.div
-                            animate={{ y: [0, -32, -64, -96, 0] }}
-                            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", times: [0, 0.25, 0.5, 0.75, 1] }}
-                            className="text-xl text-slate-light font-mono"
+                            animate={{ y: [...roles.map((_, i) => -32 * i), 0] }}
+                            transition={{
+                                duration: roles.length * 2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                times: roles.map((_, i) => i / roles.length).concat(1),
+                            }}
+                            className="text-lg sm:text-xl text-slate-light font-mono"
                         >
-                            <div className="h-8 flex items-center">Full-Stack Developer</div>
-                            <div className="h-8 flex items-center">Agentic AI Engineer</div>
-                            <div className="h-8 flex items-center">Real-Time Systems</div>
-                            <div className="h-8 flex items-center">Hackathon Winner</div>
+                            {roles.map((role) => (
+                                <div key={role} className="h-8 flex items-center">{role}</div>
+                            ))}
                         </motion.div>
                     </div>
                 </motion.div>
@@ -73,22 +82,15 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.6 }}
-                    className="flex space-x-6"
+                    className="flex flex-col sm:flex-row gap-4 sm:gap-6"
                 >
                     <MagneticButton
                         href="#work"
-                        className="border border-teal-400 text-teal-400 px-8 py-4 rounded hover:bg-teal-400/10 transition-colors font-mono text-sm inline-block"
+                        className="border border-teal-400 text-teal-400 px-8 py-4 rounded hover:bg-teal-400/10 transition-colors font-mono text-sm inline-block text-center w-full sm:w-auto"
                     >
                         Check out my work!
                     </MagneticButton>
-                    <MagneticButton
-                        href="/Hetav_Shah_Resume.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-teal-400 text-navy-900 px-8 py-4 rounded border border-teal-400 hover:bg-teal-300 transition-colors font-mono text-sm font-bold inline-block"
-                    >
-                        Get Resume
-                    </MagneticButton>
+                    <ResumeDropdown />
                 </motion.div>
             </div>
         </section>

@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import ResumeDropdown from './ResumeDropdown';
 import { useRoute } from '../context/RouteContext';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+
+    // Lock body scroll while the full-screen menu is open, or the page scrolls
+    // behind the overlay.
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        const previous = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = previous;
+        };
+    }, [isOpen]);
     const [scrolled, setScrolled] = useState(false);
     const { currentPage, setCurrentPage } = useRoute();
 
@@ -85,17 +97,13 @@ const Navbar = () => {
                         <MessageCircle size={14} />
                         {currentPage === 'agent' ? 'Back Home' : 'Ask Hetav'}
                     </motion.button>
-                    <motion.a
-                        href="/Hetav_Shah_Resume.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <motion.div
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6 }}
-                        className="border border-teal-400 text-teal-400 px-4 py-2 rounded hover:bg-teal-400/10 transition-colors font-mono text-sm"
                     >
-                        Resume
-                    </motion.a>
+                        <ResumeDropdown variant="nav" />
+                    </motion.div>
                 </div>
 
                 {/* Mobile: Ask Hetav icon + Hamburger */}
@@ -126,16 +134,12 @@ const Navbar = () => {
             {/* Mobile Menu Overlay */}
             {isOpen && (
                 <motion.div
-                    initial={{ opacity: 0, x: 100 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
                     className="fixed inset-0 bg-navy-900/95 backdrop-blur-lg flex flex-col items-center justify-center z-40 md:hidden"
                 >
-                    <button
-                        onClick={() => setIsOpen(false)}
-                        className="absolute top-5 right-5 text-teal-400"
-                    >
-                        <X size={28} />
-                    </button>
                     <ul className="space-y-6 text-center w-full px-8">
                         <li>
                             <button
@@ -159,15 +163,7 @@ const Navbar = () => {
                             </li>
                         ))}
                         <li className="pt-4">
-                            <a
-                                href="/Hetav_Shah_Resume.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="border border-teal-400 text-teal-400 px-6 py-3 rounded hover:bg-teal-400/10 transition-colors font-mono inline-block text-sm"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                Resume
-                            </a>
+                            <ResumeDropdown variant="nav" onNavigate={() => setIsOpen(false)} />
                         </li>
                     </ul>
                 </motion.div>

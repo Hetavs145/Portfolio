@@ -1,0 +1,123 @@
+\documentclass[a4paper,9pt]{extarticle}
+
+\usepackage[top=0.4in,bottom=0.35in,left=0.42in,right=0.42in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{charter}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% section headings: small caps, rule underneath
+\titleformat{\section}
+  {\normalsize\bfseries\uppercase}
+  {}{0em}{}[\vspace{-0.7em}\rule{\textwidth}{0.6pt}]
+\titlespacing{\section}{0pt}{4pt}{2.5pt}
+
+\newcommand{\entry}[2]{%
+  \textbf{#1}\hfill{\small #2}\par\vspace{1pt}}
+\newcommand{\sub}[2]{%
+  {\small\itshape #1}\hfill{\small\itshape #2}\par\vspace{2pt}}
+
+\setlist[itemize]{leftmargin=1.1em, topsep=0.5pt, itemsep=0pt, parsep=0pt, label=\textbullet}
+
+\begin{document}
+
+%======================== HEADER ========================
+\begin{center}
+  {\LARGE\bfseries Hetav Shah}\\[3pt]
+  {\small
+    Gujarat, India \textperiodcentered\
+    \href{mailto:hetavs145@gmail.com}{hetavs145@gmail.com} \textperiodcentered\
+    +91 8200135258 \textperiodcentered\
+    \href{https://github.com/Hetavs145/}{GitHub} \textperiodcentered\
+    \href{https://www.linkedin.com/in/hetav-shah-26601722b}{LinkedIn} \textperiodcentered\
+    \href{https://portfolio.vaquah.in}{Portfolio}
+  }
+\end{center}
+\vspace{2pt}
+
+%======================== SUMMARY ========================
+\section{Summary}
+Full-stack developer and agentic AI engineer building autonomous multi-agent LLM pipelines with LangGraph, LangChain and n8n. Architected a 6-agent traffic incident command system at 0.34s end-to-end. Skilled in React, Next.js, FastAPI and real-time systems, with a focus on automating manual workflows into auditable, self-serve processes. Hackathon winner, 1st place.
+
+%======================== SKILLS ========================
+\section{Skills}
+\begin{tabular}{@{}p{0.23\textwidth}p{0.75\textwidth}@{}}
+\textbf{Languages} & JavaScript, TypeScript, Python, C++, Java, SQL \\[1.5pt]
+\textbf{Web} & React, Next.js, Three.js, Tailwind CSS, Node.js, Express.js, FastAPI, Firebase, Socket.io, REST APIs, WebSocket \\[1.5pt]
+\textbf{AI and ML} & LangGraph, LangChain, MCP, n8n, RAG, Groq, Google Gemini, Whisper STT, scikit-learn, TensorFlow, PyTorch, MediaPipe, OpenCV, DBSCAN \\[1.5pt]
+\textbf{Tools and Analytics} & Git, GitHub, Docker, Postman, Power BI, Pydantic, Zustand, NetworkX, OSMnx \\
+\end{tabular}
+
+%======================== EXPERIENCE ========================
+\section{Experience}
+\entry{NTS Global Nihon}{Jun 2025 -- Aug 2025}
+\sub{Full-Stack Developer Intern, Team Lead}{Remote}
+\begin{itemize}
+  \item Engineered Firebase auth, Firestore security rules and session management across 2 production environments.
+  \item Automated routine customer queries with 5 RAG-based Kaamigo chatbot modules covering 50+ interaction flows.
+  \item Shipped real-time chat across 3 platforms with cross-device sync; led the intern team and merged 11 pull requests through structured Git review workflows.
+\end{itemize}
+
+%======================== PROJECTS ========================
+\section{Projects}
+
+\entry{TrafficMind: AI Co-Pilot for Traffic Incident Command}{Mar 2026}
+\sub{LangGraph, FastAPI, Next.js, Groq, Gemini}{}
+\begin{itemize}
+  \item Architected an autonomous 6-agent LangGraph pipeline (Signal, Routing, Alert, Density, Narrative, Supervisor) with parallel fan-out and supervisor fan-in orchestration.
+  \item Automates slow incident triage: streams a 250-segment road network via OSMnx on 5s WebSockets with RAG-grounded SOP retrieval across 12 documents, at 0.34s on Groq Llama 3.3 70B.
+\end{itemize}
+
+\entry{Kontexo: Agentic MCP Gateway}{2026}
+\sub{LangGraph, JSON-RPC 2.0, Celery, Redis, ChromaDB}{}
+\begin{itemize}
+  \item Engineered a JSON-RPC 2.0 MCP server exposing 19 tools across GitHub, Slack, Sheets and Trello, driven by a 10-node LangGraph state machine.
+  \item Automates manual tool-by-tool coordination: one plain-English prompt drives a multi-step workflow, gated by human approval.
+\end{itemize}
+
+\entry{An Autonomous AI-Powered Warehouse Inventory Robot}{Apr 2026}
+\sub{LangGraph, Groq, Flask, OpenCV, Minor Project, Nirma University}{}
+\begin{itemize}
+  \item Built an autonomous 8-state navigation FSM with route memory, plus a QR and vision pipeline for automated product verification.
+  \item Automates manual stock checks: a LangGraph agent routes spoken commands over 9 intents, with a Commander dashboard and offline QR fallback.
+\end{itemize}
+
+\entry{VaquaH: HVAC and Cooling Services Platform}{Oct 2025 -- Present}
+\sub{React, Node.js, Express, Firebase, Razorpay}{}
+\begin{itemize}
+  \item Launched a production e-commerce platform with 50+ products, smart search, coupon system, tiered shipping, Razorpay checkout and COD partial-advance logic.
+  \item Automates phone-led ordering and scheduling into self-service via 8 service modules and a RAG chatbot with voice and gesture control.
+\end{itemize}
+
+\entry{HetChat: Real-Time Messaging Platform}{2025}
+\begin{itemize}
+  \item Built a chat platform on React, Node.js and Socket.io with Firebase Auth, Firestore persistence, typing indicators and presence tracking.
+\end{itemize}
+
+\entry{Portfolio: RAG-Backed Personal Site}{2026}
+\begin{itemize}
+  \item Built a React, Vite and Three.js site with an embedded RAG agent on Groq Llama 3.3 70B, running as a Vercel serverless function at zero hosting cost.
+\end{itemize}
+
+%======================== ACHIEVEMENTS ========================
+\section{Achievements and Positions}
+\entry{Hackathon Winner, 1st Place: Aetrix 2026, PDEU}{Mar 21--22, 2026}
+{\small Won 1st with TrafficMind in Smart Transportation as Team 2AM Coders, over 36 hours, judged across all 3 evaluation phases.}\par\vspace{3pt}
+\entry{Student Coordinator, Swayam: The Entrepreneurship Club, IMNU}{2026--2028}
+{\small Responsible for Administration, Public Relations and Event Management.}
+
+%======================== EDUCATION ========================
+\section{Education}
+\entry{Nirma University, Ahmedabad \normalfont{\itshape Integrated B.Tech (CSE) and MBA}}{2023 -- 2028 \textbullet\ CGPA 7.13/10}
+
+%======================== CERTIFICATIONS ========================
+\section{Certifications}
+{\small Power BI for Beginners \textperiodcentered\ Introduction to LangGraph \textperiodcentered\ n8n: No Code AI Agent Builder (Simplilearn) \textperiodcentered\ Cloud Foundations (AWS Academy) \textperiodcentered\ C for Everyone Part 2 (UC Santa Cruz, Coursera)}
+
+\end{document}

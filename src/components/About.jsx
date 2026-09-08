@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useCursor } from '../context/CursorContext';
+import { skills } from '../data/profile';
 
 const About = () => {
     const [ref, inView] = useInView({
@@ -9,19 +10,6 @@ const About = () => {
         threshold: 0.2,
     });
     const { setCursor, resetCursor } = useCursor();
-
-    const skills = [
-        "JavaScript / TypeScript",
-        "Python",
-        "React / Next.js",
-        "Node.js / FastAPI",
-        "LangGraph / LangChain",
-        "Groq / Gemini (LLMs)",
-        "TensorFlow / PyTorch",
-        "Firebase",
-        "Docker",
-        "Git"
-    ];
 
     return (
         <section id="about" className="py-20 relative">
@@ -52,7 +40,7 @@ const About = () => {
                             Here are a few technologies I've been working with recently:
                         </p>
 
-                        <ul className="grid grid-cols-2 gap-2 font-mono text-sm text-slate">
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-sm text-slate">
                             {skills.map((skill, index) => (
                                 <li
                                     key={index}
@@ -74,25 +62,33 @@ const About = () => {
                     >
                         {/* Circular Ringified Aura */}
                         <motion.div
-                            className="absolute z-0 w-[110%] h-[110%] rounded-full border-2 border-teal-400/60"
-                            animate={{ scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] }}
+                            className="absolute z-0 w-full h-full rounded-full border-2 border-teal-400/60"
+                            animate={{ scale: [1.10, 1.21, 1.10], opacity: [0.6, 1, 0.6] }}
                             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                         />
                         <motion.div
-                            className="absolute z-0 w-[125%] h-[125%] rounded-full border-2 border-purple-500/50"
-                            animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.9, 0.5] }}
+                            className="absolute z-0 w-full h-full rounded-full border-2 border-purple-500/50"
+                            animate={{ scale: [1.25, 1.44, 1.25], opacity: [0.5, 0.9, 0.5] }}
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                         />
                         <motion.div
-                            className="absolute z-0 w-[140%] h-[140%] rounded-full border-2 border-pink-500/40"
-                            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.7, 0.3] }}
+                            className="absolute z-0 w-full h-full rounded-full border-2 border-pink-500/40"
+                            animate={{ scale: [1.40, 1.68, 1.40], opacity: [0.3, 0.7, 0.3] }}
                             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                         />
 
-                        <div className="relative z-10 w-full aspect-square rounded-2xl overflow-hidden border-2 border-teal-400 bg-navy-800">
+                        <div className="relative z-10 w-4/5 sm:w-[85%] md:w-full aspect-square rounded-2xl overflow-hidden border-2 border-teal-400 bg-navy-800">
                             {/* Main Image */}
                             <div className="w-full h-full relative z-20">
-                                <img src="/Profile.png" alt="Hetav Shah" className="w-full h-full object-cover relative z-10" />
+                                <img
+                                    src="/Profile.png"
+                                    alt="Hetav Shah"
+                                    width={600}
+                                    height={600}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="w-full h-full object-cover relative z-10"
+                                />
 
                                 {/* Overlay Gradient for depth */}
                                 <div className="absolute inset-0 bg-gradient-to-tr from-teal-400/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none z-20"></div>

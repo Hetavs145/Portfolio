@@ -16,7 +16,10 @@ function AppContent() {
     const { currentPage } = useRoute();
 
     return (
-        <div className="bg-navy-900 min-h-screen text-slate-light selection:bg-teal-400 selection:text-navy-900 cursor-none">
+        // `cursor-hidden-fine` hides the native cursor only on devices that have
+        // one (see index.css). Applying cursor-none globally did nothing useful on
+        // touch, where ResumeAura — the canvas replacement — never mounts.
+        <div className="bg-navy-900 min-h-screen text-slate-light selection:bg-teal-400 selection:text-navy-900 cursor-hidden-fine">
             <ResumeAura />
             <Navbar />
 

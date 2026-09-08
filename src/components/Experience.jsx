@@ -26,7 +26,7 @@ const ExperienceCard = ({ job, index, isSingle }) => {
             </div>
 
             <div className={`order-1 px-6 py-4 bg-navy-800/50 backdrop-blur-sm rounded-lg border border-teal-400/20 shadow-lg hover:border-teal-400/50 transition-colors
-                ${isSingle ? 'w-full md:w-8/12 text-center md:text-left' : 'w-full md:w-5/12 ml-16 md:ml-0'}`}>
+                ${isSingle ? 'w-full md:w-8/12 text-center md:text-left' : 'w-[calc(100%-4rem)] md:w-5/12 ml-16 md:ml-0'}`}>
                 <h3 className="mb-1 font-bold text-slate-lighter text-xl">{job.role}</h3>
                 <h4 className="mb-2 font-mono text-teal-400 text-sm">{job.company}</h4>
                 <p className="mb-4 text-sm text-slate-light font-mono">{job.period}</p>
@@ -70,9 +70,9 @@ const Experience = () => {
                     <div className="h-px bg-navy-600 flex-grow ml-4"></div>
                 </motion.div>
 
-                <div className="relative wrap overflow-hidden p-10 h-full">
+                <div className="relative overflow-hidden p-4 md:p-10 h-full">
                     {!isSingle && (
-                        <div className="border-2-2 absolute border-opacity-20 border-teal-400 h-full border left-8 md:left-1/2 transform md:-translate-x-1/2"></div>
+                        <div className="absolute border-opacity-20 border-teal-400 h-full border left-8 md:left-1/2 transform md:-translate-x-1/2"></div>
                     )}
                     {jobs.map((job, index) => (
                         <ExperienceCard key={index} job={job} index={index} isSingle={isSingle} />

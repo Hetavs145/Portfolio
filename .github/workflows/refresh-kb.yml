@@ -1,0 +1,98 @@
+name: Refresh knowledge base
+
+# Keeps the chatbot current without manual steps: re-scrapes LinkedIn and GitHub,
+# re-embeds, and commits the updated index. Render auto-deploys on push.
+#
+# This repo is public, so Actions minutes are free and unlimited.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   OPENROUTER_API_KEY   - embeddings (and chat, if you test here)
+#   RAPIDAPI_KEY         - LinkedIn scrape; omit and LinkedIn is simply skipped
+# Optional:
+#   OPENROUTER_EMBED_KEY, RAPIDAPI_KEY_FALLBACK, LINKEDIN_DMA_TOKEN
+
+on:
+  schedule:
+    # 03:00 UTC daily
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      full_profile:
+        description: 'Also refresh the full LinkedIn profile (costs an extra credit)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-kb
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install server dependencies
+        run: npm ci --prefix server || npm install --prefix server
+
+      - name: Re-parse resumes
+        run: node server/scripts/parse-resumes.js
+
+      # Posts every day, full profile only on Mondays or when manually requested.
+      # Keeps monthly RapidAPI spend around 35 of the free 50 credits.
+      - name: Decide LinkedIn scope
+        id: scope
+        run: |
+          if [ "${{ github.event.inputs.full_profile }}" = "true" ] || [ "$(date -u +%u)" = "1" ]; then
+            echo "args=" >> "$GITHUB_OUTPUT"
+          else
+            echo "args=--posts" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Refresh LinkedIn
+        # Never fails the run: the adapter cascade keeps the last good snapshot,
+        # and a scraper outage must not block the rest of the rebuild.
+        continue-on-error: true
+        env:
+          LINKEDIN_SOURCE: ${{ vars.LINKEDIN_SOURCE || 'rapidapi' }}
+          LINKEDIN_PROFILE_URL: ${{ vars.LINKEDIN_PROFILE_URL }}
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          RAPIDAPI_KEY_FALLBACK: ${{ secrets.RAPIDAPI_KEY_FALLBACK }}
+          RAPIDAPI_HOST: ${{ vars.RAPIDAPI_HOST }}
+          LINKEDIN_DMA_TOKEN: ${{ secrets.LINKEDIN_DMA_TOKEN }}
+        run: node server/scripts/refresh-linkedin.js ${{ steps.scope.outputs.args }}
+
+      - name: Rebuild vector index
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
+        run: node server/scripts/build-index.js
+
+      - name: Verify project links still resolve
+        continue-on-error: true
+        run: node server/scripts/check-links.js
+
+      - name: Commit if the knowledge base actually changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add server/data/index.json server/data/linkedin.json \
+                  server/data/resume.json server/data/resume-imnu.json 2>/dev/null || true
+          # `builtAt` changes on every build, so diff the content that matters.
+          if git diff --cached --quiet; then
+            echo "No changes — nothing to commit."
+          elif [ -z "$(git diff --cached --stat | grep -v 'index.json' || true)" ] \
+               && [ "$(git diff --cached --numstat -- server/data/index.json | awk '{print $1+$2}')" = "2" ]; then
+            echo "Only the build timestamp changed — skipping commit."
+            git reset
+          else
+            git commit -m "chore: refresh knowledge base [skip ci]"
+            git push
+          fi

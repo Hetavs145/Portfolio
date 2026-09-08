@@ -1,0 +1,171 @@
+{
+  "name": "Hetav Shah",
+  "contact": {
+    "location": "Gujarat, India",
+    "email": "hetavs145@gmail.com",
+    "phone": "+91 8200135258",
+    "github": "https://github.com/Hetavs145/",
+    "linkedin": "https://www.linkedin.com/in/hetav-shah-26601722b",
+    "portfolio": "https://portfolio.vaquah.in"
+  },
+  "summary": "Full-stack developer and agentic AI engineer building autonomous multi-agent LLM pipelines with LangGraph, LangChain and n8n. Architected a 6-agent traffic incident command system at 0.34s end-to-end. Skilled in React, Next.js, FastAPI and real-time systems, with a focus on automating manual workflows into auditable, self-serve processes. Hackathon winner, 1st place. %======================== SKILLS ========================",
+  "skills": {
+    "Languages": [
+      "JavaScript",
+      "TypeScript",
+      "Python",
+      "C++",
+      "Java",
+      "SQL"
+    ],
+    "Web": [
+      "React",
+      "Next.js",
+      "Three.js",
+      "Tailwind CSS",
+      "Node.js",
+      "Express.js",
+      "FastAPI",
+      "Firebase",
+      "Socket.io",
+      "REST APIs",
+      "WebSocket"
+    ],
+    "AI and ML": [
+      "LangGraph",
+      "LangChain",
+      "MCP",
+      "n8n",
+      "RAG",
+      "Groq",
+      "Google Gemini",
+      "Whisper STT",
+      "scikit-learn",
+      "TensorFlow",
+      "PyTorch",
+      "MediaPipe",
+      "OpenCV",
+      "DBSCAN"
+    ],
+    "Tools and Analytics": [
+      "Git",
+      "GitHub",
+      "Docker",
+      "Postman",
+      "Power BI",
+      "Pydantic",
+      "Zustand",
+      "NetworkX",
+      "OSMnx"
+    ]
+  },
+  "experience": [
+    {
+      "title": "NTS Global Nihon",
+      "meta": "Jun 2025 -- Aug 2025",
+      "subtitle": "Full-Stack Developer Intern, Team Lead",
+      "subtitleMeta": "Remote",
+      "bullets": [
+        "Engineered Firebase auth, Firestore security rules and session management across 2 production environments.",
+        "Automated routine customer queries with 5 RAG-based Kaamigo chatbot modules covering 50+ interaction flows.",
+        "Shipped real-time chat across 3 platforms with cross-device sync; led the intern team and merged 11 pull requests through structured Git review workflows."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "TrafficMind: AI Co-Pilot for Traffic Incident Command",
+      "meta": "Mar 2026",
+      "subtitle": "LangGraph, FastAPI, Next.js, Groq, Gemini",
+      "subtitleMeta": "",
+      "bullets": [
+        "Architected an autonomous 6-agent LangGraph pipeline (Signal, Routing, Alert, Density, Narrative, Supervisor) with parallel fan-out and supervisor fan-in orchestration.",
+        "Automates slow incident triage: streams a 250-segment road network via OSMnx on 5s WebSockets with RAG-grounded SOP retrieval across 12 documents, at 0.34s on Groq Llama 3.3 70B."
+      ]
+    },
+    {
+      "title": "Kontexo: Agentic MCP Gateway",
+      "meta": "2026",
+      "subtitle": "LangGraph, JSON-RPC 2.0, Celery, Redis, ChromaDB",
+      "subtitleMeta": "",
+      "bullets": [
+        "Engineered a JSON-RPC 2.0 MCP server exposing 19 tools across GitHub, Slack, Sheets and Trello, driven by a 10-node LangGraph state machine.",
+        "Automates manual tool-by-tool coordination: one plain-English prompt drives a multi-step workflow, gated by human approval."
+      ]
+    },
+    {
+      "title": "An Autonomous AI-Powered Warehouse Inventory Robot",
+      "meta": "Apr 2026",
+      "subtitle": "LangGraph, Groq, Flask, OpenCV, Minor Project, Nirma University",
+      "subtitleMeta": "",
+      "bullets": [
+        "Built an autonomous 8-state navigation FSM with route memory, plus a QR and vision pipeline for automated product verification.",
+        "Automates manual stock checks: a LangGraph agent routes spoken commands over 9 intents, with a Commander dashboard and offline QR fallback."
+      ]
+    },
+    {
+      "title": "VaquaH: HVAC and Cooling Services Platform",
+      "meta": "Oct 2025 -- Present",
+      "subtitle": "React, Node.js, Express, Firebase, Razorpay",
+      "subtitleMeta": "",
+      "bullets": [
+        "Launched a production e-commerce platform with 50+ products, smart search, coupon system, tiered shipping, Razorpay checkout and COD partial-advance logic.",
+        "Automates phone-led ordering and scheduling into self-service via 8 service modules and a RAG chatbot with voice and gesture control."
+      ]
+    },
+    {
+      "title": "HetChat: Real-Time Messaging Platform",
+      "meta": "2025",
+      "subtitle": null,
+      "subtitleMeta": null,
+      "bullets": [
+        "Built a chat platform on React, Node.js and Socket.io with Firebase Auth, Firestore persistence, typing indicators and presence tracking."
+      ]
+    },
+    {
+      "title": "Portfolio: RAG-Backed Personal Site",
+      "meta": "2026",
+      "subtitle": null,
+      "subtitleMeta": null,
+      "bullets": [
+        "Built a React, Vite and Three.js site with an embedded RAG agent on Groq Llama 3.3 70B, running as a Vercel serverless function at zero hosting cost."
+      ]
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Hackathon Winner, 1st Place: Aetrix 2026, PDEU",
+      "meta": "Mar 21--22, 2026",
+      "subtitle": null,
+      "subtitleMeta": null,
+      "bullets": [
+        "Won 1st with TrafficMind in Smart Transportation as Team 2AM Coders, over 36 hours, judged across all 3 evaluation phases."
+      ]
+    },
+    {
+      "title": "Student Coordinator, Swayam: The Entrepreneurship Club, IMNU",
+      "meta": "2026--2028",
+      "subtitle": null,
+      "subtitleMeta": null,
+      "bullets": [
+        "Responsible for Administration, Public Relations and Event Management."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "title": "Nirma University, Ahmedabad Integrated B.Tech (CSE) and MBA",
+      "meta": "2023 -- 2028 · CGPA 7.13/10",
+      "subtitle": null,
+      "subtitleMeta": null,
+      "bullets": []
+    }
+  ],
+  "certifications": [
+    "Power BI for Beginners",
+    "Introduction to LangGraph",
+    "n8n: No Code AI Agent Builder (Simplilearn)",
+    "Cloud Foundations (AWS Academy)",
+    "C for Everyone Part 2 (UC Santa Cruz, Coursera)"
+  ]
+}

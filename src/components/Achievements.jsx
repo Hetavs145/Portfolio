@@ -1,9 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Trophy, Award, GraduationCap, BookOpen } from 'lucide-react';
+import { Trophy, Award, GraduationCap, Users } from 'lucide-react';
+import { achievements } from '../data/achievements';
 
-const AchievementCard = ({ icon: Icon, title, subtitle, details, index, color = 'teal' }) => {
+/* The data module stores icon names rather than components, so that plain Node
+   can import it when building the RAG index (lucide-react is ESM+JSX). */
+const ICONS = { Trophy, Award, GraduationCap, Users };
+
+const AchievementCard = ({ icon, title, subtitle, details, index, color = 'teal' }) => {
+    const Icon = ICONS[icon] ?? Award;
     const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
     const colorMap = {
@@ -42,43 +48,6 @@ const AchievementCard = ({ icon: Icon, title, subtitle, details, index, color = 
 };
 
 const Achievements = () => {
-    const achievements = [
-        {
-            icon: Trophy,
-            title: 'Hackathon Winner — 1st Place',
-            subtitle: 'Team 2AM Coders · March 21–22, 2026',
-            color: 'amber',
-            details: [
-                'Won 1st place at first-ever hackathon — 36 hours of non-stop building.',
-                'Presented TrafficMind to 8+ judges and mentors, praised across both evaluation rounds and final panel.',
-                'Only team recognized across all 3 phases — Phase 1 discussions, mentor evaluations, and final judge presentations.',
-            ],
-        },
-        {
-            icon: GraduationCap,
-            title: 'Education',
-            subtitle: 'Nirma University · Expected May 2028',
-            color: 'teal',
-            details: [
-                'Integrated B.Tech in Computer Science & Engineering + MBA',
-                'Institute of Technology, Nirma University, Ahmedabad',
-                'CGPA: 7.04 / 10',
-            ],
-        },
-        {
-            icon: Award,
-            title: 'Certifications',
-            subtitle: null,
-            color: 'purple',
-            details: [
-                'Cloud Foundations — AWS Academy',
-                'Intro to LangGraph — Simplilearn',
-                'n8n: No Code AI Agent Builder — Simplilearn',
-                'Full Stack Development — NTS Global Nihon',
-                'C Programming — Coursera',
-            ],
-        },
-    ];
 
     return (
         <section id="achievements" className="py-20 relative">
@@ -95,7 +64,7 @@ const Achievements = () => {
                     <div className="h-px bg-navy-600 flex-grow ml-4"></div>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {achievements.map((item, index) => (
                         <AchievementCard key={index} {...item} index={index} />
                     ))}

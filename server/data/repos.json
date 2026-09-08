@@ -1,0 +1,14 @@
+{
+  "user": "Hetavs145",
+  "extra": [
+    "fjiolla/Kontexo"
+  ],
+  "skip": [
+    "Small-Projects"
+  ],
+  "skipForks": true,
+  "readmeChars": 800,
+  "keepForks": [
+    "Hetavs145/TrafficMind"
+  ]
+}

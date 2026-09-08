@@ -69,10 +69,10 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# dotenv environment variables file — broadened so no .env variant can leak
 .env
-.env.test
-.env.production
+.env.*
+!.env.example
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

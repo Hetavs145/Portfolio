@@ -10,9 +10,36 @@
   body {
     @apply bg-navy-900 text-slate-light font-sans antialiased selection:bg-teal-400 selection:text-navy-900;
   }
+
+  /* Global guard against horizontal scroll.
+     `clip` rather than `hidden` so position: sticky keeps working. Decorative
+     absolutely-positioned elements (the About aura rings, the hero glitch
+     pseudo-elements) can still paint outward without dragging the document
+     into a horizontal scrollbar. */
+  html,
+  body {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  /* Long unbroken strings — repo URLs, emails, tech tags — must wrap rather than
+     widen their container. */
+  p, li, h1, h2, h3, h4 {
+    overflow-wrap: break-word;
+  }
 }
 
 @layer utilities {
+  /* Hide the native cursor only on devices that actually have one. Applied
+     globally before, which did nothing useful on touch and left phones with
+     no cursor affordance at all. */
+  @media (pointer: fine) {
+    .cursor-hidden-fine,
+    .cursor-hidden-fine * {
+      cursor: none;
+    }
+  }
+
   .glass {
     @apply bg-navy-700/50 backdrop-blur-md border border-teal-400/20;
     box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);

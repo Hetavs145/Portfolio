@@ -91,7 +91,7 @@ const RealTimeDemo = () => {
                         </div>
 
                         {/* Chat Messages */}
-                        <div ref={chatContainerRef} className="h-[calc(100vh-16rem)] sm:h-[calc(100vh-18rem)] md:h-[28rem] overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800">
+                        <div ref={chatContainerRef} className="h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-18rem)] md:h-[28rem] overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800">
                             <AnimatePresence>
                                 {messages.map((msg) => (
                                     <motion.div
@@ -102,7 +102,7 @@ const RealTimeDemo = () => {
                                         className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                                     >
                                         <div
-                                            className={`max-w-[80%] p-3 rounded-lg text-sm ${msg.sender === 'user'
+                                            className={`max-w-[80%] p-3 rounded-lg text-sm break-words ${msg.sender === 'user'
                                                 ? 'bg-teal-400 text-navy-900 rounded-br-none'
                                                 : 'bg-navy-600 text-slate-lighter rounded-bl-none'
                                                 }`}

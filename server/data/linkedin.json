@@ -1,0 +1,967 @@
+{
+  "source": "rapidapi",
+  "profileUrl": "https://www.linkedin.com/in/hetav-shah-26601722b/",
+  "fetchedAt": "2026-09-08T11:04:22.711Z",
+  "profile": {
+    "headline": "Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
+    "summary": "Student Coordinator at SWAYAM - The Entrepreneurship Club of IMNU| 🏆&nbsp;Aetrix (PDEU) Grand Prize Winner -Turned 36 hours of caffeine into a working product|Noisy Like a Photon and Silent like a Wave🌀|A explorer in search of a \"Right Destination\"👨‍💻|J Shaped Progressor📈😉|LazyAmbitious",
+    "location": "Greater Vadodara Area",
+    "positions": [
+      {
+        "companyId": 90968733,
+        "companyName": "NTS Nihon Global",
+        "companyUsername": "nts-nihon-global",
+        "companyURL": "https://www.linkedin.com/company/nts-nihon-global/",
+        "companyLogo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_400_400/company-logo_400_400/0/1677356542717?e=1790208000&v=beta&t=l2clsLHbElnxN5V9BFrtpHwFf0k_-gLJ-dFo1D-LrbI",
+        "companyIndustry": "Computer Software",
+        "companyStaffCountRange": "501 - 1000",
+        "title": "Full-stack Developer Intern",
+        "multiLocaleTitle": {
+          "en_US": "Full-stack Developer Intern"
+        },
+        "multiLocaleCompanyName": {
+          "en_US": "NTS Nihon Global"
+        },
+        "location": "Remote",
+        "locationType": "",
+        "description": "Led the Project and Worked on Firebase-based backend architecture, including authentication, Firestore rules, and secure data handling along with minor tweeks and improvements in the Frontend.\nImplemented structured error handling for login and onboarding flows, improving application stability.\nLed the Kaamigo chatbot feature development — defined interaction flows, integrated model inference endpoints, and coordinated UI revisions.\nActively participated in code reviews, Git workflows, and cross‑team development for web and mobile platforms.\nBuilt and tested real‑time chat functionality and user activity synchronization.\nRecieved Letter of Recommendation for the same.",
+        "employmentType": "Internship",
+        "start": {
+          "year": 2025,
+          "month": 6,
+          "day": 0
+        },
+        "end": {
+          "year": 2025,
+          "month": 8,
+          "day": 0
+        }
+      }
+    ],
+    "education": [
+      {
+        "start": {
+          "year": 2023,
+          "month": 8,
+          "day": 0
+        },
+        "end": {
+          "year": 2028,
+          "month": 5,
+          "day": 0
+        },
+        "fieldOfStudy": "Computer Science",
+        "degree": "Integrated (B.Tech CSE-MBA)",
+        "grade": "",
+        "schoolName": "Nirma University",
+        "description": "",
+        "activities": "",
+        "url": "https://www.linkedin.com/school/nirma-university-ahmedabad-gujarat-india/",
+        "schoolId": "15096420",
+        "logo": [
+          {
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_200_200/company-logo_200_200/0/1708176267470?e=1790208000&v=beta&t=w-Rr2GrLDvzBUSBaHggOSfU47oufbSqJU_t75SKH_1c",
+            "width": 200,
+            "height": 200
+          },
+          {
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_100_100/company-logo_100_100/0/1708176267470?e=1790208000&v=beta&t=lwQOxdtAEnxw3dA3exqu35VTTSbmjkAe27fP8SvfEug",
+            "width": 100,
+            "height": 100
+          },
+          {
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_400_400/company-logo_400_400/0/1708176267470?e=1790208000&v=beta&t=XTekOzXJnjesJA8CV1zLXOl17AUsFhom7sNVbbz_KXA",
+            "width": 400,
+            "height": 400
+          }
+        ],
+        "multiLocaleDegreeName": {
+          "en": "Integrated (B.Tech CSE-MBA)"
+        }
+      },
+      {
+        "start": {
+          "year": 2020,
+          "month": 1,
+          "day": 0
+        },
+        "end": {
+          "year": 2023,
+          "month": 5,
+          "day": 0
+        },
+        "fieldOfStudy": "none",
+        "degree": "secondary school",
+        "grade": "",
+        "schoolName": "Parth School of Science and Competition - India",
+        "description": "",
+        "activities": "",
+        "url": "",
+        "schoolId": "",
+        "logo": null,
+        "multiLocaleDegreeName": {
+          "en": "secondary school"
+        }
+      }
+    ],
+    "skills": [
+      {
+        "name": "Microsoft Power BI",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Leadership",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Team Spirit",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Team Motivation",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Teamwork",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Amazon EC2",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Amazon Web Services (AWS)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "AWS Command Line Interface (CLI)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "AWS Support",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "AWS Core Services",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "AWS Architecture",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "AWS Identity and Access Management (AWS IAM)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "AWS Pricing",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "LangGraph",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Agentic AI Development",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Analytical Thinking",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Problem Solving",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Case Analysis",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Business Acumen",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Logical Reasoning",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Decision-Making",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Critical Thinking",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Time Management",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Online Assessments",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Competitive Aptitude",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Strategic Thinking",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Data Interpretation",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Support Vector Machine (SVM)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Naive Bayes Classifier",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Web Applications",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "full",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Decision Trees",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Socket.io",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Client-server Application Development",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Razorpay",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Team Leadership",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Wireframing",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Data Structures",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Cascading Style Sheets (CSS)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Algorithms",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "User Experience (UX)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Node.js",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Artificial Intelligence (AI)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "User Interface Design",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "SQL",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Retrieval-Augmented Generation (RAG)",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "LangChain",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Scikit-Learn",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "TensorFlow",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "PyTorch",
+        "passedSkillAssessment": false
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Power BI for Beginners",
+        "start": {
+          "year": 2026,
+          "month": 9,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Simplilearn",
+        "company": {
+          "name": "Simplilearn",
+          "universalName": "simplilearn",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1790208000&v=beta&t=PtgrjNLreCRgUgQSs4s6zfTYOYlgZZQbSdIYj1AQ33E",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "Win Over World - 2026 Certificate of Excellence",
+        "start": {
+          "year": 2026,
+          "month": 6,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "People Labs Pvt Ltd",
+        "company": {
+          "name": "People Labs Pvt Ltd",
+          "universalName": "people-labs-pvt-ltd",
+          "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQGQktgJYxX_pw/company-logo_200_200/company-logo_200_200/0/1630586375036/people_labs_pvt_ltd_logo?e=1790208000&v=beta&t=gYukT6jPjRBnreFaQzbUVkx4LbNeysesCHAQ2v2GvV4",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "AWS Academy Graduate - Cloud Foundations - Training Badge",
+        "start": {
+          "year": 2026,
+          "month": 3,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Amazon Web Services (AWS)",
+        "company": {
+          "name": "Amazon Web Services (AWS)",
+          "universalName": "amazon-web-services",
+          "logo": "https://media.licdn.com/dms/image/v2/D4E0BAQFqdm1TZ-RZKQ/company-logo_400_400/B4EZgOay6gHEAg-/0/1752588562343/amazon_web_services_logo?e=1790208000&v=beta&t=SE2iigscvA38gYtkY5LhXG0p2XSzjFb-q7JdX2_FZJ0",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "Introduction to LangGraph",
+        "start": {
+          "year": 2026,
+          "month": 3,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Simplilearn",
+        "company": {
+          "name": "Simplilearn",
+          "universalName": "simplilearn",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1790208000&v=beta&t=PtgrjNLreCRgUgQSs4s6zfTYOYlgZZQbSdIYj1AQ33E",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "Hero Campus Challenge Season 10",
+        "start": {
+          "year": 2026,
+          "month": 2,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Hero MotoCorp",
+        "company": {
+          "name": "Hero MotoCorp",
+          "universalName": "heromotocorp",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGWyWL5FO6LCQ/company-logo_200_200/B56ZpxxW.tI4AM-/0/1762845356644?e=1790208000&v=beta&t=PYKcP_HOwstsqHF5vido2_6lLs8FLhrO21ey8mt7KSk",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "NationBuilding Case Study Competition 2026",
+        "start": {
+          "year": 2026,
+          "month": 1,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Nation with NaMo",
+        "company": {
+          "name": "Nation with NaMo",
+          "universalName": "nationwithnamo",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQHRGUz46gfLaw/company-logo_200_200/company-logo_200_200/0/1644842003637/nationwithnamo_logo?e=1790208000&v=beta&t=85vmDBoIcDtWVdfyaUxPmFpGx2Pm9UHcR60otzDka8Q",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "Certificate of Participation in TATA Crucible Campus Quiz 2025 of TATA Crucible Campus Quiz 2025",
+        "start": {
+          "year": 2025,
+          "month": 11,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Unstop",
+        "company": {
+          "name": "Unstop",
+          "universalName": "unstop",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1790208000&v=beta&t=xHf8R5aq_vNgsFwpTB0-ufVFrv-StnSEu9XjkimSqKY",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "Full Stack Developer",
+        "start": {
+          "year": 2025,
+          "month": 8,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "NTS Nihon Global",
+        "company": {
+          "name": "NTS Nihon Global",
+          "universalName": "nts-nihon-global",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_200_200/company-logo_200_200/0/1677356542717?e=1790208000&v=beta&t=MW2MjATaG53LiTEPfSloqjErD11GodyiAEBJHZ-Cm-Q",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "Certificate of Excellence in Round 1: Learning Boot Camp of Unstop Talent Park 2025",
+        "start": {
+          "year": 2025,
+          "month": 3,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Unstop",
+        "company": {
+          "name": "Unstop",
+          "universalName": "unstop",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1790208000&v=beta&t=xHf8R5aq_vNgsFwpTB0-ufVFrv-StnSEu9XjkimSqKY",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      },
+      {
+        "name": "Coursera Course",
+        "start": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "authority": "Coursera",
+        "company": {
+          "name": "Coursera",
+          "universalName": "coursera",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQGexnfBxeEG-g/company-logo_200_200/company-logo_200_200/0/1630530042036/coursera_logo?e=1790208000&v=beta&t=woihIBq9x8T7_kAyTrMTPiEJ-ebqn2dmZfdI_3jCYvk",
+          "staffCountRange": {},
+          "headquarter": {}
+        },
+        "timePeriod": {
+          "start": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          },
+          "end": {
+            "year": 0,
+            "month": 0,
+            "day": 0
+          }
+        }
+      }
+    ],
+    "honors": [],
+    "projects": [
+      {
+        "title": "HetChat",
+        "description": "Hetchat is a modern messaging platform designed to make communication feel effortless. Built with a clean interface and real-time performance, Hetchat gives you a seamless space to talk, share, and stay connected — whether you're chatting, collaborating with a team, or building a community.\nWith lightning-fast syncing, intuitive navigation, and smooth media sharing, Hetchat removes the clutter and brings focus back to what matters: your conversations. No complexity, no distractions — just smart, fluid communication.\nCreate groups or jump into quick chats — all powered by a streamlined design that keeps everything simple, responsive, and secure. Hetchat adapts to you, making every interaction feel natural and instant.",
+        "start": {
+          "year": 2025,
+          "month": 10,
+          "day": 0
+        },
+        "end": {
+          "year": 2025,
+          "month": 10,
+          "day": 0
+        },
+        "contributors": [
+          {
+            "urn": "ACoAADl9Ma4BOdYtO_253gREo-hGgafKDvYeaK4",
+            "username": "hetav-shah-26601722b",
+            "fullName": "Hetav Shah",
+            "firstName": "Hetav",
+            "lastName": "Shah",
+            "profilePicture": [
+              {
+                "width": 800,
+                "height": 800,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1790208000&v=beta&t=dvioCRaN-eEoKi5mPD0OR-7gDINoMB8ZWQtoXUgd4DY"
+              },
+              {
+                "width": 200,
+                "height": 200,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1790208000&v=beta&t=qHiMcZ3LR9xetDp644isqdr2-OZ05wRiT4SjVcySc2I"
+              },
+              {
+                "width": 400,
+                "height": 400,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1790208000&v=beta&t=31w1U6Nb6vUci0nNz9qJ8B5joZQxjIweRidAsl_9AzI"
+              },
+              {
+                "width": 100,
+                "height": 100,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1790208000&v=beta&t=zp1VzvF7aTZK8Ki5gm6OrziizAK2z83w8uW4dWpVST0"
+              }
+            ],
+            "headline": "Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
+            "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
+          }
+        ]
+      },
+      {
+        "title": "Phishguard- Phising Website Detector",
+        "description": "PhisGuard is a lightweight yet highly effective phishing-detection system designed to keep users safe from malicious links and deceptive websites. At its core, PhisGuard uses a Decision Tree classification model, trained on real-world phishing and legitimate URL datasets to deliver fast and reliable detection.\nWith an accuracy of around 90%, the system analyzes URL patterns, domain features, and structural attributes to instantly classify whether a link is safe or suspicious. PhisGuard provides clear alerts, seamless integration, and real-time protection — without the heavy computational cost of deep learning models.\nWhether you're browsing online, checking emails, or validating shared links, PhisGuard ensures every click is smarter and safer.\nPhisGuard — Simple, accurate, and efficient phishing protection powered by Decision Trees.",
+        "start": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "contributors": [
+          {
+            "urn": "ACoAADl9Ma4BOdYtO_253gREo-hGgafKDvYeaK4",
+            "username": "hetav-shah-26601722b",
+            "fullName": "Hetav Shah",
+            "firstName": "Hetav",
+            "lastName": "Shah",
+            "profilePicture": [
+              {
+                "width": 800,
+                "height": 800,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1790208000&v=beta&t=dvioCRaN-eEoKi5mPD0OR-7gDINoMB8ZWQtoXUgd4DY"
+              },
+              {
+                "width": 200,
+                "height": 200,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1790208000&v=beta&t=qHiMcZ3LR9xetDp644isqdr2-OZ05wRiT4SjVcySc2I"
+              },
+              {
+                "width": 400,
+                "height": 400,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1790208000&v=beta&t=31w1U6Nb6vUci0nNz9qJ8B5joZQxjIweRidAsl_9AzI"
+              },
+              {
+                "width": 100,
+                "height": 100,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1790208000&v=beta&t=zp1VzvF7aTZK8Ki5gm6OrziizAK2z83w8uW4dWpVST0"
+              }
+            ],
+            "headline": "Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
+            "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
+          }
+        ]
+      },
+      {
+        "title": "Spam Detection AI",
+        "description": "The Spam Email Detector is a machine learning–based text classification system designed to accurately detect spam messages in real time. Built using classical ML algorithms and trained on the combined_data.csv dataset, this system analyzes email or SMS text and instantly classifies it as Spam or Not Spam with high precision.\nAt the core, the project uses a Decision Tree Classifier,Naïve Bayes and SVM classifiers achieving an impressive 99.06% accuracy during evaluation. Allowing users to switch between models and compare performance in real-time.\nBy extracting text features using TF-IDF and applying supervised learning techniques, the detector quickly identifies suspicious keywords, patterns, and structures commonly found in phishing or spam messages. The result is an intuitive, visually appealing dashboard that shows:\n🔍 Confidence Score\n📬 Spam vs. Not Spam Probability\n🤖 Model Used (Decision Tree / Naïve Bayes / SVM)\n⚡ Real-time text analysis\nThe detector is optimized for practical use, educational demonstrations, and ML workflow understanding. With its clean UI, interactive model selection, and extremely high accuracy, it serves as a complete end-to-end ML project—from preprocessing to deployment.\nSpam Email Detector — Fast, accurate, and model-flexible. Powered by Decision Tree (99.06% accurate).",
+        "start": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "contributors": [
+          {
+            "urn": "ACoAADl9Ma4BOdYtO_253gREo-hGgafKDvYeaK4",
+            "username": "hetav-shah-26601722b",
+            "fullName": "Hetav Shah",
+            "firstName": "Hetav",
+            "lastName": "Shah",
+            "profilePicture": [
+              {
+                "width": 800,
+                "height": 800,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1790208000&v=beta&t=dvioCRaN-eEoKi5mPD0OR-7gDINoMB8ZWQtoXUgd4DY"
+              },
+              {
+                "width": 200,
+                "height": 200,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1790208000&v=beta&t=qHiMcZ3LR9xetDp644isqdr2-OZ05wRiT4SjVcySc2I"
+              },
+              {
+                "width": 400,
+                "height": 400,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1790208000&v=beta&t=31w1U6Nb6vUci0nNz9qJ8B5joZQxjIweRidAsl_9AzI"
+              },
+              {
+                "width": 100,
+                "height": 100,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1790208000&v=beta&t=zp1VzvF7aTZK8Ki5gm6OrziizAK2z83w8uW4dWpVST0"
+              }
+            ],
+            "headline": "Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
+            "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
+          }
+        ]
+      },
+      {
+        "title": "VaquaH-AC Products & Services Web App.",
+        "description": "VaquaH Cooling Service A modern web app for discovering AC products and booking cooling services. It includes a product catalog, detailed pages, cart and checkout flow, service appointments, orders, contracts, and a user dashboard.\n\nHighlights Products: Rich catalog with images, specs, and feature highlights Commerce: Cart, checkout, order history and status Services: Appointment booking with confirmation and updates Contracts: Plan selection and contract management Experience: Fast, responsive, mobile‑first UI with accessible components Tech Overview Frontend React (Vite), React Router Tailwind CSS + Shadcn UI TanStack Query for client‑side caching and syncing Context-based state (Auth, Cart) and modular service layer Backend (Briefing, high‑level only) Node.js application that powers product, order, appointment, and contract workflows Layered architecture (routing/controllers → domain services → data access) Pluggable integrations for authentication, payments, and data storage Environment-driven configuration; no secrets stored in the repository Emphasis on input validation, consistent error handling, and observability hooks Project Structure src/components — Reusable UI blocks src/pages — Route-level pages src/context — Providers (Auth, Cart) src/services — Frontend data-access modules src/lib — App configuration and utilities src/utils — Non-UI helpers backend/ — Node.js server (domain services and HTTP handlers) Local Development Install dependencies npm install cd frontend && npm install cd ../backend && npm install Start concurrent dev servers npm run dev Build production assets npm run build Output is generated in frontend/dist.\n\nAcknowledgements Built with React, Tailwind, Shadcn UI, TanStack Query, and a lightweight Node.js service layer.",
+        "start": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        },
+        "contributors": [
+          {
+            "urn": "ACoAADl9Ma4BOdYtO_253gREo-hGgafKDvYeaK4",
+            "username": "hetav-shah-26601722b",
+            "fullName": "Hetav Shah",
+            "firstName": "Hetav",
+            "lastName": "Shah",
+            "profilePicture": [
+              {
+                "width": 800,
+                "height": 800,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1790208000&v=beta&t=dvioCRaN-eEoKi5mPD0OR-7gDINoMB8ZWQtoXUgd4DY"
+              },
+              {
+                "width": 200,
+                "height": 200,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1790208000&v=beta&t=qHiMcZ3LR9xetDp644isqdr2-OZ05wRiT4SjVcySc2I"
+              },
+              {
+                "width": 400,
+                "height": 400,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1790208000&v=beta&t=31w1U6Nb6vUci0nNz9qJ8B5joZQxjIweRidAsl_9AzI"
+              },
+              {
+                "width": 100,
+                "height": 100,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1790208000&v=beta&t=zp1VzvF7aTZK8Ki5gm6OrziizAK2z83w8uW4dWpVST0"
+              }
+            ],
+            "headline": "Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
+            "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
+          }
+        ]
+      }
+    ]
+  },
+  "posts": [
+    {
+      "text": "𝗧𝗵𝗲 𝗠𝗕𝗔 𝗵𝗮𝗱𝗻’𝘁 𝗲𝘃𝗲𝗻 𝗼𝗳𝗳𝗶𝗰𝗶𝗮𝗹𝗹𝘆 𝘀𝘁𝗮𝗿𝘁𝗲𝗱, 𝗯𝘂𝘁 𝘁𝗵𝗲 𝗳𝗶𝗿𝘀𝘁 𝗺𝗶𝗹𝗲𝘀𝘁𝗼𝗻𝗲 𝘄𝗮𝘀 𝗮𝗹𝗿𝗲𝗮𝗱𝘆 𝗮𝗰𝗵𝗶𝗲𝘃𝗲𝗱!\n\nGrateful to have received the Certificate of Excellence at Win Over World (WOW) 2026 by People Labs. \n\nThe workshop strengthened my leadership, teamwork, analytical & critical thinking, communication, decision-making, and problem-solving skills through experiential learning.\n\nIt was a great start to my journey at Institute of Management , Nirma University, and I looked forward to building on this foundation with many more learning experiences and milestones ahead.\n\nPeople Labs Pvt Ltd \n\n#MBA #IMNirmaUniversity #Leadership #Teamwork #CriticalThinking #ExperientialLearning #PeopleLabs #WOW2026 #GrowthMindset",
+      "postedAt": "2026-07-26 13:48:52.553 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7487141896742559744/",
+      "reactions": 28
+    },
+    {
+      "text": "𝗜𝗳 𝘁𝗵𝗶𝘀 𝗶𝘀 𝘄𝗵𝗮𝘁 𝘁𝗵𝗲 𝗯𝗿𝗮𝗶𝗻 𝗹𝗼𝗼𝗸𝘀 𝗹𝗶𝗸𝗲 𝗮𝘁 𝘁𝗵𝗲 𝗯𝗲𝗴𝗶𝗻𝗻𝗶𝗻𝗴, 𝗜’𝗺 𝗲𝘅𝗰𝗶𝘁𝗲𝗱 𝘁𝗼 𝘀𝗲𝗲 𝘄𝗵𝗮𝘁 𝗶𝘁 𝗯𝗲𝗰𝗼𝗺𝗲𝘀. 🧠✨\nAfter nearly a year of research, planning, validating assumptions, and connecting dots, the real work finally began last month. 📚🔍\nWhat you're seeing isn't the project itself.\nIt's the visual footprint of its evolution — ideas connecting, systems emerging, relationships forming, and a vision gradually taking shape. 🌐✨\nEvery node tells a story.\nEvery connection reveals a possibility.\nStill early.\nVery early.\nBut the brain is forming. 🧠✨\nAnd this is only the beginning.\n#BuildingInPublic #Innovation #ArtificialIntelligence #AI  #ProductDevelopment #KnowledgeGraph #SystemsThinking #FutureOfTechnology #ResearchAndDevelopment #GraphVisualization #BuildInPublic",
+      "postedAt": "2026-06-16 01:30:02.083 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7472460446650990592/",
+      "reactions": 7
+    },
+    {
+      "text": "Congratulations Hetav Shah",
+      "postedAt": "2026-03-27 13:32:09.978 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7443288759900561409/",
+      "reactions": 55
+    },
+    {
+      "text": "🚀 𝗣𝗼𝗿𝘁𝗳𝗼𝗹𝗶𝗼 𝗨𝗽𝗱𝗮𝘁𝗲 — 𝗡𝗼𝘄 𝗜𝘁 𝗧𝗮𝗹𝗸𝘀 𝗕𝗮𝗰𝗸\nI just updated my portfolio… and it’s no longer just a website.\nIt’s me — as an AI persona 🤖\n𝙒𝙝𝙖𝙩 𝙨𝙩𝙖𝙧𝙩𝙚𝙙 𝙖𝙨 𝙖 𝙨𝙩𝙖𝙩𝙞𝙘 𝙥𝙤𝙧𝙩𝙛𝙤𝙡𝙞𝙤\n𝙝𝙖𝙨 𝙣𝙤𝙬 𝙩𝙪𝙧𝙣𝙚𝙙 𝙞𝙣𝙩𝙤 𝙖𝙣 𝙞𝙣𝙩𝙚𝙧𝙖𝙘𝙩𝙞𝙫𝙚, 𝙞𝙣𝙩𝙚𝙡𝙡𝙞𝙜𝙚𝙣𝙩 𝙚𝙭𝙥𝙚𝙧𝙞𝙚𝙣𝙘𝙚 ⚡\n🧠 𝗪𝗵𝗮𝘁’𝘀 𝗜𝗻𝘀𝗶𝗱𝗲?\nA persona-driven agent built using RAG + LangGraph\n• Understands context\n• Responds in real-time\n• Represents how I think, build, and solve\n💬 𝗪𝗵𝗮𝘁 𝗖𝗵𝗮𝗻𝗴𝗲𝘀?\nNo more just scrolling.\nNow you can simply ask:\n• What have I built?\n• How do I approach problems?\n• What’s my experience?\n…and get answers instantly.\n⚡ 𝗪𝗵𝘆 𝗧𝗵𝗶𝘀 𝗠𝗮𝘁𝘁𝗲𝗿𝘀\nWe’re moving from static portfolios\nto interactive, intelligent experiences.\n🌐 𝗧𝗿𝘆 𝗜𝘁 𝗛𝗲𝗿𝗲\nhttps://lnkd.in/dBjze6-7\n𝗧𝗵𝗶𝘀 𝗶𝘀𝗻’𝘁 𝗷𝘂𝘀𝘁 𝗮𝗻 𝘂𝗽𝗱𝗮𝘁𝗲.\n𝗜𝘁’𝘀 𝗮 𝘀𝗵𝗶𝗳𝘁. 🚀\nWould love your thoughts 👇\n#AI #RAG #LangGraph #AgenticAI #Portfolio #BuildInPublic #FullStack",
+      "postedAt": "2026-03-25 13:30:14.528 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7442563499936980993/",
+      "reactions": 25
+    },
+    {
+      "text": "𝗙𝗿𝗼𝗺 “𝗚𝗿𝗲𝗮𝘁 𝗧𝗵𝗶𝗻𝗴𝘀 𝗔𝗿𝗲 𝗖𝗼𝗺𝗶𝗻𝗴” 𝘁𝗼 𝗮𝗰𝘁𝘂𝗮𝗹𝗹𝘆 𝗺𝗮𝗸𝗶𝗻𝗴 𝗶𝘁 𝗵𝗮𝗽𝗽𝗲𝗻.\n𝟭𝘀𝘁 𝗧𝗿𝘂𝗲 𝗛𝗮𝗰𝗸𝗮𝘁𝗵𝗼𝗻. 𝟭𝘀𝘁 𝗪𝗶𝗻. 🏆\nWhat started as an idea turned into 36 hours of pure dev to stage as winners — no sleep, no distractions, just building, refining, and pushing limits.\nFrom being discussed among teams in Phase 1…\nTo becoming the only team consistently praised by volunteers and mentors across both evaluation rounds…\nTo stepping into the final phase and delivering something that truly impressed the judges — we showed up at every stage.\n𝗧𝗵𝗶𝘀 𝘄𝗮𝘀𝗻’𝘁 𝗹𝘂𝗰𝗸.\nIt was focus, execution, and the mindset to conquer the podium.\nWe didn’t just participate — we dominated the journey.\nShoutout to my team 2AM Coders for the grind, the belief, and the energy throughout.\nKanak Jain | Poorvanshi Kochar | Leena Shah | Fenil Solanki\nSome might ask, “Where were you till now? Why no hackathons before this, even till the end of 3rd year?”\nSimple — I was building myself.\nBecause I believe in one thing: Great things take time.\n𝗔𝗻𝗱 𝘁𝗵𝗶𝘀?\n𝗝𝘂𝘀𝘁 𝘁𝗵𝗲 𝗯𝗲𝗴𝗶𝗻𝗻𝗶𝗻𝗴. 🚀\n#Hackathon #Winners #FirstWin #BuildInPublic #DeveloperJourney #TeamWork #Innovation #Startups #Tech #Grinding #Execution #Mindset #StudentsInTech #FutureBuilders\nComputer Science and Engineering Department\nPandit Deendayal Energy University (PDEU)",
+      "postedAt": "2026-03-25 12:15:07.573 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7442544596397490177/",
+      "reactions": 103
+    },
+    {
+      "text": "A traffic accident happens.\n\nWithin seconds:\n\nSignals start adapting.\nRoutes start shifting.\nAlerts are already drafted.\nEmergency vehicles get priority paths.\nNo human has intervened yet.\nThis isn’t the future.\nThis is what we built in 36 hours.\n\nIntroducing 𝗧𝗿𝗮𝗳𝗳𝗶𝗰𝗠𝗶𝗻𝗱\n An AI system that doesn’t just 𝗺𝗼𝗻𝗶𝘁𝗼𝗿 𝘁𝗿𝗮𝗳𝗳𝗶𝗰 — it 𝘁𝗵𝗶𝗻𝗸𝘀 𝗹𝗶𝗸𝗲 𝗮 𝗰𝗼𝗻𝘁𝗿𝗼𝗹 𝗿𝗼𝗼𝗺.\n\nTeam: 𝟮𝗔𝗠 𝗖𝗢𝗗𝗘𝗥𝗦\nPoorvanshi Kochar, Hetav Shah, Leena Shah, Fenil Solanki\n\nInstead of one big model…We designed 𝟲 𝘀𝗽𝗲𝗰𝗶𝗮𝗹𝗶𝘇𝗲𝗱 𝗔𝗜 𝗮𝗴𝗲𝗻𝘁𝘀 𝗿𝘂𝗻𝗻𝗶𝗻𝗴 𝗶𝗻 𝗽𝗮𝗿𝗮𝗹𝗹𝗲𝗹:\n\nSignal Agent → adjusts traffic lights dynamically\nRouting Agent → finds safest, smartest diversions\nAlert Agent → communicates instantly with the public\nDensity Agent → understands live traffic flow\nSupervisor → prevents cascading failures\nNarrative Agent → explains everything in real time\n\nAll of them working together — in under 3 seconds.\n\n𝗪𝗵𝗮𝘁 𝗺𝗮𝗸𝗲𝘀 𝗧𝗿𝗮𝗳𝗳𝗶𝗰𝗠𝗶𝗻𝗱 𝗱𝗶𝗳𝗳𝗲𝗿𝗲𝗻𝘁:\n• Map-based + route-level intelligence\n• Priority routing for Ambulance · Police · Fire\n• Weather-aware traffic decisions\n• Voice-enabled chatbot (hands-free for drivers)\n• Predicts accident hotspots 𝟯𝟬 𝗺𝗶𝗻𝘂𝘁𝗲𝘀 𝗶𝗻 𝗮𝗱𝘃𝗮𝗻𝗰𝗲\n\n𝗕𝘂𝗶𝗹𝘁 𝗼𝗻 𝗿𝗲𝗮𝗹-𝘄𝗼𝗿𝗹𝗱 𝗰𝗼𝗺𝗽𝗹𝗲𝘅𝗶𝘁𝘆:\n• 250+ real road segments\n• Live traffic simulation (5-second updates)\n• AI-powered decision making under uncertainty\n\nThis wasn’t just about building fast.\nIt was about building something that can 𝗵𝗮𝗻𝗱𝗹𝗲 𝗰𝗵𝗮𝗼𝘀... 𝗰𝗮𝗹𝗺𝗹𝘆.\nBecause traffic isn’t a data problem.\n\nIt’s a 𝗱𝗲𝗰𝗶𝘀𝗶𝗼𝗻 𝗽𝗿𝗼𝗯𝗹𝗲𝗺 𝘂𝗻𝗱𝗲𝗿 𝗽𝗿𝗲𝘀𝘀𝘂𝗿𝗲.\n\n36 hours.\n6 agents.\n1 system that acts before humans can react.\n\nAnd honestly?\nWe’re just getting started\n\nBig shoutout to the amazing organizers and mentors for making this experience unforgettable\n\n#AI #SmartCities #Hackathon #Innovation #MultiAgentSystems #TrafficManagement #2AMCoders\n\nPandit Deendayal Energy University (PDEU)\nScience & Technical Committee of PDEU",
+      "postedAt": "2026-03-23 15:50:11.929 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7441873945458499584/",
+      "reactions": 104
+    },
+    {
+      "text": "Excited to share that I’ve earned a verified achievement from Amazon Web Services (AWS)!This milestone reflects my growing understanding of cloud computing, including core AWS services, architecture, and best practices. Looking forward to building more scalable and secure solutions as I continue my journey in the cloud.#AWS #CloudComputing #Learning #TechJourney",
+      "postedAt": "2026-03-19 03:44:17.528 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7440241713597652992/",
+      "reactions": 5
+    },
+    {
+      "text": "Thank you, #SkillUp by #Simplilearn 🙌\n📢 I am super excited to share that I've just completed Introduction to LangGraph. 🎓\n                    \nI had a great experience learning industry-aligned skills of Generative AI\n                    \n    \n                    \n #Upskilling #GenerativeAI #Certification #JobReady #SkillUpBySimplilearn",
+      "postedAt": "2026-03-09 19:23:11.223 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7436854115583967232/",
+      "reactions": 9
+    },
+    {
+      "text": "A few days back, I learned something without even participating in a hackathon 😄\nThere was a Google Developer Groups (GDG) hackathon at our university.\nI didn’t take part — no team, tight schedule.\nA day before, a classmate asked:\n👉 which AI IDE I use\n👉 what I use for frontend & backend\n⚛️ React\n🔥 Firebase\n🤖 Antigravity\nThe next day at 5:30 PM while I was in library(rare 😅), he asked how to deploy.\nI explained the Vercel flow.\nAround 7 PM, while I was still in the library (very rare 😅), I got a call:\n“Vercel isn’t recognizing the repo and we need to submit till 8-9 pm.”\nSo I walked to the reading area in the opposite building —\nand instantly saw the issue 👀\nThe project was uploaded as a ZIP file 📦\nThen I asked:\n“Do you have Git installed?”\nThe answer was:\n“I don’t know.”\nI installed Git , pushed the repo properly, and deployed — live 🚀\nI also guided them on backend deployment using Render for later.\nThis wasn’t just one team — I helped with the same issue 3–5 teams that evening(all teams present there).\nMost were 8–9.5 CGPA rankers.\nI’m a 7.15 CGPA struggler 😅\nThat day made one thing clear:\nfundamentals beat last-minute cramming.\nEven if the scores are lower.\nEven if the journey is slower.\nBecause when it’s time to build, debug, deploy, and fix things under pressure —\nfundamentals show up.\nWhen I started my own project,\nthe UI wasn’t perfect either 🎨\nBut my focus from day one was simple:\n🧩 make features work\n🔐 wire auth properly (Google Auth included)\n🗂️ structure the system\nI kept building feature by feature,\nand only later refined the UI.\nYes, my project still has flaws (not yet live on https://vaquah.in):\n• email/password auth without OTP (kept intentionally for my upcoming Secured Application Development subject)\n• a few bugs I’m actively fixing 🛠️\nBut today:\n✅ the UI is consistent\n✅ most features work reliably\n✅ the web app is structured end-to-end\nEven the initial prototype itself felt complete.\nThat day reminded me of one thing:\nGrades matter.\nBut understanding matters more.\nAnd honestly — helping others learn how to ship?\nThat’s a win too 😊💛\nGoogle \n#BuildInPublic #GDG #FullStack #React #Firebase #Vercel #Render #StudentDevelopers #LearningByDoing #FundamentalsOverGrades #TechJourney",
+      "postedAt": "2026-01-05 12:30:48.657 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7413919902207545344/",
+      "reactions": 9
+    },
+    {
+      "text": "Not a demo. Not a clone.\nWrapping up the year with VaquaH — a real, end-to-end product build.\nFull project walkthrough on YouTube 👇\nhttps://lnkd.in/g3q-YRUA\nCV / NLP project in progress — stay tuned.\nSmall Update: I rolled out new version v1.3.1 as of 01/01/26 - in which I have fixed few minor bugs visible in video (v1.3.0) and refined a bit of UI which was visibly odd. 🐛 🛠️",
+      "postedAt": "2025-12-31 18:22:40.845 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7412196513814286336/",
+      "reactions": 12
+    },
+    {
+      "text": "Didn’t say much this year!\nBut YouTube and ChatGPT did. 😌✨\n📌 Skill Builder\n📌 Explorer. Doer. Producer.\n📌 Code, caffeine, curiosity ☕💻\nBuilt more than I posted.\nLearned more than I showed.\nNothing forced.\nJust consistent building. ⚡\n#BuildInPublic #ComputerScience #DeveloperLife #AI #FullStack #SkillBuilder",
+      "postedAt": "2025-12-25 04:30:03.661 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7409812651003838464/",
+      "reactions": 8
+    },
+    {
+      "text": "What building a real CV/NLP system actually looks like:\n❌ Not just training a model\n❌ Not just writing frontend code\n✅ Debugging data at 3am\n✅ Fixing one weird edge case that breaks everything\n✅ Rewriting the same API twice\n✅ Finally watching it work\nAnd yeah that moment makes it worth it.\n#DeveloperLife #ComputerVision #NLP #FullStackDev #BuildInPublic",
+      "postedAt": "2025-12-21 22:45:02.503 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7408638660457193472/",
+      "reactions": 8
+    },
+    {
+      "text": "Using no-code AI? 👀\n\nThen ask yourself this —\nwhat happens when the tool gives a wrong answer?\n\nNo-code helps you start fast.\n\nBut deep understanding helps you\ndebug, explain, trust, and scale. 🧠\n\nThat’s the difference between\nusing AI\nand\nbuilding real capability with AI.\n\nTools will keep changing.\nFundamentals won’t. 📌\n\nIf you’re serious about long-term growth,\nbuild the bridge — not just the shortcut.\n\nFollow Harshit Harsh for practical AI & data clarity.\nRepost if this changed how you see no-code 🚀\n\n#NoCodeAI #ArtificialIntelligence #DataScienceJourney #AIForBeginners #TechCareers #LearningMindset",
+      "postedAt": "2025-12-21 07:44:19.499 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7408411987669544963/",
+      "reactions": 848
+    },
+    {
+      "text": "A few days back, I got a message saying:\n“You’re in the top 1% of Cursor users in Vadodara — come join Café Cursor.”\nYeah… couldn’t skip that. 👀\nPulled up at The House of Earthmonk.\nMet sharp builders.\nSwapped workflows.\nPicked up some insane Cursor tricks.\nAnd walked out with a whole new respect for how fast this tool is moving.\nPlus — a personal credit drop as a thank-you? Say less. ⚡\nGrateful for the invite, the conversations, and the community.\nCursor is building something special.\nVadodara showed up. 💛🔥\n#Cursor #Top1Percent #CafeCursorVadodara #AICommunity #Developers #BuildInPublic",
+      "postedAt": "2025-12-19 06:37:38.381 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7407670430032965632/",
+      "reactions": 14
+    },
+    {
+      "text": "Heads down, locked in.\nWorking on something way bigger than anything I’ve done before.\nBuilding something that blends Computer Vision with NLP in the craziest way possible.\nNot gonna lie — it might take a month, or 6 months, or a whole year.\nBut yeah… I’m ready for the grind.\nStay tuned. Big reveal cooking. 👀🔥\n#StayTuned #SomethingBigComing #ComputerVision #NLP #ArtificialIntelligence #GenAI",
+      "postedAt": "2025-11-28 13:59:28.805 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7400171477632843776/",
+      "reactions": 16
+    },
+    {
+      "text": "I’m honored to share that I have been considered for a future opportunity in \"Core Team\" at NTS Nihon Global after the completion of my degree.\n\nOver the past months, I’ve had the opportunity to work closely with NTS Nihon Global on real-world development challenges. This experience has helped me understand not just the technical aspects of building solutions, but also how problems are approached in professional environments.\nI am truly grateful to Mr. Neeraj Kumar (Director, NTS Nihon Global) for recognizing my efforts and expressing his trust in my ability to contribute to the organisation in the long term. \nThis encouragement means a lot — it reminds me that consistent learning, curiosity, and dedication truly create meaningful direction. I will continue working on improving my skills, gaining real-world understanding, and contributing effectively to the ongoing project.\nLooking forward to learning more, growing further, and doing my best to justify the trust placed in me.\nOnwards and upwards. 🚀\nNTS Nihon Global \n#learning #softwaredevelopment #grateful #growthmindset #opportunity #technology #team #careerjourney",
+      "postedAt": "2025-11-11 16:26:57.529 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7394047998156058624/",
+      "reactions": 15
+    },
+    {
+      "text": "Completed my internship at NTS Global Nihon (June 2025 - August 2025), where I worked as a Full Stack Developer and later stepped up as a Team Lead 🤝\nFrom integrating auth systems & Firestore rules to developing chat features and contributing to chatbot workflows, this experience taught me how to:\nThink in terms of systems, not just code\nTake ownership of features end-to-end\nCommunicate effectively within a team environment\nGrateful for the chance to grow, lead, and ship meaningful work 🚀\nLooking forward to applying this momentum to upcoming Full Stack + AI-driven projects ✨\nNTS Nihon Global\n#softwareengineering #leadership #experience #react #nodejs #firebase",
+      "postedAt": "2025-11-11 15:35:09.654 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7394034962783539202/",
+      "reactions": 14
+    },
+    {
+      "text": "🚀 Project —> VaquaH - Premium AC Services & Products\nBuilt it. Designed it. Shipped it. Improving it.\nNot a “for marks” project.\nNot a “copied from GitHub” project.\nA working end-to-end service + product platform.\nVaquaH (https://vaquah.in)\nA platform where customers can:\nBrowse & Order AC products and accessories\nBook AC services (cleaning, repair, installation)\nTrack their service flow\nManage their account & orders in a user dashboard\nAnd yes — there is a full Admin Dashboard too.\nNot a static one — a real one that handles:\nProduct & inventory updates\nOrder logs\nPricing controls\nService data management\n(Admin Dashboard won't be visible until I update the role of user in Firestore Database)\n\n🛠️ What’s Left to Complete\nAppointment / Technician Assignment workflow\nBackend logic for Discounts / Seasonal Offers\nand Many More...\nAlready in progress.\nThis project made me understand how service businesses really operate, not just how to build nice UI.\n⚙️ Tech Stack\nReact (Vite) • Tailwind • shadcn/ui • Node.js • Firebase\nTanStack Query • Component-based architecture • Mobile-first design\n🎯 Why I’m Posting This\nBecause it’s easy to forget how far you’ve come when you’re still building.\nSometimes you need to flex your work — not to impress,\nbut to document your growth.\nStill building. Still evolving.\nBut yeah… feels good. 😌🔥\n\"Open to Feedbacks 🤝\"\n#VaquaH #WebAppDevelopment #ReactJS #FullStackDev #ProductBuilder #ShippingNotTalking #DeveloperJourney #AdminDashboard #BuiltNotBought",
+      "postedAt": "2025-11-11 15:10:22.584 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7394028725560025088/",
+      "reactions": 8
+    },
+    {
+      "text": "Reposting this because I relate to it a lot.\n\nOnce you understand how to code, tools like Cursor,Trae, Windsurf, and Copilot don’t replace you — they just remove the repetitive parts. The real value is in how you think, design systems, and structure logic.Typing is not the skill.Thinking is.\n\nAI coding assistants don’t lower the bar — they raise what we focus on.Less typing. More thinking. Better products.\n\nBuilding smarter > building harder.\n\nAt the end of the day, experience isn’t about how fast you typeIt’s about how clearly you think, how well you architect, and how efficiently you translate ideas into reality.\n\nAI just gives us more room to do exactly that. 🚀",
+      "postedAt": "2025-11-11 13:56:40.222 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7394010176829251584/",
+      "reactions": 1
+    },
+    {
+      "text": "I’m happy to share that I’m starting a new position as Full-stack Developer Intern at NTS Nihon Global!",
+      "postedAt": "2025-07-10 08:55:53.989 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7348998390107508736/",
+      "reactions": 13
+    },
+    {
+      "text": "Thrilled to announce the first achievement in  college , our/my poster secured a spot in the top 3 of my college batch!(C1)🌟🏆 Team effort at its best! Excited for more accomplishments to come. #CollegeAchievement #TeamWin #FutureSuccess 🎓✨",
+      "postedAt": "2023-12-03 20:04:10.738 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7137169666686255104/",
+      "reactions": null
+    },
+    {
+      "text": "\"Delighted to share that I've achieved my C Course certification! 🌐 Excited to apply this knowledge in real-world scenarios. #CPROgramming #CertificationAchievement #ContinuousLearning\"",
+      "postedAt": "2023-12-01 15:49:53.267 +0000 UTC",
+      "url": "https://www.linkedin.com/feed/update/urn:li:activity:7136380896483446784/",
+      "reactions": null
+    }
+  ]
+}
