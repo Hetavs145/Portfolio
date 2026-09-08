@@ -38,7 +38,7 @@ const Footer = () => {
             <div className="py-3 px-4 border-b border-white/5 bg-navy-900/40 backdrop-blur-sm flex items-center justify-center gap-2 text-xs font-mono text-slate-400">
                 <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_#38bdf8]" />
                 <span className="tracking-wider text-teal-400/90 font-medium">
-                    {isTouchDevice ? 'tap on robo to see the magic' : 'move cursor near to robo to see the magic'}
+                    {isTouchDevice ? 'tap on arc reactor to see the magic' : 'move cursor near arc reactor to see the magic'}
                 </span>
             </div>
 

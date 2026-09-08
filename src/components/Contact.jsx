@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Github, Linkedin, Instagram, Youtube, Sparkles } from 'lucide-react';
+import { Mail, Phone, Github, Linkedin, Instagram, Youtube } from 'lucide-react';
 
 const contactChannels = [
     {
@@ -143,20 +143,23 @@ const Contact = () => {
                         onMouseLeave={() => !isTouch && setIsNear(false)}
                         onClick={() => isTouch && setIsNear(prev => !prev)}
                     >
-                        {/* Center Holographic Status Prompt */}
+                        {/* Center Arc Reactor Interaction Prompt (No AI icon) */}
                         <div
-                            className={`flex flex-col items-center gap-2.5 transition-all duration-500 ${
-                                isNear ? 'opacity-30 scale-90' : 'opacity-90 scale-100'
+                            className={`flex flex-col items-center gap-2 transition-all duration-500 ${
+                                isNear ? 'opacity-25 scale-90' : 'opacity-95 scale-100'
                             }`}
                         >
-                            <div className="w-12 h-12 rounded-full border border-teal-400/40 bg-navy-900/80 backdrop-blur-md flex items-center justify-center text-teal-400 shadow-[0_0_16px_rgba(56,189,248,0.25)] animate-pulse">
-                                <Sparkles size={22} className="text-teal-300" />
+                            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-navy-950/85 border border-cyan-400/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)]">
+                                <span className="relative flex h-2.5 w-2.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400 shadow-[0_0_8px_#38bdf8]"></span>
+                                </span>
+                                <span className="font-mono text-xs text-cyan-300/90 tracking-wider font-medium">
+                                    {isTouch
+                                        ? (isNear ? 'tap arc reactor to hide' : 'tap on arc reactor')
+                                        : (isNear ? 'move cursor away to hide' : 'move cursor near arc reactor')}
+                                </span>
                             </div>
-                            <span className="font-mono text-xs text-teal-400/85 tracking-widest uppercase bg-navy-950/80 px-3 py-1 rounded-full border border-teal-400/20 backdrop-blur-sm">
-                                {isTouch
-                                    ? (isNear ? 'Tap robo to hide' : 'Tap on robo to connect')
-                                    : (isNear ? 'Move cursor away to hide' : 'Move cursor near robo body to connect')}
-                            </span>
                         </div>
 
                         {/* Floating Orbital Channels Blooming Around Robot Body */}
