@@ -124,7 +124,7 @@ const About = () => {
                                     height={600}
                                     loading="lazy"
                                     decoding="async"
-                                    className="w-full h-full object-cover object-[50%_18%] grayscale-[15%] group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
+                                    className="w-full h-full object-cover object-[50%_63%] grayscale-[15%] group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
                                 />
 
                                 {/* Subtle Technical Glaze */}

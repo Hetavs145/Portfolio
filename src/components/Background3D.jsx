@@ -630,19 +630,25 @@ const Background3D = () => {
       currentShiftX: 0
     };
 
-    // Flight takeoff animation state
+    // Flight takeoff animation state (moving away into distance & smooth return)
     const flightState = {
       active: false,
       progress: 0,
-      speedY: 0,
-      flightYOffset: 0
+      currentZ: 0,
+      currentY: 0,
+      targetZ: 0,
+      targetY: 0,
+      returning: false
     };
 
     const handleFlightTakeoff = () => {
       flightState.active = true;
       flightState.progress = 0;
-      flightState.speedY = 0;
-      flightState.flightYOffset = 0;
+      flightState.currentZ = 0;
+      flightState.currentY = 0;
+      flightState.targetZ = 0;
+      flightState.targetY = 0;
+      flightState.returning = false;
     };
 
     window.addEventListener('flight-takeoff', handleFlightTakeoff);
@@ -851,22 +857,51 @@ const Background3D = () => {
       }
 
       if (flightState.active) {
-        flightState.progress += 0.014;
+        if (!flightState.returning) {
+          // Smooth, majestic progression of robot flying away into the distance
+          flightState.progress = Math.min(1, flightState.progress + 0.010);
 
-        // Cinematic Overdrive Rocket Thrusters
-        thrusterScaleL = 3.6 + Math.random() * 0.8;
-        thrusterScaleW = 2.0 + Math.random() * 0.4;
-        thrusterIntensity = 18.0;
+          // Easing curve: recedes away along Z into deep space, while gently ascending in the sky
+          const flyT = 1 - Math.pow(1 - flightState.progress, 2.5);
+          flightState.targetZ = -22 * flyT; // Moves into deep background (-Z)
+          flightState.targetY = 3.6 * flyT;  // Ascends into upper sky (+Y)
 
-        // Robot pitches forward into supersonic flight posture
-        suitGroup.rotation.x = -0.42;
+          // As user arrives near top of page, initiate smooth re-entry swoop
+          if (window.scrollY <= 30 && flightState.progress > 0.35) {
+            flightState.returning = true;
+          }
+        } else {
+          // Graceful re-entry swoop back from deep space towards camera
+          flightState.targetZ += (0 - flightState.targetZ) * 0.06;
+          flightState.targetY += (0 - flightState.targetY) * 0.06;
 
-        // Accelerate straight UP into the sky!
-        flightState.speedY += 0.28;
-        flightState.flightYOffset += flightState.speedY;
+          if (Math.abs(flightState.targetZ) < 0.3 && Math.abs(flightState.targetY) < 0.15 && window.scrollY <= 10) {
+            flightState.active = false;
+            flightState.returning = false;
+            flightState.targetZ = 0;
+            flightState.targetY = 0;
+            flightState.currentZ = 0;
+            flightState.currentY = 0;
+            particleMaterial.size = 0.12;
+            particleMaterial.opacity = 0.55;
+          }
+        }
+
+        // Smooth physics dampening for flight coordinates
+        flightState.currentZ += (flightState.targetZ - flightState.currentZ) * 0.08;
+        flightState.currentY += (flightState.targetY - flightState.currentY) * 0.08;
+
+        // Cinematic Rocket Thrusters in flight
+        thrusterScaleL = 2.5 + Math.sin(time * 36) * 0.3;
+        thrusterScaleW = 1.35 + Math.sin(time * 24) * 0.15;
+        thrusterIntensity = 14.0;
+
+        // Robot pitches forward away from the camera into deep space
+        const distanceT = Math.min(1, Math.abs(flightState.currentZ) / 14);
+        suitGroup.rotation.x = -0.55 * distanceT;
 
         // Movie Hyperspace: Stars/particles stream DOWNWARDS at warp speed!
-        const warpSpeed = 2.4 + Math.min(flightState.progress * 4.0, 4.0);
+        const warpSpeed = 1.8 + Math.min(flightState.progress * 1.5, 1.5);
         for (let i = 1; i < particleCount * 3; i += 3) {
           positions[i] -= warpSpeed;
           if (positions[i] < -25) {
@@ -876,16 +911,8 @@ const Background3D = () => {
           }
         }
         particleGeometry.attributes.position.needsUpdate = true;
-        particleMaterial.size = 0.25;
-        particleMaterial.opacity = 0.95;
-
-        // Arrive at the top: when user reaches top (scrollY <= 15) and flight progress finishes
-        if (window.scrollY <= 15 && flightState.progress > 0.85) {
-          flightState.active = false;
-          flightState.flightYOffset = 0;
-          particleMaterial.size = 0.12;
-          particleMaterial.opacity = 0.55;
-        }
+        particleMaterial.size = 0.22;
+        particleMaterial.opacity = 0.90;
       } else {
         // Normal gentle star drift
         particleSystem.rotation.y = time * 0.02;
@@ -948,13 +975,17 @@ const Background3D = () => {
       scrollState.currentRotY += (targetRot - scrollState.currentRotY) * 0.04;
       scrollState.currentShiftX += (targetShiftX - scrollState.currentShiftX) * 0.04;
 
-      // Apply 3D Turntable Rotation to the entire assembled suit
-      suitGroup.rotation.y = scrollState.currentRotY;
-      suitGroup.position.x = scrollState.currentShiftX;
+      // When in flight, smoothly center suit horizontally
+      const flightCenterT = flightState.active ? Math.min(1, Math.abs(flightState.currentZ) / 8) : 0;
+      suitGroup.rotation.y = scrollState.currentRotY * (1 - flightCenterT);
+      suitGroup.position.x = scrollState.currentShiftX * (1 - flightCenterT);
 
       // Gentle floating hover bobbing
       const bobbing = Math.sin(time) * 0.12;
-      suitGroup.position.y = (assembly > 0.4 ? 1.6 : 0) + bobbing + flightState.flightYOffset;
+      suitGroup.position.y = (assembly > 0.4 ? 1.6 : 0) + bobbing + flightState.currentY;
+
+      // 3D Depth Position: moves into distance (away from camera)
+      suitGroup.position.z = flightState.currentZ;
 
       // Responsive model scale
       const modelScale = isMobile ? 0.72 : 0.95;
