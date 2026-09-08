@@ -4,22 +4,27 @@ A modern, interactive developer portfolio built with React, Three.js, and Framer
 
 ## 🚀 Key Features
 
-### 🎨 Interactive Experience
+### 🎨 3D Mech & Interactive Sci-Fi Experience
 
-- **3D Background**: Three.js-powered animated background with real-time rendering.
-- **Resume Aura Cursor**: Custom canvas cursor that emits floating keyword particles (Full-Stack, Agentic, LangGraph, etc.) based on which section you're hovering.
-- **Magnetic Buttons**: Buttons that pull toward your cursor with spring physics.
-- **Smooth Animations**: Framer Motion transitions on scroll, hover, and page load.
-- **Glitch Effect**: Cyberpunk-style name animation in the hero section.
+- **Procedural 3D Suit Assembly**: An Iron Man–inspired mech character dynamically assembles piece-by-piece across scroll viewports (Helmet ➔ Gauntlets ➔ Torso & Arc Reactor ➔ Legs ➔ Thruster Boots) built with procedural Three.js geometries, metallic PBR shaders, and full turntable rotations without 2D flipping.
+- **Twin Fire Booster Plumes**: Realistic downward-firing flame thrusters anchored strictly below the boots with dynamic turbulence noise and light emission.
+- **Interactive Arc Reactor Proximity & Magic**: Moving your cursor near the Arc Reactor (or tapping it on mobile/tablet) triggers real-time robot facial reactions: glowing blush cheeks, joyful smile, pupil eye-tracking, and Arc Reactor energy flares.
+- **Orbital Floating Contact Constellation**: 6 futuristic holographic pods (Email, Phone, GitHub, LinkedIn, Instagram, YouTube) floating in zero-g around the robot body, blooming outward upon Arc Reactor proximity/tap.
+- **Hyperspace "Scroll to Top" Flight**: Clicking the rocket triggers a cinematic 3D spaceflight where the robot recedes deep into the Z-axis while 200+ stars stream downward at warp speed, concluding with an atmospheric re-entry swoop.
+- **Vector HUD Telemetry Dial**: Pure vector SVG engineering reticle in the About section with concentric calibration tracks, cardinal brackets, and azimuth degree labels (`000°`, `090°`, `180°`, `270°`).
+- **Resume Aura Cursor**: Custom canvas cursor (`z-[9999]`) emitting floating keyword particles (Full-Stack, Agentic, LangGraph, etc.) based on section context.
 
-### 🤖 AI Chat Agent
+### 🤖 AI Chat Agent & RAG Pipeline
 
-- **Real vector RAG**: The corpus is chunked and embedded ahead of time; each question retrieves the top-5 matching chunks by cosine similarity. Not a fixed blob stuffed into every prompt.
-- **Multi-source knowledge base**: Both resumes (`.tex` + IMNU `.docx`), live GitHub repos and READMEs, LinkedIn, and the site's own project/achievement data — 70 chunks, all kept in sync.
-- **OpenRouter free tier, end to end**: `nvidia/nemotron-3-embed-1b:free` for embeddings, `google/gemma-4-31b-it:free` for chat. Zero cost.
-- **Degrades instead of failing**: if embedding fails, retrieval falls back to lexical IDF scoring over the same chunks; if a model is rate-limited, it fails over to a model on a different provider.
-- **Self-updating**: a daily GitHub Action re-scrapes, re-embeds and commits, so new repos and LinkedIn posts show up without any manual step.
-- **Conversation memory**: last 12 turns, with an LRU cache so repeat questions cost no quota.
+- **Real Vector RAG**: High-dimensional vector search using `nvidia/nemotron-3-embed-1b:free` (dim 2048) over **113 indexed knowledge chunks** across:
+  - 💼 **LinkedIn**: 43 chunks (including 22 live posts, certifications, and experience)
+  * 🐙 **GitHub**: 26 chunks (all project repositories & cleaned READMEs)
+  * 📄 **Resumes**: 24 chunks (standard `.tex` & IMNU `.docx`)
+  * 🌐 **Site Content**: 20 chunks
+- **Automated Daily Sync**: GitHub Actions workflow (`refresh-kb.yml`) automatically runs every night at 03:00 UTC to re-scrape latest LinkedIn posts and GitHub repos, re-embed changes, and push updates.
+- **OpenRouter Multi-Model Fallback Chain**: Primary chat with `google/gemma-4-31b-it:free`, cascading to `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` and `google/gemma-4-26b-a4b-it:free`.
+- **Graceful Degradation**: Falls back to lexical IDF scoring if embedding limits are hit, ensuring 100% uptime.
+- **Conversation Memory**: 12-turn conversational memory with LRU caching for zero-quota repeat queries.
 
 See [architecture_diagram.md](./architecture_diagram.md) for the full pipeline.
 
