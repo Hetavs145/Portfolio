@@ -70,6 +70,15 @@ const Contact = () => {
     const [isTouch, setIsTouch] = useState(false);
     const [activeTooltip, setActiveTooltip] = useState(null);
     const hubRef = useRef(null);
+    const lastToggleTime = useRef(0);
+
+    // Reliable debounced toggle ensuring tap always works and never double-fires
+    const toggleNear = (forceVal) => {
+        const now = performance.now();
+        if (now - lastToggleTime.current < 450) return;
+        lastToggleTime.current = now;
+        setIsNear(prev => (typeof forceVal === 'boolean' ? forceVal : !prev));
+    };
 
     useEffect(() => {
         const mq = window.matchMedia('(pointer: coarse)');
@@ -79,13 +88,13 @@ const Contact = () => {
         updateTouch();
         mq.addEventListener('change', updateTouch);
 
-        // Listen for touch event dispatched from Background3D when robot is tapped on mobile
+        // Listen for touch event dispatched from Background3D when robot or Arc Reactor is tapped on mobile
         const handleRoboTouch = () => {
-            setIsNear(prev => !prev);
+            toggleNear();
         };
         window.addEventListener('robo-touch', handleRoboTouch);
 
-        // Mouse proximity detection for desktop
+        // Mouse proximity detection for desktop (cursor logic kept completely untouched!)
         const handleWindowMouseMove = (e) => {
             if (isTouch || !hubRef.current) return;
             const rect = hubRef.current.getBoundingClientRect();
@@ -138,28 +147,40 @@ const Contact = () => {
                     {/* Interactive Robot Orbital Hub Zone */}
                     <div
                         ref={hubRef}
-                        className="relative w-full max-w-lg h-80 sm:h-96 mx-auto flex items-center justify-center select-none cursor-pointer"
+                        className="relative w-full max-w-lg h-80 sm:h-96 mx-auto flex items-center justify-center select-none"
                         onMouseEnter={() => !isTouch && setIsNear(true)}
                         onMouseLeave={() => !isTouch && setIsNear(false)}
-                        onClick={() => isTouch && setIsNear(prev => !prev)}
+                        onClick={() => toggleNear()}
                     >
                         {/* Center Arc Reactor Interaction Prompt (No AI icon) */}
                         <div
-                            className={`flex flex-col items-center gap-2 transition-all duration-500 ${
-                                isNear ? 'opacity-25 scale-90' : 'opacity-95 scale-100'
+                            className={`flex flex-col items-center gap-2 transition-all duration-500 cursor-pointer ${
+                                isNear ? 'opacity-35 scale-95' : 'opacity-100 scale-100'
                             }`}
                         >
-                            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-navy-950/85 border border-cyan-400/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)]">
-                                <span className="relative flex h-2.5 w-2.5">
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleNear();
+                                }}
+                                onTouchEnd={(e) => {
+                                    e.stopPropagation();
+                                    toggleNear();
+                                }}
+                                aria-label="Tap Arc Reactor to reveal or hide channels"
+                                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-navy-950/90 border border-cyan-400/50 hover:border-cyan-300 backdrop-blur-md shadow-[0_0_24px_rgba(56,189,248,0.35)] active:scale-95 transition-all cursor-pointer select-none"
+                            >
+                                <span className="relative flex h-3 w-3">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400 shadow-[0_0_8px_#38bdf8]"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-400 shadow-[0_0_8px_#38bdf8]"></span>
                                 </span>
-                                <span className="font-mono text-xs text-cyan-300/90 tracking-wider font-medium">
+                                <span className="font-mono text-xs sm:text-sm text-cyan-300 tracking-wider font-semibold">
                                     {isTouch
                                         ? (isNear ? 'tap arc reactor to hide' : 'tap on arc reactor')
                                         : (isNear ? 'move cursor away to hide' : 'move cursor near arc reactor')}
                                 </span>
-                            </div>
+                            </button>
                         </div>
 
                         {/* Floating Orbital Channels Blooming Around Robot Body */}
@@ -173,6 +194,7 @@ const Contact = () => {
                                     href={item.href}
                                     target={item.href.startsWith('mailto:') || item.href.startsWith('tel:') ? '_self' : '_blank'}
                                     rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
                                     initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                                     animate={isNear ? {
                                         scale: 1,

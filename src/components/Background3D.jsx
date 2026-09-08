@@ -683,7 +683,14 @@ const Background3D = () => {
         mouse.screenX = touch.clientX;
         mouse.screenY = touch.clientY;
 
-        // Check if touch is on or near the robot body
+        // Check if touch is on or near the Arc Reactor or robot body
+        const arcWorld = new THREE.Vector3();
+        arcLight.getWorldPosition(arcWorld);
+        arcWorld.project(camera);
+        const arcScreenX = (arcWorld.x * 0.5 + 0.5) * window.innerWidth;
+        const arcScreenY = (-(arcWorld.y) * 0.5 + 0.5) * window.innerHeight;
+        const distToArc = Math.hypot(touch.clientX - arcScreenX, touch.clientY - arcScreenY);
+
         const roboWorld = new THREE.Vector3();
         suitGroup.getWorldPosition(roboWorld);
         roboWorld.project(camera);
@@ -691,7 +698,7 @@ const Background3D = () => {
         const roboScreenY = (-(roboWorld.y) * 0.5 + 0.5) * window.innerHeight;
         const distToRobo = Math.hypot(touch.clientX - roboScreenX, touch.clientY - roboScreenY);
 
-        if (distToRobo < 320) {
+        if (distToArc < 360 || distToRobo < 360) {
           // Trigger touch magic for 4.5 seconds
           touchMagicUntil = performance.now() + 4500;
           // Dispatch custom event so Contact component can bloom orbital icons
