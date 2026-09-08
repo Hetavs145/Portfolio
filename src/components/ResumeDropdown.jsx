@@ -60,7 +60,7 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
 
     const triggerClass =
         variant === 'nav'
-            ? 'flex items-center gap-1.5 border border-teal-400 text-teal-400 px-4 py-2 rounded hover:bg-teal-400/10 transition-colors font-mono text-sm'
+            ? 'flex items-center gap-1.5 border border-teal-400 text-teal-400 px-4 py-2 rounded-full hover:bg-teal-400/10 transition-colors font-mono text-sm'
             : 'flex items-center justify-center gap-2 bg-teal-400 text-navy-900 px-8 py-4 rounded border border-teal-400 hover:bg-teal-300 transition-colors font-mono text-sm font-bold w-full sm:w-auto';
 
     return (

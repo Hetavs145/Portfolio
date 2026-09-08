@@ -37,20 +37,29 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'glass py-3 md:py-4' : 'bg-transparent py-4 md:py-6'}`}>
-            <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
+        <header className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 md:px-8 pt-3 md:pt-4 pointer-events-none">
+            <nav
+                className={`pointer-events-auto max-w-6xl mx-auto rounded-full transition-all duration-300 px-5 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center ${
+                    scrolled
+                        ? 'backdrop-blur-xl bg-navy-950/90 border border-teal-400/30 shadow-2xl shadow-black/60'
+                        : 'backdrop-blur-xl bg-navy-900/75 border border-white/10 shadow-xl shadow-black/25'
+                }`}
+            >
                 <motion.button
                     onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-teal-400 font-mono text-lg md:text-xl font-bold"
+                    className="text-teal-400 font-mono text-lg md:text-xl font-bold flex items-center gap-2 group"
                 >
-                    Hetav
+                    <span className="w-8 h-8 rounded-full border border-teal-400/50 flex items-center justify-center bg-teal-400/10 text-xs text-teal-300 font-mono font-bold group-hover:bg-teal-400 group-hover:text-navy-950 transition-colors shadow-sm">
+                        H
+                    </span>
+                    <span className="tracking-tight hover:text-teal-300 transition-colors">Hetav</span>
                 </motion.button>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex items-center space-x-8">
-                    <ol className="flex space-x-8">
+                <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+                    <ol className="flex space-x-6 lg:space-x-8">
                         <motion.li
                             initial={{ y: -20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -88,9 +97,9 @@ const Navbar = () => {
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        className={`px-4 py-2 rounded font-mono text-sm transition-all duration-300 flex items-center gap-2 ${
+                        className={`px-4 py-2 rounded-full font-mono text-sm transition-all duration-300 flex items-center gap-2 ${
                             currentPage === 'agent'
-                                ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25'
+                                ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25 font-bold'
                                 : 'border border-teal-400 text-teal-400 hover:bg-teal-400/10'
                         }`}
                     >
@@ -107,7 +116,7 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile: Ask Hetav icon + Hamburger */}
-                <div className="flex md:hidden items-center gap-3">
+                <div className="flex md:hidden items-center gap-2.5">
                     <motion.button
                         onClick={() => {
                             setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
@@ -116,20 +125,23 @@ const Navbar = () => {
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className={`p-2 rounded-lg transition-all duration-300 ${
+                        className={`p-2 rounded-full transition-all duration-300 ${
                             currentPage === 'agent'
                                 ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25'
                                 : 'border border-teal-400 text-teal-400'
                         }`}
                         aria-label="Ask Hetav"
                     >
-                        <MessageCircle size={20} />
+                        <MessageCircle size={18} />
                     </motion.button>
-                    <button onClick={() => setIsOpen(!isOpen)} className="text-teal-400">
-                        {isOpen ? <X size={28} /> : <Menu size={28} />}
+                    <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="text-teal-400 p-1.5 rounded-full hover:bg-white/5 transition-colors"
+                    >
+                        {isOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
-            </div>
+            </nav>
 
             {/* Mobile Menu Overlay */}
             {isOpen && (
@@ -138,8 +150,15 @@ const Navbar = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.18, ease: 'easeOut' }}
-                    className="fixed inset-0 bg-navy-900/95 backdrop-blur-lg flex flex-col items-center justify-center z-40 md:hidden"
+                    className="fixed inset-0 bg-navy-900/95 backdrop-blur-lg flex flex-col items-center justify-center z-40 md:hidden pointer-events-auto"
                 >
+                    <button
+                        onClick={() => setIsOpen(false)}
+                        className="absolute top-6 right-6 text-teal-400 p-2 rounded-full hover:bg-white/10"
+                        aria-label="Close menu"
+                    >
+                        <X size={28} />
+                    </button>
                     <ul className="space-y-6 text-center w-full px-8">
                         <li>
                             <button
@@ -162,13 +181,13 @@ const Navbar = () => {
                                 </a>
                             </li>
                         ))}
-                        <li className="pt-4">
+                        <li className="pt-4 flex justify-center">
                             <ResumeDropdown variant="nav" onNavigate={() => setIsOpen(false)} />
                         </li>
                     </ul>
                 </motion.div>
             )}
-        </nav>
+        </header>
     );
 };
 
