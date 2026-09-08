@@ -3,7 +3,7 @@ import { Github, Linkedin, Mail, Instagram, Youtube } from 'lucide-react';
 
 const Footer = () => {
     return (
-        <footer className="bg-navy-800 py-8 text-center text-slate-light font-mono text-sm border-t border-navy-700">
+        <footer className="relative z-10 bg-navy-950/90 backdrop-blur-md py-8 text-center text-slate-light font-mono text-sm border-t border-white/5 shadow-2xl">
             <div className="flex justify-center space-x-6 mb-4">
                 <a href="https://github.com/Hetavs145" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 hover:-translate-y-1 transition-all">
                     <Github size={20} />

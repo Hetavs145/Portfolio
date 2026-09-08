@@ -10,10 +10,10 @@ const ProjectCard = ({ project, index }) => {
     const isSecondary = project.featured === 'secondary';
 
     const cardClasses = isPrimary
-        ? 'bg-navy-800 rounded-lg p-6 hover:-translate-y-2 transition-all duration-300 border-2 border-amber-400/50 hover:border-amber-400 group shadow-lg shadow-amber-400/10 hover:shadow-amber-400/20 relative overflow-hidden'
+        ? 'backdrop-blur-md bg-navy-800/75 rounded-xl p-6 hover:-translate-y-2 transition-all duration-300 border-2 border-amber-400/50 hover:border-amber-400 group shadow-xl shadow-amber-400/10 hover:shadow-amber-400/20 relative overflow-hidden'
         : isSecondary
-            ? 'bg-navy-800 rounded-lg p-6 hover:-translate-y-2 transition-all duration-300 border-2 border-teal-400/40 hover:border-teal-400 group shadow-lg shadow-teal-400/10 hover:shadow-teal-400/20 relative overflow-hidden'
-            : 'bg-navy-800 rounded-lg p-6 hover:-translate-y-2 transition-transform duration-300 border border-teal-400/10 hover:border-teal-400/30 group';
+            ? 'backdrop-blur-md bg-navy-800/75 rounded-xl p-6 hover:-translate-y-2 transition-all duration-300 border-2 border-teal-400/40 hover:border-teal-400 group shadow-xl shadow-teal-400/10 hover:shadow-teal-400/20 relative overflow-hidden'
+            : 'backdrop-blur-md bg-navy-800/65 rounded-xl p-6 hover:-translate-y-2 transition-all duration-300 border border-white/10 hover:border-teal-400/40 group shadow-lg shadow-black/30 hover:shadow-teal-400/10 relative overflow-hidden';
 
     const iconColor = isPrimary ? 'text-amber-400' : 'text-teal-400';
     const titleHoverColor = isPrimary ? 'group-hover:text-amber-400' : 'group-hover:text-teal-400';

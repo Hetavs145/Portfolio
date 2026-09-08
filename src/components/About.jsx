@@ -12,15 +12,16 @@ const About = () => {
     const { setCursor, resetCursor } = useCursor();
 
     return (
-        <section id="about" className="py-20 relative">
+        <section id="about" className="py-20 relative z-10">
             <div className="container mx-auto px-6 md:px-12 lg:px-24">
-                <motion.div
-                    ref={ref}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.5 }}
-                    className="grid md:grid-cols-2 gap-12 items-center"
-                >
+                <div className="backdrop-blur-md bg-navy-900/80 border border-white/10 rounded-3xl p-8 sm:p-12 shadow-2xl relative">
+                    <motion.div
+                        ref={ref}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={inView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.5 }}
+                        className="grid md:grid-cols-2 gap-12 items-center"
+                    >
                     <div>
                         <div className="flex items-center mb-8">
                             <h2 className="text-3xl font-bold text-slate-lighter">About Me</h2>
@@ -119,7 +120,8 @@ const About = () => {
                     </motion.div>
                 </motion.div>
             </div>
-        </section>
+        </div>
+    </section>
     );
 };
 
