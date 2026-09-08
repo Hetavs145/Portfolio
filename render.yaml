@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: portfolio-agent-server
+    env: node
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: GROQ_API_KEY
+        sync: false
