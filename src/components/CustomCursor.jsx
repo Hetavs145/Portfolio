@@ -52,13 +52,13 @@ const CustomCursor = () => {
     return (
         <>
             <motion.div
-                className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-50 hidden md:block"
+                className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[9999] hidden md:block"
                 variants={variants}
                 animate={cursorVariant}
                 transition={{ type: "spring", stiffness: 500, damping: 28 }}
             />
             <motion.div
-                className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-50 hidden md:block"
+                className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] hidden md:block"
                 variants={dotVariants}
                 animate={cursorVariant}
                 transition={{ type: "spring", stiffness: 1000, damping: 50 }}

@@ -49,12 +49,9 @@ const Navbar = () => {
                     onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); }}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-teal-400 font-mono text-lg md:text-xl font-bold flex items-center gap-2 group"
+                    className="text-teal-400 font-mono text-lg md:text-xl font-bold tracking-tight hover:text-teal-300 transition-colors"
                 >
-                    <span className="w-8 h-8 rounded-full border border-teal-400/50 flex items-center justify-center bg-teal-400/10 text-xs text-teal-300 font-mono font-bold group-hover:bg-teal-400 group-hover:text-navy-950 transition-colors shadow-sm">
-                        H
-                    </span>
-                    <span className="tracking-tight hover:text-teal-300 transition-colors">Hetav</span>
+                    Hetav
                 </motion.button>
 
                 {/* Desktop Menu */}

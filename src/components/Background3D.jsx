@@ -72,7 +72,7 @@ const Background3D = () => {
     scene.add(goldFillLight);
 
     // --- 3. Floating Starfield / Particles (3D Points) ---
-    const particleCount = 140;
+    const particleCount = 220;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
 
@@ -515,59 +515,82 @@ const Background3D = () => {
       solePlate.position.set(0, -0.28, 0.15);
       boot.add(solePlate);
 
-      // 6. Recessed Thruster Nozzles
+      // 6. Recessed Thruster Nozzles (Mounted beneath sole plate)
       const frontNozzle = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.20, 0.24, 0.15, 24),
+        new THREE.CylinderGeometry(0.20, 0.24, 0.16, 24),
         darkMetalMaterial
       );
-      frontNozzle.position.set(0, -0.38, 0.45);
+      frontNozzle.position.set(0, -0.42, 0.45);
       boot.add(frontNozzle);
 
       const rearNozzle = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.22, 0.26, 0.15, 24),
+        new THREE.CylinderGeometry(0.22, 0.26, 0.16, 24),
         darkMetalMaterial
       );
-      rearNozzle.position.set(0, -0.38, -0.15);
+      rearNozzle.position.set(0, -0.42, -0.15);
       boot.add(rearNozzle);
 
-      // 7. Iron Man Fire Booster Plume (Pointing Downward)
-      const boosterGroup = new THREE.Group();
-      boosterGroup.position.set(0, -0.42, 0.1); // Centered under sole thruster cluster
-      boot.add(boosterGroup);
+      // Helper to generate downward-pointing cone with base at y = 0 and apex extending strictly DOWNWARDS
+      const createDownwardConeGeo = (radius, height) => {
+        const geo = new THREE.ConeGeometry(radius, height, 24, 1, true);
+        geo.rotateX(Math.PI);             // 1. Apex points down (-height/2), Base is at (+height/2)
+        geo.translate(0, -height / 2, 0); // 2. Shift so base is at y = 0, Apex extends down to -height
+        return geo;
+      };
 
-      // Outer Fiery Orange Flame Cone
-      const flameOuterGeo = new THREE.ConeGeometry(0.38, 1.6, 24, 1, true);
-      flameOuterGeo.translate(0, -0.8, 0); // Translate so apex is at the nozzle
-      flameOuterGeo.rotateX(Math.PI);     // Point flame downward
-      const flameOuter = new THREE.Mesh(flameOuterGeo, flameOuterMaterial);
-      boosterGroup.add(flameOuter);
+      // 7. Iron Man Fire Booster Plumes (STRICTLY BELOW SHOES, POINTING DOWNWARD)
+      // Front thruster plume (Mounted below front nozzle)
+      const frontBoosterGroup = new THREE.Group();
+      frontBoosterGroup.position.set(0, -0.50, 0.45);
+      boot.add(frontBoosterGroup);
 
-      // Inner Arc Cyan Plasma Jet Cone
-      const flameInnerGeo = new THREE.ConeGeometry(0.20, 1.25, 24, 1, true);
-      flameInnerGeo.translate(0, -0.62, 0);
-      flameInnerGeo.rotateX(Math.PI);
-      const flameInner = new THREE.Mesh(flameInnerGeo, flameInnerMaterial);
-      boosterGroup.add(flameInner);
+      const frontOuterGeo = createDownwardConeGeo(0.28, 1.6);
+      const frontFlameOuter = new THREE.Mesh(frontOuterGeo, flameOuterMaterial);
+      frontBoosterGroup.add(frontFlameOuter);
 
-      // White Hot Needle Core
-      const flameCoreGeo = new THREE.ConeGeometry(0.09, 0.85, 16, 1, true);
-      flameCoreGeo.translate(0, -0.42, 0);
-      flameCoreGeo.rotateX(Math.PI);
-      const flameCore = new THREE.Mesh(flameCoreGeo, flameCoreMaterial);
-      boosterGroup.add(flameCore);
+      const frontInnerGeo = createDownwardConeGeo(0.16, 1.25);
+      const frontFlameInner = new THREE.Mesh(frontInnerGeo, flameInnerMaterial);
+      frontBoosterGroup.add(frontFlameInner);
 
-      // Fiery Downward PointLight
-      const thrusterLight = new THREE.PointLight(0xff6600, 4.0, 7);
-      thrusterLight.position.set(0, -0.9, 0);
-      boosterGroup.add(thrusterLight);
+      const frontCoreGeo = createDownwardConeGeo(0.07, 0.85);
+      const frontFlameCore = new THREE.Mesh(frontCoreGeo, flameCoreMaterial);
+      frontBoosterGroup.add(frontFlameCore);
+
+      // Rear thruster plume (Mounted below rear nozzle)
+      const rearBoosterGroup = new THREE.Group();
+      rearBoosterGroup.position.set(0, -0.50, -0.15);
+      boot.add(rearBoosterGroup);
+
+      const rearOuterGeo = createDownwardConeGeo(0.30, 1.75);
+      const rearFlameOuter = new THREE.Mesh(rearOuterGeo, flameOuterMaterial);
+      rearBoosterGroup.add(rearFlameOuter);
+
+      const rearInnerGeo = createDownwardConeGeo(0.18, 1.35);
+      const rearFlameInner = new THREE.Mesh(rearInnerGeo, flameInnerMaterial);
+      rearBoosterGroup.add(rearFlameInner);
+
+      const rearCoreGeo = createDownwardConeGeo(0.08, 0.95);
+      const rearFlameCore = new THREE.Mesh(rearCoreGeo, flameCoreMaterial);
+      rearBoosterGroup.add(rearFlameCore);
+
+      // Fiery Downward PointLight illuminating beneath the boot
+      const thrusterLight = new THREE.PointLight(0xff5500, 4.0, 7);
+      thrusterLight.position.set(0, -0.85, 0.15);
+      boot.add(thrusterLight);
 
       return {
         group: boot,
-        flameOuter,
-        flameInner,
-        flameCore,
+        frontFlameOuter,
+        frontFlameInner,
+        frontFlameCore,
+        rearFlameOuter,
+        rearFlameInner,
+        rearFlameCore,
         thrusterLight,
-        flameGeos: [flameOuterGeo, flameInnerGeo, flameCoreGeo]
+        flameGeos: [
+          frontOuterGeo, frontInnerGeo, frontCoreGeo,
+          rearOuterGeo, rearInnerGeo, rearCoreGeo
+        ]
       };
     };
 
@@ -586,7 +609,7 @@ const Background3D = () => {
     const TARGET_LEGS_Y = -4.3;
     const TARGET_BOOTS_Y = -6.1;
 
-    // --- 7. Mouse & Scroll Tracking State ---
+    // --- 7. Mouse, Scroll & Flight Tracking State ---
     const mouse = {
       x: 0,
       y: 0,
@@ -606,6 +629,23 @@ const Background3D = () => {
       targetShiftX: 0,
       currentShiftX: 0
     };
+
+    // Flight takeoff animation state
+    const flightState = {
+      active: false,
+      progress: 0,
+      speedY: 0,
+      flightYOffset: 0
+    };
+
+    const handleFlightTakeoff = () => {
+      flightState.active = true;
+      flightState.progress = 0;
+      flightState.speedY = 0;
+      flightState.flightYOffset = 0;
+    };
+
+    window.addEventListener('flight-takeoff', handleFlightTakeoff);
 
     const handleMouseMove = (e) => {
       // Normalized device coordinates [-1, 1]
@@ -657,6 +697,17 @@ const Background3D = () => {
       const currentHeadScale = 1.42 - Math.min(1, assembly * 1.5) * 0.42;
       headGroup.scale.set(currentHeadScale, currentHeadScale, currentHeadScale);
 
+      // --- Cursor Proximity Magic Detection ---
+      const roboWorld = new THREE.Vector3();
+      suitGroup.getWorldPosition(roboWorld);
+      roboWorld.project(camera);
+      const roboScreenX = (roboWorld.x * 0.5 + 0.5) * window.innerWidth;
+      const roboScreenY = (-(roboWorld.y) * 0.5 + 0.5) * window.innerHeight;
+
+      const distToRobo = Math.hypot(mouse.screenX - roboScreenX, mouse.screenY - roboScreenY);
+      // Magic triggers smoothly when cursor is within 280px of robot
+      const magicIntensity = Math.max(0, 1 - distToRobo / 280);
+
       // --- Draw Cute Robot Face on Dynamic 2D Canvas ---
       fCtx.fillStyle = '#ffffff';
       fCtx.fillRect(0, 0, 512, 512);
@@ -685,11 +736,19 @@ const Background3D = () => {
       fCtx.ellipse(256 - eyeOffsetX + lookBackX, eyeCenterY + lookBackY, eyeRadiusX, eyeRadiusY, 0, 0, Math.PI * 2);
       fCtx.fill();
 
-      // Left Eye Pupil / Sparkle
+      // Left Eye Main Sparkle
       fCtx.fillStyle = '#ffffff';
       fCtx.beginPath();
-      fCtx.arc(256 - eyeOffsetX + lookFrontX + 10, eyeCenterY + lookFrontY - 12, 15, 0, Math.PI * 2);
+      fCtx.arc(256 - eyeOffsetX + lookFrontX + 10, eyeCenterY + lookFrontY - 12, 15 + magicIntensity * 3, 0, Math.PI * 2);
       fCtx.fill();
+
+      // Left Eye Magic Secondary Twinkle
+      if (magicIntensity > 0.05) {
+        fCtx.fillStyle = '#64ffda';
+        fCtx.beginPath();
+        fCtx.arc(256 - eyeOffsetX + lookFrontX + 18, eyeCenterY + lookFrontY + 8, 6 * magicIntensity, 0, Math.PI * 2);
+        fCtx.fill();
+      }
 
       // Right Eye (Deep Dark Navy)
       fCtx.fillStyle = '#0a192f';
@@ -697,37 +756,53 @@ const Background3D = () => {
       fCtx.ellipse(256 + eyeOffsetX + lookBackX, eyeCenterY + lookBackY, eyeRadiusX, eyeRadiusY, 0, 0, Math.PI * 2);
       fCtx.fill();
 
-      // Right Eye Pupil / Sparkle
+      // Right Eye Main Sparkle
       fCtx.fillStyle = '#ffffff';
       fCtx.beginPath();
-      fCtx.arc(256 + eyeOffsetX + lookFrontX + 10, eyeCenterY + lookFrontY - 12, 15, 0, Math.PI * 2);
+      fCtx.arc(256 + eyeOffsetX + lookFrontX + 10, eyeCenterY + lookFrontY - 12, 15 + magicIntensity * 3, 0, Math.PI * 2);
       fCtx.fill();
 
-      // Cute Blush Cheeks (#ff6b6b with transparency)
-      fCtx.fillStyle = 'rgba(255, 107, 107, 0.45)';
+      // Right Eye Magic Secondary Twinkle
+      if (magicIntensity > 0.05) {
+        fCtx.fillStyle = '#64ffda';
+        fCtx.beginPath();
+        fCtx.arc(256 + eyeOffsetX + lookFrontX + 18, eyeCenterY + lookFrontY + 8, 6 * magicIntensity, 0, Math.PI * 2);
+        fCtx.fill();
+      }
+
+      // Cute Blush Cheeks (Glows brighter & warmer when magic cursor is near)
+      const blushAlpha = 0.45 + magicIntensity * 0.45;
+      fCtx.fillStyle = `rgba(255, 95, 125, ${blushAlpha})`;
       fCtx.beginPath();
-      fCtx.ellipse(256 - eyeOffsetX, eyeCenterY + 92, 36, 18, 0, 0, Math.PI * 2);
+      fCtx.ellipse(256 - eyeOffsetX, eyeCenterY + 92, 36 + magicIntensity * 10, 18 + magicIntensity * 5, 0, 0, Math.PI * 2);
       fCtx.fill();
 
       fCtx.beginPath();
-      fCtx.ellipse(256 + eyeOffsetX, eyeCenterY + 92, 36, 18, 0, 0, Math.PI * 2);
+      fCtx.ellipse(256 + eyeOffsetX, eyeCenterY + 92, 36 + magicIntensity * 10, 18 + magicIntensity * 5, 0, 0, Math.PI * 2);
       fCtx.fill();
 
-      // Cute Smile Mouth
+      // Cute Smile Mouth (Opens into a beaming joyful smile when cursor is near)
       fCtx.strokeStyle = '#0a192f';
-      fCtx.lineWidth = 7;
+      fCtx.lineWidth = 7 + magicIntensity * 2;
       fCtx.lineCap = 'round';
       fCtx.beginPath();
-      fCtx.arc(256, eyeCenterY + 46, 18, 0.2, Math.PI - 0.2);
+      const smileRadius = 18 + magicIntensity * 10;
+      fCtx.arc(256, eyeCenterY + 44 - magicIntensity * 4, smileRadius, 0.15, Math.PI - 0.15);
       fCtx.stroke();
 
       // Signal Three.js to upload updated canvas texture
       faceTexture.needsUpdate = true;
 
+      // Arc Reactor & Repulsor lights reactive magic
+      arcLight.intensity = 3.5 + magicIntensity * 8.0 + (magicIntensity > 0.1 ? Math.sin(time * 24) * 2.0 : 0);
+      leftRepulsorLight.intensity = 1.8 + magicIntensity * 5.0;
+      rightRepulsorLight.intensity = 1.8 + magicIntensity * 5.0;
+      antennaLight.intensity = 1.2 + magicIntensity * 3.0;
+
       // --- Suit Assembly Choreography Across Scroll ---
       const isMobile = window.innerWidth < 768;
 
-      if (assembly <= 0.01) {
+      if (assembly <= 0.01 && !flightState.active) {
         // 1st Viewport (scroll = 0): strictly ONLY the cute robot head and particles
         torsoGroup.visible = false;
         leftArmGroup.visible = false;
@@ -763,22 +838,78 @@ const Background3D = () => {
         bootsGroup.position.set(0, TARGET_BOOTS_Y + bootDrop, 0);
       }
 
-      // --- Iron Man Fire Booster Dynamic Rocket Plume Animation ---
-      if (bootsGroup.visible) {
-        const flameNoise = Math.sin(time * 36) * 0.14 + Math.cos(time * 52) * 0.09 + (Math.random() - 0.5) * 0.08;
-        const fireLength = 1.0 + flameNoise;
-        const fireWidth = 1.0 + flameNoise * 0.35;
+      // --- Iron Man Fire Booster Plume Animation & Cinematic Flight ---
+      const flameNoise = Math.sin(time * 36) * 0.14 + Math.cos(time * 52) * 0.09 + (Math.random() - 0.5) * 0.08;
+      let thrusterScaleL = 1.0 + flameNoise;
+      let thrusterScaleW = 1.0 + flameNoise * 0.35;
+      let thrusterIntensity = 3.5 + flameNoise * 2.0;
 
-        leftBootData.flameOuter.scale.set(fireWidth, fireLength, fireWidth);
-        leftBootData.flameInner.scale.set(fireWidth * 0.85, fireLength * 1.1, fireWidth * 0.85);
-        leftBootData.flameCore.scale.set(fireWidth * 0.7, fireLength * 1.05, fireWidth * 0.7);
+      if (magicIntensity > 0.05) {
+        thrusterScaleL += magicIntensity * 0.6;
+        thrusterScaleW += magicIntensity * 0.3;
+        thrusterIntensity += magicIntensity * 4.0;
+      }
 
-        rightBootData.flameOuter.scale.set(fireWidth, fireLength, fireWidth);
-        rightBootData.flameInner.scale.set(fireWidth * 0.85, fireLength * 1.1, fireWidth * 0.85);
-        rightBootData.flameCore.scale.set(fireWidth * 0.7, fireLength * 1.05, fireWidth * 0.7);
+      if (flightState.active) {
+        flightState.progress += 0.014;
 
-        leftBootData.thrusterLight.intensity = 3.5 + flameNoise * 2.0;
-        rightBootData.thrusterLight.intensity = 3.5 + flameNoise * 2.0;
+        // Cinematic Overdrive Rocket Thrusters
+        thrusterScaleL = 3.6 + Math.random() * 0.8;
+        thrusterScaleW = 2.0 + Math.random() * 0.4;
+        thrusterIntensity = 18.0;
+
+        // Robot pitches forward into supersonic flight posture
+        suitGroup.rotation.x = -0.42;
+
+        // Accelerate straight UP into the sky!
+        flightState.speedY += 0.28;
+        flightState.flightYOffset += flightState.speedY;
+
+        // Movie Hyperspace: Stars/particles stream DOWNWARDS at warp speed!
+        const warpSpeed = 2.4 + Math.min(flightState.progress * 4.0, 4.0);
+        for (let i = 1; i < particleCount * 3; i += 3) {
+          positions[i] -= warpSpeed;
+          if (positions[i] < -25) {
+            positions[i] = 25 + (Math.random() - 0.5) * 4;
+            positions[i - 1] = (Math.random() - 0.5) * 36;
+            positions[i + 1] = (Math.random() - 0.5) * 20;
+          }
+        }
+        particleGeometry.attributes.position.needsUpdate = true;
+        particleMaterial.size = 0.25;
+        particleMaterial.opacity = 0.95;
+
+        // Arrive at the top: when user reaches top (scrollY <= 15) and flight progress finishes
+        if (window.scrollY <= 15 && flightState.progress > 0.85) {
+          flightState.active = false;
+          flightState.flightYOffset = 0;
+          particleMaterial.size = 0.12;
+          particleMaterial.opacity = 0.55;
+        }
+      } else {
+        // Normal gentle star drift
+        particleSystem.rotation.y = time * 0.02;
+        particleSystem.position.x = mouse.x * 0.5;
+        particleSystem.position.y = mouse.y * 0.5;
+      }
+
+      // Update both boots' flame plumes (front and rear nozzles)
+      if (bootsGroup.visible || flightState.active) {
+        bootsGroup.visible = true;
+        const applyPlumes = (bootData) => {
+          bootData.frontFlameOuter.scale.set(thrusterScaleW, thrusterScaleL, thrusterScaleW);
+          bootData.frontFlameInner.scale.set(thrusterScaleW * 0.85, thrusterScaleL * 1.08, thrusterScaleW * 0.85);
+          bootData.frontFlameCore.scale.set(thrusterScaleW * 0.65, thrusterScaleL * 1.02, thrusterScaleW * 0.65);
+
+          bootData.rearFlameOuter.scale.set(thrusterScaleW * 1.05, thrusterScaleL * 1.1, thrusterScaleW * 1.05);
+          bootData.rearFlameInner.scale.set(thrusterScaleW * 0.90, thrusterScaleL * 1.18, thrusterScaleW * 0.90);
+          bootData.rearFlameCore.scale.set(thrusterScaleW * 0.70, thrusterScaleL * 1.1, thrusterScaleW * 0.70);
+
+          bootData.thrusterLight.intensity = thrusterIntensity;
+        };
+
+        applyPlumes(leftBootData);
+        applyPlumes(rightBootData);
       }
 
       // --- Section Based 3D Turntable Rotation (Zero 2D Flipping) ---
@@ -786,7 +917,7 @@ const Background3D = () => {
       let targetRot = 0;
       let targetShiftX = 0;
 
-      if (assembly >= 0.80) {
+      if (assembly >= 0.80 && !flightState.active) {
         if (totalProg < 0.18) {
           // Front assembled pose
           targetRot = 0;
@@ -823,20 +954,17 @@ const Background3D = () => {
 
       // Gentle floating hover bobbing
       const bobbing = Math.sin(time) * 0.12;
-      suitGroup.position.y = (assembly > 0.4 ? 1.6 : 0) + bobbing;
+      suitGroup.position.y = (assembly > 0.4 ? 1.6 : 0) + bobbing + flightState.flightYOffset;
 
       // Responsive model scale
       const modelScale = isMobile ? 0.72 : 0.95;
       suitGroup.scale.set(modelScale, modelScale, modelScale);
 
-      // Mouse parallax tilt in true 3D space
-      suitGroup.rotation.x = -mouse.y * 0.08;
-      suitGroup.rotation.z = -mouse.x * 0.04;
-
-      // Gentle drift for 3D starfield particles
-      particleSystem.rotation.y = time * 0.02;
-      particleSystem.position.x = mouse.x * 0.5;
-      particleSystem.position.y = mouse.y * 0.5;
+      // Mouse parallax tilt in true 3D space (when not in flight)
+      if (!flightState.active) {
+        suitGroup.rotation.x = -mouse.y * 0.08;
+        suitGroup.rotation.z = -mouse.x * 0.04;
+      }
 
       renderer.render(scene, camera);
       animationFrameId = requestAnimationFrame(render);
@@ -849,6 +977,7 @@ const Background3D = () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('flight-takeoff', handleFlightTakeoff);
       cancelAnimationFrame(animationFrameId);
 
       particleGeometry.dispose();

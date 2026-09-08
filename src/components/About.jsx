@@ -63,33 +63,47 @@ const About = () => {
                     >
                         {/* Mechanical HUD Precision Aperture (Non-AI, Engineering Dial) */}
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            {/* Outer Precision Dial Image Rotating Slowly */}
-                            <motion.img
-                                src="/assets/suit/aperture.jpg"
-                                alt="HUD Aperture Reticle"
-                                className="w-[125%] h-[125%] max-w-none object-contain opacity-25 mix-blend-screen"
+                            {/* Outer Precision Dial - Pure SVG Engineering HUD with zero raster background */}
+                            <motion.svg
+                                className="w-[124%] h-[124%] max-w-none pointer-events-none"
+                                viewBox="0 0 240 240"
                                 animate={{ rotate: 360 }}
-                                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                            />
+                                transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                            >
+                                {/* Outer Technical Calibration Tracks */}
+                                <circle cx="120" cy="120" r="114" fill="none" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="0.8" strokeDasharray="4 8" />
+                                <circle cx="120" cy="120" r="108" fill="none" stroke="rgba(217, 119, 6, 0.35)" strokeWidth="0.6" strokeDasharray="2 5" />
+                                <circle cx="120" cy="120" r="102" fill="none" stroke="rgba(255, 255, 255, 0.12)" strokeWidth="0.5" />
 
-                            {/* Crisp SVG Precision Mechanical Calipers & Degree Ticks */}
-                            <svg className="absolute w-[118%] h-[118%] pointer-events-none" viewBox="0 0 200 200">
-                                <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-white/10" />
-                                <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" strokeWidth="0.75" strokeDasharray="3 6" className="text-teal-400/30" />
-                                <circle cx="100" cy="100" r="82" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="1 4" className="text-gold/20" />
-                                
-                                {/* 4 Crosshair Tick Marks */}
-                                <line x1="100" y1="2" x2="100" y2="10" stroke="currentColor" strokeWidth="1.5" className="text-teal-400/60" />
-                                <line x1="100" y1="190" x2="100" y2="198" stroke="currentColor" strokeWidth="1.5" className="text-teal-400/60" />
-                                <line x1="2" y1="100" x2="10" y2="100" stroke="currentColor" strokeWidth="1.5" className="text-teal-400/60" />
-                                <line x1="190" y1="100" x2="198" y2="100" stroke="currentColor" strokeWidth="1.5" className="text-teal-400/60" />
+                                {/* Cardinal Precision Reticle Brackets */}
+                                <line x1="120" y1="4" x2="120" y2="15" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
+                                <line x1="120" y1="225" x2="120" y2="236" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
+                                <line x1="4" y1="120" x2="15" y2="120" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
+                                <line x1="225" y1="120" x2="236" y2="120" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
 
-                                {/* Degree labels */}
-                                <text x="100" y="16" fontSize="4" textAnchor="middle" fill="#38bdf8" fontFamily="monospace" opacity="0.7">000°</text>
-                                <text x="185" y="102" fontSize="4" textAnchor="middle" fill="#8e98ab" fontFamily="monospace" opacity="0.6">090°</text>
-                                <text x="100" y="186" fontSize="4" textAnchor="middle" fill="#8e98ab" fontFamily="monospace" opacity="0.6">180°</text>
-                                <text x="15" y="102" fontSize="4" textAnchor="middle" fill="#8e98ab" fontFamily="monospace" opacity="0.6">270°</text>
-                            </svg>
+                                {/* 45-Degree Telemetry Ticks */}
+                                <line x1="39" y1="39" x2="47" y2="47" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
+                                <line x1="201" y1="39" x2="193" y2="47" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
+                                <line x1="39" y1="201" x2="47" y2="193" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
+                                <line x1="201" y1="201" x2="193" y2="193" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
+
+                                {/* Engineering Azimuth Degrees */}
+                                <text x="120" y="24" fontSize="4.5" textAnchor="middle" fill="#38bdf8" fontFamily="monospace" opacity="0.8">000°</text>
+                                <text x="218" y="122" fontSize="4.5" textAnchor="middle" fill="#94a3b8" fontFamily="monospace" opacity="0.7">090°</text>
+                                <text x="120" y="221" fontSize="4.5" textAnchor="middle" fill="#94a3b8" fontFamily="monospace" opacity="0.7">180°</text>
+                                <text x="22" y="122" fontSize="4.5" textAnchor="middle" fill="#94a3b8" fontFamily="monospace" opacity="0.7">270°</text>
+                            </motion.svg>
+
+                            {/* Inner Counter-Rotating Precision Ring */}
+                            <motion.svg
+                                className="absolute w-[114%] h-[114%] max-w-none pointer-events-none"
+                                viewBox="0 0 200 200"
+                                animate={{ rotate: -360 }}
+                                transition={{ duration: 65, repeat: Infinity, ease: "linear" }}
+                            >
+                                <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(56, 189, 248, 0.2)" strokeWidth="1" strokeDasharray="16 32" />
+                                <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255, 255, 255, 0.08)" strokeWidth="0.5" strokeDasharray="1 4" />
+                            </motion.svg>
 
                             {/* Telemetry Corner Badges */}
                             <div className="absolute top-0 right-4 font-mono text-[9px] tracking-wider text-teal-400/60 uppercase border border-teal-400/20 px-1.5 py-0.5 rounded bg-navy-950/80 backdrop-blur-sm">
