@@ -673,7 +673,46 @@ const Background3D = () => {
       scrollState.totalProgress = docHeight > 0 ? scrollY / docHeight : 0;
     };
 
+    let touchMagicUntil = 0;
+
+    const handleTouchStart = (e) => {
+      if (e.touches && e.touches.length > 0) {
+        const touch = e.touches[0];
+        mouse.targetX = (touch.clientX / window.innerWidth) * 2 - 1;
+        mouse.targetY = -(touch.clientY / window.innerHeight) * 2 + 1;
+        mouse.screenX = touch.clientX;
+        mouse.screenY = touch.clientY;
+
+        // Check if touch is on or near the robot body
+        const roboWorld = new THREE.Vector3();
+        suitGroup.getWorldPosition(roboWorld);
+        roboWorld.project(camera);
+        const roboScreenX = (roboWorld.x * 0.5 + 0.5) * window.innerWidth;
+        const roboScreenY = (-(roboWorld.y) * 0.5 + 0.5) * window.innerHeight;
+        const distToRobo = Math.hypot(touch.clientX - roboScreenX, touch.clientY - roboScreenY);
+
+        if (distToRobo < 320) {
+          // Trigger touch magic for 4.5 seconds
+          touchMagicUntil = performance.now() + 4500;
+          // Dispatch custom event so Contact component can bloom orbital icons
+          window.dispatchEvent(new CustomEvent('robo-touch'));
+        }
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches && e.touches.length > 0) {
+        const touch = e.touches[0];
+        mouse.targetX = (touch.clientX / window.innerWidth) * 2 - 1;
+        mouse.targetY = -(touch.clientY / window.innerHeight) * 2 + 1;
+        mouse.screenX = touch.clientX;
+        mouse.screenY = touch.clientY;
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
@@ -711,8 +750,10 @@ const Background3D = () => {
       const roboScreenY = (-(roboWorld.y) * 0.5 + 0.5) * window.innerHeight;
 
       const distToRobo = Math.hypot(mouse.screenX - roboScreenX, mouse.screenY - roboScreenY);
-      // Magic triggers smoothly when cursor is within 280px of robot
-      const magicIntensity = Math.max(0, 1 - distToRobo / 280);
+      // Magic triggers smoothly when cursor is within 280px of robot, or when touched on mobile/tablet devices
+      const cursorMagic = Math.max(0, 1 - distToRobo / 280);
+      const isTouchMagic = performance.now() < touchMagicUntil;
+      const magicIntensity = isTouchMagic ? Math.max(cursorMagic, 1.0) : cursorMagic;
 
       // --- Draw Cute Robot Face on Dynamic 2D Canvas ---
       fCtx.fillStyle = '#ffffff';
@@ -1007,6 +1048,8 @@ const Background3D = () => {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('flight-takeoff', handleFlightTakeoff);
       cancelAnimationFrame(animationFrameId);

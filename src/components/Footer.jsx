@@ -4,12 +4,25 @@ import { Github, Linkedin, Mail, Instagram, Youtube, Rocket } from 'lucide-react
 const Footer = () => {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
+
     useEffect(() => {
         const onScroll = () => {
             setShowScrollTop(window.scrollY > 300);
         };
         window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll);
+
+        const mq = window.matchMedia('(pointer: coarse)');
+        const checkTouch = () => {
+            setIsTouchDevice(mq.matches || 'ontouchstart' in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0));
+        };
+        checkTouch();
+        mq.addEventListener('change', checkTouch);
+
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            mq.removeEventListener('change', checkTouch);
+        };
     }, []);
 
     const handleScrollToTop = () => {
@@ -21,11 +34,11 @@ const Footer = () => {
 
     return (
         <footer className="relative z-10 bg-navy-950/90 backdrop-blur-md text-center text-slate-light font-mono text-sm border-t border-white/5 shadow-2xl">
-            {/* "Move cursor near to robo to see the magic" banner */}
+            {/* "Move cursor near to robo to see the magic" / "Tap on robo to see the magic" responsive banner */}
             <div className="py-3 px-4 border-b border-white/5 bg-navy-900/40 backdrop-blur-sm flex items-center justify-center gap-2 text-xs font-mono text-slate-400">
                 <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_#38bdf8]" />
                 <span className="tracking-wider text-teal-400/90 font-medium">
-                    move cursor near to robo to see the magic
+                    {isTouchDevice ? 'tap on robo to see the magic' : 'move cursor near to robo to see the magic'}
                 </span>
             </div>
 
