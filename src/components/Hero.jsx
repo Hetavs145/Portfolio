@@ -37,10 +37,7 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
                 >
-                    <h3
-                        className="text-4xl md:text-6xl font-bold text-slate-light mb-8"
-                        style={{ textShadow: '1px 1px 0 #000, 2px 2px 0 #000, 3px 3px 0 rgba(0,0,0,0.5)' }}
-                    >
+                    <h3 className="text-4xl md:text-6xl font-bold text-slate-light mb-8 tracking-tight">
                         I build things for the web.
                     </h3>
                 </motion.div>
@@ -51,11 +48,8 @@ const Hero = () => {
                     transition={{ duration: 0.5, delay: 0.5 }}
                     className="max-w-xl mb-10"
                 >
-                    <div
-                        className="text-slate text-lg leading-relaxed mb-4"
-                        style={{ textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 2px 2px 0 #000' }}
-                    >
-                        I build <span className="text-teal-400">Full-Stack systems</span>, <span className="text-teal-400">Agentic AI pipelines</span>, and <span className="text-teal-400">Real-Time apps</span>.
+                    <div className="text-slate text-lg leading-relaxed mb-4">
+                        I build <span className="text-teal-400 font-medium">Full-Stack systems</span>, <span className="text-teal-400 font-medium">Agentic AI pipelines</span>, and <span className="text-teal-400 font-medium">Real-Time apps</span>.
                     </div>
                     <div className="h-8 overflow-hidden relative">
                         {/* Keyframes are derived from `roles`, so adding a role to

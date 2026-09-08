@@ -41,17 +41,17 @@
   }
 
   .glass {
-    @apply bg-navy-700/50 backdrop-blur-md border border-teal-400/20;
-    box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
+    @apply bg-navy-800/60 backdrop-blur-md border border-white/10;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-blue-500 to-purple-600 animate-pulse-slow;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-lighter via-teal-300 to-slate-light;
   }
 
   .neon-border {
-    @apply border border-teal-400;
-    box-shadow: 0 0 10px rgba(100, 255, 218, 0.3), inset 0 0 10px rgba(100, 255, 218, 0.1);
+    @apply border border-teal-400/40;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2), inset 0 0 12px rgba(56, 189, 248, 0.05);
   }
 
   .glitch-effect {
@@ -164,4 +164,21 @@
 
 ::-webkit-scrollbar-thumb {
   @apply bg-teal-400 rounded-full hover:bg-teal-500 transition-colors;
+}
+
+/* Lenis Smooth Scroll */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }

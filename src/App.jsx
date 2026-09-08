@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import Lenis from 'lenis';
 import { CursorProvider } from './context/CursorContext';
 import { RouteProvider, useRoute } from './context/RouteContext';
 import ResumeAura from './components/ResumeAura';
@@ -15,11 +16,32 @@ import Achievements from './components/Achievements';
 function AppContent() {
     const { currentPage } = useRoute();
 
+    useEffect(() => {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            touchMultiplier: 1.2,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+
+        const id = requestAnimationFrame(raf);
+
+        return () => {
+            cancelAnimationFrame(id);
+            lenis.destroy();
+        };
+    }, []);
+
     return (
         // `cursor-hidden-fine` hides the native cursor only on devices that have
         // one (see index.css). Applying cursor-none globally did nothing useful on
         // touch, where ResumeAura — the canvas replacement — never mounts.
-        <div className="bg-navy-900 min-h-screen text-slate-light selection:bg-teal-400 selection:text-navy-900 cursor-hidden-fine">
+        <div className="bg-navy-950 min-h-screen text-slate-light selection:bg-teal-400 selection:text-navy-950 cursor-hidden-fine">
             <ResumeAura />
             <Navbar />
 
