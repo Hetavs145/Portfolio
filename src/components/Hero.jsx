@@ -37,7 +37,7 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
                 >
-                    <h3 className="text-4xl md:text-6xl font-bold text-slate-light mb-8 tracking-tight">
+                    <h3 className="text-4xl md:text-6xl font-bold text-slate-light mb-8 tracking-tight text-3d-black-border">
                         I build things for the web.
                     </h3>
                 </motion.div>
@@ -48,7 +48,7 @@ const Hero = () => {
                     transition={{ duration: 0.5, delay: 0.5 }}
                     className="max-w-xl mb-10"
                 >
-                    <div className="text-slate text-lg leading-relaxed mb-4">
+                    <div className="text-slate text-lg leading-relaxed mb-4 text-3d-black-border-sm">
                         I build <span className="text-teal-400 font-medium">Full-Stack systems</span>, <span className="text-teal-400 font-medium">Agentic AI pipelines</span>, and <span className="text-teal-400 font-medium">Real-Time apps</span>.
                     </div>
                     <div className="h-8 overflow-hidden relative">

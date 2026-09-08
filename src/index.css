@@ -45,6 +45,32 @@
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   }
 
+  .text-3d-black-border {
+    -webkit-text-stroke: 1.5px #000000;
+    text-shadow:
+      -1px -1px 0 #000000,
+       1px -1px 0 #000000,
+      -1px  1px 0 #000000,
+       1px  1px 0 #000000,
+       0px  1px 0 #000000,
+       0px  2px 0 #000000,
+       0px  3px 0 #000000,
+       0px  4px 0 #000000,
+       0px  5px 6px rgba(0, 0, 0, 0.9);
+  }
+
+  .text-3d-black-border-sm {
+    -webkit-text-stroke: 0.75px #000000;
+    text-shadow:
+      -1px -1px 0 #000000,
+       1px -1px 0 #000000,
+      -1px  1px 0 #000000,
+       1px  1px 0 #000000,
+       0px  1px 0 #000000,
+       0px  2px 0 #000000,
+       0px  3px 4px rgba(0, 0, 0, 0.85);
+  }
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-lighter via-teal-300 to-slate-light;
   }

@@ -5,19 +5,21 @@ import * as THREE from 'three';
  * Background3D
  * 
  * 1st Viewport (Opening Site / scroll = 0):
- * Strictly preserves the EXACT original cute robot head, mouse-tracking pupils,
- * pink blush cheeks, mouth, 3D antenna with glowing cyan ball, and floating starfield particles.
+ * Strictly preserves the EXACT original cute robot head with smooth rounded corners,
+ * mouse-tracking pupils, pink blush cheeks, mouth, 3D antenna with glowing cyan ball,
+ * and floating starfield particles.
+ * Prominently enlarged (1.42x) on initial load, smoothly scaling to 1.0x as user scrolls.
  * 
  * As User Scrolls (Slower, Majestic Assembly across heroHeight * 2.5):
  * Procedurally assembles the full 3D Mark armor suit around the cute robot:
  *  1. Hands & gauntlets fly in laterally with glowing cyan repulsors
  *  2. Center torso (chest with glowing Arc Reactor + stomach + back thrusters) locks in
  *  3. Legs articulate up from below
- *  4. Boots snap into position with cyan thrusters
+ *  4. Highly detailed sculpted boots snap into position with roaring Iron Man fire boosters!
  * 
  * Subsequent Viewports (About, Experience, Achievements, Projects, Contact):
  * Performs TRUE 3D turntable rotation with real mesh depth, bevels, PBR metallic reflections,
- * and zero 2D flipping.
+ * dynamic fire booster flame plumes under the feet, and zero 2D flipping.
  */
 const Background3D = () => {
   const containerRef = useRef(null);
@@ -120,9 +122,49 @@ const Background3D = () => {
       metalness: 0.06
     });
 
+    // Fire Booster Flame Materials (Additive Blending for Intense Rocket Glow)
+    const flameOuterMaterial = new THREE.MeshBasicMaterial({
+      color: 0xff5500, // Fiery Stark Rocket Orange
+      transparent: true,
+      opacity: 0.88,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+
+    const flameInnerMaterial = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8, // Intense Electric Arc Cyan Core
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+
+    const flameCoreMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffffff, // Superheated White Hot Needle
+      transparent: true,
+      opacity: 1.0,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+
+    // Helper to generate rounded rectangle 2D shape for authentic rounded corners
+    const createRoundedBoxShape = (width, height, radius) => {
+      const shape = new THREE.Shape();
+      const x = -width / 2;
+      const y = -height / 2;
+      shape.moveTo(x + radius, y);
+      shape.lineTo(x + width - radius, y);
+      shape.quadraticCurveTo(x + width, y, x + width, y + radius);
+      shape.lineTo(x + width, y + height - radius);
+      shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      shape.lineTo(x + radius, y + height);
+      shape.quadraticCurveTo(x, y + height, x, y + height - radius);
+      shape.lineTo(x, y + radius);
+      shape.quadraticCurveTo(x, y, x + radius, y);
+      return shape;
+    };
+
     // --- 5. Dynamic Cute Robot Face Texture (Canvas 512x512) ---
-    // Strictly reproduces the EXACT cute robot face on 1st viewport:
-    // White rounded head, navy eyes, dynamic cursor pupil tracking, pink blush cheeks #ff6b6b, smile
     const faceCanvas = document.createElement('canvas');
     faceCanvas.width = 512;
     faceCanvas.height = 512;
@@ -139,26 +181,40 @@ const Background3D = () => {
     const suitGroup = new THREE.Group();
     scene.add(suitGroup);
 
-    // [A] Head Group
+    // [A] Head Group (Prominently enlarged on 1st viewport, with rounded corners)
     const headGroup = new THREE.Group();
     headGroup.position.set(0, 0, 0);
     suitGroup.add(headGroup);
 
-    // Head 3D Mesh with real depth (X: 3.2, Y: 2.5, Z: 2.0)
-    // Front face (+Z) uses the dynamic cute robot face texture
-    const headMaterials = [
-      whiteHeadMaterial, // +X right
-      whiteHeadMaterial, // -X left
-      whiteHeadMaterial, // +Y top
-      whiteHeadMaterial, // -Y bottom
-      faceFrontMaterial, // +Z front
-      whiteHeadMaterial  // -Z back
-    ];
-    const headMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(3.2, 2.5, 2.0),
-      headMaterials
-    );
-    headGroup.add(headMesh);
+    // Head 3D Rounded Chassis (corners smoothly rounded with radius 0.7 and depth 1.8)
+    const headShape = createRoundedBoxShape(3.2, 2.5, 0.7);
+    const extrudeSettings = {
+      depth: 1.8,
+      bevelEnabled: true,
+      bevelSegments: 5,
+      steps: 1,
+      bevelSize: 0.12,
+      bevelThickness: 0.12
+    };
+    const headGeometry = new THREE.ExtrudeGeometry(headShape, extrudeSettings);
+    headGeometry.center();
+    const headChassis = new THREE.Mesh(headGeometry, whiteHeadMaterial);
+    headGroup.add(headChassis);
+
+    // Front Face Plate (ShapeGeometry with matching rounded corners)
+    const facePlateGeometry = new THREE.ShapeGeometry(headShape, 24);
+    const pos = facePlateGeometry.attributes.position;
+    const uvs = [];
+    for (let i = 0; i < pos.count; i++) {
+      const u = (pos.getX(i) + 1.6) / 3.2;
+      const v = (pos.getY(i) + 1.25) / 2.5;
+      uvs.push(u, v);
+    }
+    facePlateGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+
+    const faceMesh = new THREE.Mesh(facePlateGeometry, faceFrontMaterial);
+    faceMesh.position.z = 1.03; // Placed right on the front face of the rounded chassis
+    headGroup.add(faceMesh);
 
     // 3D Ear Caps (Gold mechanical discs on sides of head)
     const leftEar = new THREE.Mesh(
@@ -166,7 +222,7 @@ const Background3D = () => {
       goldMaterial
     );
     leftEar.rotation.z = Math.PI / 2;
-    leftEar.position.set(-1.68, 0, 0);
+    leftEar.position.set(-1.72, 0, 0);
     headGroup.add(leftEar);
 
     const rightEar = new THREE.Mesh(
@@ -174,7 +230,7 @@ const Background3D = () => {
       goldMaterial
     );
     rightEar.rotation.z = Math.PI / 2;
-    rightEar.position.set(1.68, 0, 0);
+    rightEar.position.set(1.72, 0, 0);
     headGroup.add(rightEar);
 
     // 3D Titanium Antenna
@@ -410,39 +466,118 @@ const Background3D = () => {
     rightKnee.position.set(0.85, -0.55, 0.45);
     legsGroup.add(rightKnee);
 
-    // [F] Boots Group
+    // [F] Sculpted 3D Boots Group with Articulated Segments & Iron Man Fire Boosters
     const bootsGroup = new THREE.Group();
     suitGroup.add(bootsGroup);
 
-    // Left Boot
-    const leftBoot = new THREE.Mesh(
-      new THREE.BoxGeometry(0.95, 0.85, 1.6),
-      crimsonMaterial
-    );
-    leftBoot.position.set(-0.85, 0, 0.2);
-    bootsGroup.add(leftBoot);
+    // Reusable builder for an articulated Iron Man Mark boot
+    const createArticulatedBoot = (isLeft) => {
+      const boot = new THREE.Group();
+      const xSign = isLeft ? -1 : 1;
 
-    const leftSoleThruster = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.24, 0.24, 0.1, 24),
-      cyanEmissiveMaterial
-    );
-    leftSoleThruster.position.set(-0.85, -0.45, 0.2);
-    bootsGroup.add(leftSoleThruster);
+      // 1. Ankle Collar & Armor Cuff
+      const ankleCollar = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.46, 0.44, 0.35, 24),
+        goldMaterial
+      );
+      ankleCollar.position.set(0, 0.42, 0);
+      boot.add(ankleCollar);
 
-    // Right Boot
-    const rightBoot = new THREE.Mesh(
-      new THREE.BoxGeometry(0.95, 0.85, 1.6),
-      crimsonMaterial
-    );
-    rightBoot.position.set(0.85, 0, 0.2);
-    bootsGroup.add(rightBoot);
+      // 2. Reinforced Heel Armor Block
+      const heelArmor = new THREE.Mesh(
+        new THREE.BoxGeometry(0.92, 0.75, 0.65),
+        crimsonMaterial
+      );
+      heelArmor.position.set(0, 0.05, -0.35);
+      boot.add(heelArmor);
 
-    const rightSoleThruster = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.24, 0.24, 0.1, 24),
-      cyanEmissiveMaterial
-    );
-    rightSoleThruster.position.set(0.85, -0.45, 0.2);
-    bootsGroup.add(rightSoleThruster);
+      // 3. Midfoot Arch / Vamp Armor Plate
+      const vampArmor = new THREE.Mesh(
+        new THREE.BoxGeometry(0.88, 0.60, 0.8),
+        crimsonMaterial
+      );
+      vampArmor.position.set(0, 0.08, 0.18);
+      boot.add(vampArmor);
+
+      // 4. Sculpted Gold Toe Cap
+      const toeCap = new THREE.Mesh(
+        new THREE.BoxGeometry(0.84, 0.45, 0.55),
+        goldMaterial
+      );
+      toeCap.position.set(0, -0.06, 0.68);
+      boot.add(toeCap);
+
+      // 5. Heavy-Duty Treaded Sole Plate
+      const solePlate = new THREE.Mesh(
+        new THREE.BoxGeometry(0.96, 0.20, 1.75),
+        darkMetalMaterial
+      );
+      solePlate.position.set(0, -0.28, 0.15);
+      boot.add(solePlate);
+
+      // 6. Recessed Thruster Nozzles
+      const frontNozzle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.20, 0.24, 0.15, 24),
+        darkMetalMaterial
+      );
+      frontNozzle.position.set(0, -0.38, 0.45);
+      boot.add(frontNozzle);
+
+      const rearNozzle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.22, 0.26, 0.15, 24),
+        darkMetalMaterial
+      );
+      rearNozzle.position.set(0, -0.38, -0.15);
+      boot.add(rearNozzle);
+
+      // 7. Iron Man Fire Booster Plume (Pointing Downward)
+      const boosterGroup = new THREE.Group();
+      boosterGroup.position.set(0, -0.42, 0.1); // Centered under sole thruster cluster
+      boot.add(boosterGroup);
+
+      // Outer Fiery Orange Flame Cone
+      const flameOuterGeo = new THREE.ConeGeometry(0.38, 1.6, 24, 1, true);
+      flameOuterGeo.translate(0, -0.8, 0); // Translate so apex is at the nozzle
+      flameOuterGeo.rotateX(Math.PI);     // Point flame downward
+      const flameOuter = new THREE.Mesh(flameOuterGeo, flameOuterMaterial);
+      boosterGroup.add(flameOuter);
+
+      // Inner Arc Cyan Plasma Jet Cone
+      const flameInnerGeo = new THREE.ConeGeometry(0.20, 1.25, 24, 1, true);
+      flameInnerGeo.translate(0, -0.62, 0);
+      flameInnerGeo.rotateX(Math.PI);
+      const flameInner = new THREE.Mesh(flameInnerGeo, flameInnerMaterial);
+      boosterGroup.add(flameInner);
+
+      // White Hot Needle Core
+      const flameCoreGeo = new THREE.ConeGeometry(0.09, 0.85, 16, 1, true);
+      flameCoreGeo.translate(0, -0.42, 0);
+      flameCoreGeo.rotateX(Math.PI);
+      const flameCore = new THREE.Mesh(flameCoreGeo, flameCoreMaterial);
+      boosterGroup.add(flameCore);
+
+      // Fiery Downward PointLight
+      const thrusterLight = new THREE.PointLight(0xff6600, 4.0, 7);
+      thrusterLight.position.set(0, -0.9, 0);
+      boosterGroup.add(thrusterLight);
+
+      return {
+        group: boot,
+        flameOuter,
+        flameInner,
+        flameCore,
+        thrusterLight,
+        flameGeos: [flameOuterGeo, flameInnerGeo, flameCoreGeo]
+      };
+    };
+
+    const leftBootData = createArticulatedBoot(true);
+    leftBootData.group.position.set(-0.85, 0, 0.2);
+    bootsGroup.add(leftBootData.group);
+
+    const rightBootData = createArticulatedBoot(false);
+    rightBootData.group.position.set(0.85, 0, 0.2);
+    bootsGroup.add(rightBootData.group);
 
     // Base resting positions for assembled armor relative to head (0, 0, 0)
     const TARGET_TORSO_Y = -1.95;
@@ -517,8 +652,12 @@ const Background3D = () => {
       scrollState.assemblyEased += (scrollState.assemblyProgress - scrollState.assemblyEased) * 0.05;
       const assembly = scrollState.assemblyEased;
 
+      // Dynamic scaling for cute robot head:
+      // Enlarged on initial load/viewport (1.42x), smoothly transitioning to 1.0x baseline as user scrolls
+      const currentHeadScale = 1.42 - Math.min(1, assembly * 1.5) * 0.42;
+      headGroup.scale.set(currentHeadScale, currentHeadScale, currentHeadScale);
+
       // --- Draw Cute Robot Face on Dynamic 2D Canvas ---
-      // Solid pure white background to blend seamlessly with head 3D mesh
       fCtx.fillStyle = '#ffffff';
       fCtx.fillRect(0, 0, 512, 512);
 
@@ -535,10 +674,10 @@ const Background3D = () => {
       const lookFrontX = Math.cos(eyeAngle) * (eyeDist / 700) * 26;
       const lookFrontY = Math.sin(eyeAngle) * (eyeDist / 700) * 26;
 
-      const eyeCenterY = 230;
+      const eyeCenterY = 240;
       const eyeOffsetX = 118;
-      const eyeRadiusX = 52;
-      const eyeRadiusY = 64;
+      const eyeRadiusX = 50;
+      const eyeRadiusY = 62;
 
       // Left Eye (Deep Dark Navy)
       fCtx.fillStyle = '#0a192f';
@@ -567,11 +706,11 @@ const Background3D = () => {
       // Cute Blush Cheeks (#ff6b6b with transparency)
       fCtx.fillStyle = 'rgba(255, 107, 107, 0.45)';
       fCtx.beginPath();
-      fCtx.ellipse(256 - eyeOffsetX, eyeCenterY + 95, 36, 18, 0, 0, Math.PI * 2);
+      fCtx.ellipse(256 - eyeOffsetX, eyeCenterY + 92, 36, 18, 0, 0, Math.PI * 2);
       fCtx.fill();
 
       fCtx.beginPath();
-      fCtx.ellipse(256 + eyeOffsetX, eyeCenterY + 95, 36, 18, 0, 0, Math.PI * 2);
+      fCtx.ellipse(256 + eyeOffsetX, eyeCenterY + 92, 36, 18, 0, 0, Math.PI * 2);
       fCtx.fill();
 
       // Cute Smile Mouth
@@ -579,14 +718,13 @@ const Background3D = () => {
       fCtx.lineWidth = 7;
       fCtx.lineCap = 'round';
       fCtx.beginPath();
-      fCtx.arc(256, eyeCenterY + 48, 18, 0.2, Math.PI - 0.2);
+      fCtx.arc(256, eyeCenterY + 46, 18, 0.2, Math.PI - 0.2);
       fCtx.stroke();
 
       // Signal Three.js to upload updated canvas texture
       faceTexture.needsUpdate = true;
 
       // --- Suit Assembly Choreography Across Scroll ---
-      // Parts start hidden/off-screen and converge slowly as assembly progress advances
       const isMobile = window.innerWidth < 768;
 
       if (assembly <= 0.01) {
@@ -623,6 +761,24 @@ const Background3D = () => {
         const bootProg = Math.min(1, Math.max(0, (assembly - 0.65) / 0.35));
         const bootDrop = (1 - bootProg) * -12;
         bootsGroup.position.set(0, TARGET_BOOTS_Y + bootDrop, 0);
+      }
+
+      // --- Iron Man Fire Booster Dynamic Rocket Plume Animation ---
+      if (bootsGroup.visible) {
+        const flameNoise = Math.sin(time * 36) * 0.14 + Math.cos(time * 52) * 0.09 + (Math.random() - 0.5) * 0.08;
+        const fireLength = 1.0 + flameNoise;
+        const fireWidth = 1.0 + flameNoise * 0.35;
+
+        leftBootData.flameOuter.scale.set(fireWidth, fireLength, fireWidth);
+        leftBootData.flameInner.scale.set(fireWidth * 0.85, fireLength * 1.1, fireWidth * 0.85);
+        leftBootData.flameCore.scale.set(fireWidth * 0.7, fireLength * 1.05, fireWidth * 0.7);
+
+        rightBootData.flameOuter.scale.set(fireWidth, fireLength, fireWidth);
+        rightBootData.flameInner.scale.set(fireWidth * 0.85, fireLength * 1.1, fireWidth * 0.85);
+        rightBootData.flameCore.scale.set(fireWidth * 0.7, fireLength * 1.05, fireWidth * 0.7);
+
+        leftBootData.thrusterLight.intensity = 3.5 + flameNoise * 2.0;
+        rightBootData.thrusterLight.intensity = 3.5 + flameNoise * 2.0;
       }
 
       // --- Section Based 3D Turntable Rotation (Zero 2D Flipping) ---
@@ -704,6 +860,15 @@ const Background3D = () => {
       whiteHeadMaterial.dispose();
       faceFrontMaterial.dispose();
       faceTexture.dispose();
+      headGeometry.dispose();
+      facePlateGeometry.dispose();
+
+      flameOuterMaterial.dispose();
+      flameInnerMaterial.dispose();
+      flameCoreMaterial.dispose();
+      leftBootData.flameGeos.forEach(g => g.dispose());
+      rightBootData.flameGeos.forEach(g => g.dispose());
+
       renderer.dispose();
     };
   }, []);
