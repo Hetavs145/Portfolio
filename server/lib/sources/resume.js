@@ -42,7 +42,7 @@ export function resumeChunks() {
             'resume',
             'Resumes — which one to read and where to get them',
             `Hetav publishes two resumes on his portfolio site, both from the "Get Resume" ` +
-                `dropdown. (1) His main technical resume, at /Hetav_Shah_Resume.pdf — projects, ` +
+                `dropdown. (1) His main current resume, at /Hetav_Shah_Resume.pdf — projects, ` +
                 `stack and experience. This is his real resume and the right one for engineering, ` +
                 `AI or software roles, and the one to read if you only read one. ` +
                 `(2) The IMNU resume, at /Hetav_Shah_IMNU.pdf — the SPOC-approved resume in the ` +
@@ -116,7 +116,7 @@ export function resumeChunks() {
                 `The IMNU resume is the SPOC-approved resume in the format mandated by the ` +
                     `Institute of Management, Nirma University placement cell. It is not Hetav's own ` +
                     `resume and not the one he would send by choice — its structure and wording follow ` +
-                    `the institute template. His actual resume is the technical one, which is the ` +
+                    `the institute template. His actual resume is the current one, which is the ` +
                     `better read for engineering roles.`,
             ),
         );

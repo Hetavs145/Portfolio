@@ -65,9 +65,9 @@ export const cursorKeywords = [
  */
 export const resumes = [
     {
-        label: 'Resume',
+        label: 'Current Resume',
         href: '/Hetav_Shah_Resume.pdf',
-        description: 'Technical resume — projects, stack, experience',
+        description: 'Current resume — projects, stack, experience',
     },
     {
         // The institute's placement cell mandates this format and signs off on it.
