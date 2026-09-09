@@ -297,7 +297,7 @@ const RealTimeDemo = () => {
                 </div>
 
                 <div className="max-w-lg mx-auto">
-                    <div className="bg-navy-700 rounded-lg overflow-hidden shadow-xl border border-navy-600">
+                    <div data-lenis-prevent className="bg-navy-700 rounded-lg overflow-hidden shadow-xl border border-navy-600">
                         {/* Chat Header */}
                         <div className="bg-navy-900 p-3 md:p-4 flex justify-between items-center border-b border-navy-600">
                             <div className="flex items-center space-x-2 md:space-x-3">
@@ -403,7 +403,7 @@ const RealTimeDemo = () => {
                                         </div>
 
                                         {/* History List */}
-                                        <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                                        <div data-lenis-prevent className="flex-1 overflow-y-auto overscroll-y-contain p-3 space-y-2">
                                             {sessions.length === 0 ? (
                                                 <div className="h-full flex flex-col items-center justify-center text-center p-6 text-slate">
                                                     <MessageSquare size={32} className="mb-2 text-navy-600" />
@@ -495,7 +495,8 @@ const RealTimeDemo = () => {
                                     <div
                                         key="chat-messages"
                                         ref={chatContainerRef}
-                                        className="h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-18rem)] md:h-[28rem] overflow-y-auto p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800"
+                                        data-lenis-prevent
+                                        className="h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-18rem)] md:h-[28rem] overflow-y-auto overscroll-y-contain p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800"
                                     >
                                         <AnimatePresence>
                                             {messages.map((msg) => (
