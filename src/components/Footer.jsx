@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Github, Linkedin, Mail, Instagram, Youtube, Rocket } from 'lucide-react';
+import { useRoute } from '../context/RouteContext';
 
 const Footer = () => {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const { currentPage } = useRoute();
 
     useEffect(() => {
         const onScroll = () => {
@@ -35,12 +37,14 @@ const Footer = () => {
     return (
         <footer className="relative z-10 bg-navy-950/90 backdrop-blur-md text-center text-slate-light font-mono text-sm border-t border-white/5 shadow-2xl">
             {/* "Move cursor near to robo to see the magic" / "Tap on robo to see the magic" responsive banner */}
-            <div className="py-3 px-4 border-b border-white/5 bg-navy-900/40 backdrop-blur-sm flex items-center justify-center gap-2 text-xs font-mono text-slate-400">
-                <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_#38bdf8]" />
-                <span className="tracking-wider text-teal-400/90 font-medium">
-                    {isTouchDevice ? 'tap on arc reactor to see the magic' : 'move cursor near arc reactor to see the magic'}
-                </span>
-            </div>
+            {currentPage !== 'agent' && (
+                <div className="py-3 px-4 border-b border-white/5 bg-navy-900/40 backdrop-blur-sm flex items-center justify-center gap-2 text-xs font-mono text-slate-400">
+                    <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_#38bdf8]" />
+                    <span className="tracking-wider text-teal-400/90 font-medium">
+                        {isTouchDevice ? 'tap on arc reactor to see the magic' : 'move cursor near arc reactor to see the magic'}
+                    </span>
+                </div>
+            )}
 
             <div className="py-8">
                 <div className="flex justify-center space-x-6 mb-4">

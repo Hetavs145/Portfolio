@@ -9,7 +9,7 @@
 export const OPENROUTER_BASE = 'https://openrouter.ai/api/v1';
 
 export const EMBED_MODEL = 'nvidia/nemotron-3-embed-1b:free';
-export const CHAT_MODEL = 'google/gemma-4-31b-it:free';
+export const CHAT_MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
 
 /**
  * Free models are served from per-provider shared pools that saturate across ALL
@@ -24,7 +24,7 @@ export const CHAT_MODEL = 'google/gemma-4-31b-it:free';
 const DEFAULT_CHAT_CHAIN = [
     CHAT_MODEL,
     'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
-    'google/gemma-4-26b-a4b-it:free',
+    'google/gemma-4-31b-it:free',
     'nvidia/nemotron-3-super-120b-a12b:free',
     'liquid/lfm-2.5-2.6b:free',
 ];
