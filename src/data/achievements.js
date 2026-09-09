@@ -29,10 +29,9 @@ export const achievements = [
         color: 'teal',
         details: [
             'Integrated B.Tech in Computer Science & Engineering + MBA',
-            'B.Tech — Institute of Technology, Nirma University (2023–2026) · 71.30%',
+            'B.Tech — Institute of Technology, Nirma University (2023–2026)',
             'MBA — Institute of Management, Nirma University (2026–2028)',
             'MBA Major: Finance · Minor: Digital Transformation & Analytics',
-            'CGPA: 7.13 / 10',
         ],
     },
     {

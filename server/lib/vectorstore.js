@@ -133,6 +133,17 @@ const STOPWORDS = new Set([
     'it', 'its', 'he', 'she', 'they', 'his', 'her', 'their', 'what', 'which', 'who', 'whom', 'how',
     'when', 'where', 'why', 'do', 'does', 'did', 'has', 'have', 'had', 'can', 'could', 'would',
     'should', 'you', 'your', 'me', 'my', 'i', 'about', 'tell', 'us',
+    // Conversational filler. These are rare enough in a resume corpus that the
+    // entity gate mistook "made" and "right" in "you made a post about aetrix,
+    // right?" for identifying terms, diluting the boost meant for "aetrix".
+    'made', 'make', 'right', 'yeah', 'yes', 'no', 'ok', 'okay', 'please', 'thanks',
+    'know', 'think', 'say', 'said', 'give', 'want', 'need', 'get', 'got', 'like',
+    'just', 'really', 'actually', 'also', 'any', 'some', 'more', 'much', 'many',
+    'there', 'here', 'was', 'were', 'am', 'been', 'still', 'ever', 'even', 'one',
+    // Recency words are handled structurally by lib/recency.js, not by matching
+    // them as if they were topics.
+    'latest', 'recent', 'recently', 'newest', 'last', 'first', 'new', 'old', 'now',
+    'current', 'currently', 'today',
 ]);
 
 const tokenize = (s) =>
@@ -141,6 +152,34 @@ const tokenize = (s) =>
         .replace(/[^a-z0-9+#./\s-]/g, ' ')
         .split(/\s+/)
         .filter((t) => t.length > 1 && !STOPWORDS.has(t));
+
+/**
+ * Query terms rare enough to be identifying — proper nouns, essentially.
+ *
+ * "Aetrix" appears in 5 of 132 chunks; "post" appears in dozens. A question is
+ * usually one or two of the former wrapped in the latter, and getting the rare
+ * one right is the whole job. Returns [] when a term appears nowhere, so a
+ * misspelling or an unknown name doesn't gate retrieval down to nothing.
+ *
+ * @param {number} maxFraction  a term in more than this share of chunks is common
+ */
+export function rareQueryTerms(query, maxFraction = 0.08) {
+    const chunks = searchableChunks();
+    if (!chunks.length) return [];
+
+    const docTokens = chunks.map((c) => new Set(tokenize(`${c.title} ${c.text}`)));
+    const limit = Math.max(1, Math.floor(chunks.length * maxFraction));
+
+    return [...new Set(tokenize(query))].filter((term) => {
+        const df = docTokens.reduce((n, set) => n + (set.has(term) ? 1 : 0), 0);
+        return df > 0 && df <= limit;
+    });
+}
+
+/** Does this chunk contain the given term? */
+export function chunkHasTerm(chunk, term) {
+    return tokenize(`${chunk.title} ${chunk.text}`).includes(term);
+}
 
 /**
  * Lexical fallback — IDF-weighted term overlap over the same chunks.
@@ -157,11 +196,18 @@ export function lexicalTopK(query, k = TOP_K) {
 
     const docTokens = chunks.map((c) => new Set(tokenize(`${c.title} ${c.text}`)));
 
-    // IDF: rare terms in the query discriminate more than common ones.
+    // IDF, squared. Plain IDF let a pile of common matches outweigh one rare one:
+    // for "you made a post on linkedin about aetrix right?", chunks matching
+    // "post" and "linkedin" outscored the only chunk that contains "aetrix", and
+    // the bot denied an award it had won. Squaring makes a discriminative term
+    // dominate the words around it, which is what this corpus needs — the queries
+    // that matter are proper nouns (Aetrix, Kontexo, VaquaH, TrafficMind) wrapped
+    // in conversational filler.
     const idf = new Map();
     for (const term of qTerms) {
         const df = docTokens.reduce((n, set) => n + (set.has(term) ? 1 : 0), 0);
-        idf.set(term, Math.log((chunks.length + 1) / (df + 1)) + 1);
+        const raw = Math.log((chunks.length + 1) / (df + 1)) + 1;
+        idf.set(term, raw * raw);
     }
 
     return chunks

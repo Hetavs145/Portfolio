@@ -59,7 +59,7 @@ export async function refreshLinkedIn(opts = {}) {
             ...previous,
             ...fresh,
             profile: fresh.profile ?? previous?.profile ?? null,
-            posts: fresh.posts ?? previous?.posts ?? [],
+            posts: mergePosts(previous?.posts, fresh.posts),
         };
 
         writeSnapshot(merged);
@@ -71,6 +71,43 @@ export async function refreshLinkedIn(opts = {}) {
         }
         return { data: previous, refreshed: false, reason: err.message };
     }
+}
+
+/**
+ * Identity for a post. The permalink is unique and stable; posts that arrive
+ * without one fall back to their timestamp plus a prefix of their text.
+ */
+function postKey(post) {
+    if (post?.url) return `url:${post.url}`;
+    return `txt:${(post?.postedAt ?? '').slice(0, 10)}:${(post?.text ?? '').replace(/\s+/g, ' ').slice(0, 80)}`;
+}
+
+/**
+ * Union the archive with a fresh page, newest first.
+ *
+ * This used to be a straight replace: `posts: fresh.posts ?? previous.posts`.
+ * The API returns only the most recent page, so every nightly run threw away
+ * everything older than that page — the archive could never hold more than one
+ * page's worth, and posts silently fell off the back as new ones were published.
+ * That is why the knowledge base had a 19-month hole in it and the bot denied
+ * posts that genuinely exist.
+ *
+ * Merging instead means the archive only ever grows: each run contributes
+ * whatever it can see, and history already collected is never lost — even if a
+ * later scrape fails or returns fewer posts.
+ */
+export function mergePosts(previous, fresh) {
+    if (!fresh) return previous ?? [];
+
+    const byKey = new Map();
+    // Previous first, then fresh, so a re-scraped post overwrites the old copy
+    // (edited text, updated reaction counts) rather than duplicating it.
+    for (const post of previous ?? []) byKey.set(postKey(post), post);
+    for (const post of fresh) byKey.set(postKey(post), post);
+
+    return [...byKey.values()].sort((a, b) =>
+        String(b.postedAt ?? '').localeCompare(String(a.postedAt ?? '')),
+    );
 }
 
 /* ------------------------------------------------------------- chunking --- */
@@ -239,26 +276,51 @@ export function linkedinChunks() {
             date: isoDate(post.postedAt),
             url: post.url || '',
         }))
-        // Skip bare reshares with no commentary of his own — "Congratulations
-        // Hetav Shah" is someone else's text and adds nothing to the corpus.
-        .filter((p) => p.text.length >= 60)
+        // Keep every post, including short ones.
+        //
+        // These used to be dropped as "bare reshares with no commentary". That
+        // filter silently deleted real posts: the 2026-03-27 certificate post for
+        // the Aetrix hackathon win carries only LinkedIn's template line
+        // ("Congratulations Hetav Shah"), so it fell under the threshold and the
+        // bot flatly denied that the post existed. A short post is still a post,
+        // and its date and link are exactly what someone asking about it wants.
+        .filter((p) => p.text || p.url)
         // Newest first, so ordinals in the corpus ("most recent", "2nd most
         // recent") are true regardless of what order the API returned.
         .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
+    // Several posts can share a date (three went out on 2025-11-11). Titles key
+    // the chunk id AND the recency layer's notion of "one item", so same-day
+    // posts must not collapse into one — otherwise pinning "the latest post"
+    // could splice fragments of two different posts together.
+    const perDate = new Map();
+    for (const p of posts) perDate.set(p.date, (perDate.get(p.date) ?? 0) + 1);
+    const seenPerDate = new Map();
+
     for (const [i, post] of posts.entries()) {
+        const n = (seenPerDate.get(post.date) ?? 0) + 1;
+        seenPerDate.set(post.date, n);
+        const suffix = (perDate.get(post.date) ?? 0) > 1 ? ` #${n}` : '';
         const rank =
             i === 0
                 ? 'This is his MOST RECENT LinkedIn post.'
                 : `This is his ${ordinal(i + 1)} most recent LinkedIn post.`;
         const stampPrefix = post.date ? `Posted ${post.date}. ${rank} ` : '';
         const link = post.url ? ` Link: ${post.url}` : '';
+        // A short post is usually an image, certificate or celebration card whose
+        // only text is a template line. Saying so keeps the model from reading the
+        // thin text as the whole story, and keeps the post findable by date.
+        const note =
+            post.text.length < 60
+                ? ' (This is a short post — an image, certificate or shared celebration card ' +
+                  'rather than a written update, so the post text itself is brief.)'
+                : '';
 
         chunks.push(
             ...splitLong(
                 'linkedin',
-                `LinkedIn post — ${post.date || 'undated'}`,
-                `${stampPrefix}${post.text}${link}`,
+                `LinkedIn post — ${post.date || 'undated'}${suffix}`,
+                `${stampPrefix}${post.text}${note}${link}`,
                 { date: post.date, kind: 'post', url: post.url },
             ),
         );
@@ -274,6 +336,28 @@ export function linkedinChunks() {
     // and a fragment of a timeline is worse than useless — it looks authoritative
     // while missing most of the list. Paging also makes "first ever post" work,
     // because the oldest page sorts to the front when the question asks for it.
+    // Counting questions ("how many posts do you have?") cannot be answered from
+    // retrieved excerpts — the model counts the blocks in front of it and says
+    // "four". One chunk holding the actual totals fixes that.
+    if (posts.length) {
+        const years = [...new Set(posts.map((p) => (p.date || '').slice(0, 4)).filter(Boolean))];
+        chunks.push(
+            makeChunk(
+                'linkedin',
+                'LinkedIn posting activity — totals',
+                `Hetav has ${posts.length} LinkedIn posts in his knowledge base, ` +
+                    `published between ${posts[posts.length - 1].date || 'an unknown date'} and ` +
+                    `${posts[0].date || 'an unknown date'}, spanning ${years.length} year(s): ` +
+                    `${years.sort().join(', ')}. That is the complete set his agent can see; ` +
+                    `it reflects what the LinkedIn API returns, so very old posts may not appear.`,
+                // Deliberately NOT kind 'timeline': timelines are excluded from
+                // similarity search (they match everything), and this chunk has
+                // to be findable by an ordinary question like "how many posts?".
+                { date: posts[0].date, kind: 'stats' },
+            ),
+        );
+    }
+
     const PAGE = 8;
     for (let start = 0; start < posts.length; start += PAGE) {
         const page = posts.slice(start, start + PAGE);

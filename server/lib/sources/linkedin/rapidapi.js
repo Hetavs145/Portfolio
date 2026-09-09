@@ -22,6 +22,9 @@
  * returning `success:false` with a "no longer available at this location"
  * message on *every* endpoint, HTTP 200 and all.
  */
+/** LinkedIn's own pagination block size; offsets must be multiples of it. */
+const PAGE_SIZE = 50;
+
 const HOSTS = {
     primary: process.env.RAPIDAPI_HOST || 'professional-network-data.p.rapidapi.com',
     fallback: process.env.RAPIDAPI_HOST_FALLBACK || 'linkedin-api8.p.rapidapi.com',
@@ -90,11 +93,13 @@ const profileUrl = () =>
     process.env.LINKEDIN_PROFILE_URL || 'https://www.linkedin.com/in/hetav-shah-26601722b/';
 
 /**
- * @param {{ includeProfile?: boolean, includePosts?: boolean }} what
+ * @param {{ includeProfile?: boolean, includePosts?: boolean, pages?: number }} what
  *   Lets the cron pull posts daily but the full profile only weekly, which is
- *   what keeps monthly spend inside the free 50 credits.
+ *   what keeps monthly spend inside the free 50 credits. `pages` > 1 walks back
+ *   through post history and costs one extra credit per page — for backfills,
+ *   not for the nightly run.
  */
-export async function fetchLinkedIn({ includeProfile = true, includePosts = true } = {}) {
+export async function fetchLinkedIn({ includeProfile = true, includePosts = true, pages = 1 } = {}) {
     const url = profileUrl();
     const out = { source: 'rapidapi', profileUrl: url, fetchedAt: new Date().toISOString() };
 
@@ -114,17 +119,74 @@ export async function fetchLinkedIn({ includeProfile = true, includePosts = true
     }
 
     if (includePosts) {
-        const posts = await callWithFallback("/get-profile-posts", { username: usernameFrom(url) });
-        const items = Array.isArray(posts) ? posts : (posts.items ?? posts.posts ?? []);
-        out.posts = items.slice(0, 25).map((post) => ({
-            text: post.text ?? post.commentary ?? post.content ?? '',
-            postedAt: post.postedDate ?? post.postedAt ?? post.date ?? null,
-            url: post.postUrl ?? post.url ?? null,
-            reactions: post.totalReactionCount ?? post.likeCount ?? null,
-        }));
+        out.posts = await fetchPosts(usernameFrom(url), pages);
     }
 
     return out;
+}
+
+/** Normalise one post record across the two hosts' field names. */
+const normalisePost = (post) => ({
+    text: post.text ?? post.commentary ?? post.content ?? '',
+    postedAt: post.postedDate ?? post.postedAt ?? post.date ?? null,
+    url: post.postUrl ?? post.url ?? null,
+    reactions: post.totalReactionCount ?? post.likeCount ?? null,
+});
+
+/**
+ * Fetch up to `pages` pages of posts, newest first.
+ *
+ * The old code took page one and cut it at 25. Because the caller then *replaced*
+ * the stored posts with that page, the archive was permanently capped at the most
+ * recent page and older posts were dropped as new ones pushed them off — which is
+ * how a 19-month gap opened up in the knowledge base.
+ *
+ * Pagination costs one credit per page against the free monthly 50, so the daily
+ * cron stays at one page (new posts are always on page one, and the merge in
+ * ./index.js keeps everything already collected). Ask for more only for a
+ * deliberate backfill: `node server/scripts/refresh-linkedin.js --deep`.
+ *
+ * The two hosts paginate differently, so both are supported: a `paginationToken`
+ * echoed in the response, or a numeric `start` offset.
+ */
+async function fetchPosts(username, pages = 1) {
+    const collected = [];
+    let token = null;
+
+    for (let page = 0; page < Math.max(1, pages); page++) {
+        const params = { username };
+        // LinkedIn paginates in blocks of 50 regardless of how many a page
+        // returns, so the offset advances by PAGE_SIZE, not by items.length.
+        if (token) params.paginationToken = token;
+        else if (page > 0) params.start = page * PAGE_SIZE;
+
+        let body;
+        try {
+            body = await callWithFallback('/get-profile-posts', params);
+        } catch (err) {
+            // A failed later page must not discard the pages that succeeded —
+            // returning [] here would throw away a good page-one scrape and, via
+            // the caller's cascade, leave the archive untouched for no reason.
+            console.warn(
+                `[linkedin] posts page ${page + 1} failed (${err.message}) — ` +
+                    `keeping the ${collected.length} post(s) already fetched`,
+            );
+            if (collected.length === 0) throw err;
+            break;
+        }
+
+        const items = Array.isArray(body) ? body : (body.items ?? body.posts ?? body.data ?? []);
+        if (!items.length) break;
+
+        collected.push(...items.map(normalisePost));
+        if (pages > 1) {
+            console.log(`[linkedin] page ${page + 1}: ${items.length} posts (${collected.length} total)`);
+        }
+
+        token = body?.paginationToken ?? body?.pagination_token ?? null;
+    }
+
+    return collected;
 }
 
 /** linkedin.com/in/<username>/ -> <username> */

@@ -2,23 +2,23 @@
   "Hetavs145/Portfolio": [
     {
       "date": "2026-09-09",
+      "message": "feat: rename technical resume to current resume and add refresh chat with 30-day history"
+    },
+    {
+      "date": "2026-09-09",
+      "message": "fix: remove Warehouse Inventory Robot from projects tab"
+    },
+    {
+      "date": "2026-09-09",
+      "message": "fix: temporal grounding, recency, hybrid retrieval, and resume updates"
+    },
+    {
+      "date": "2026-09-09",
       "message": "feat: switch to NVIDIA NIM inference (Nemotron-3 30B Omni) and 1B embeddings"
     },
     {
       "date": "2026-09-09",
       "message": "feat: upgrade AI model to Llama 3.3 70B and hide magic banner on chat route"
-    },
-    {
-      "date": "2026-09-09",
-      "message": "chore: refresh knowledge base [skip ci]"
-    },
-    {
-      "date": "2026-09-08",
-      "message": "docs: update README with 3D mech assembly, Arc Reactor interactions, and 113-chunk RAG pipeline"
-    },
-    {
-      "date": "2026-09-08",
-      "message": "chore: re-embed full vector index with 113 chunks including 22 LinkedIn posts"
     }
   ],
   "Hetavs145/youtube-renderer": [
