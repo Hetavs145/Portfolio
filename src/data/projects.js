@@ -49,15 +49,6 @@ export const projects = [
         featured: 'secondary',
     },
     {
-        title: 'Warehouse Inventory Robot',
-        description:
-            'Autonomous AI-powered warehouse inventory robot. 8-state navigation FSM with route memory, plus a QR and vision pipeline for automated product verification. A LangGraph agent routes spoken commands across 9 intents, with a Commander dashboard and offline QR fallback. Minor Project, Nirma University.',
-        tech: ['LangGraph', 'Groq', 'Flask', 'OpenCV', 'Python'],
-        live: null,
-        github: null,
-        featured: null,
-    },
-    {
         title: 'YouTube Upload Automation',
         description:
             'n8n agentic workflow automating daily YouTube uploads end to end. 90% reduced manual time with LLM-based metadata auto-generation and 100% field compliance.',
