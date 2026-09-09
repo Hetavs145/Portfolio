@@ -6,6 +6,15 @@
  *
  * `source` labels where a fact came from ("resume", "github", "linkedin", "site")
  * and is surfaced to the model so it can say *how* it knows something.
+ *
+ * Chunks may also carry optional metadata:
+ *
+ *   { date: 'YYYY-MM-DD', kind: 'post' | 'repo' | 'commit' | ..., url }
+ *
+ * `date` is what makes "what's your latest post?" answerable. Cosine similarity
+ * has no notion of time — every post looks equally "recent" to an embedding — so
+ * recency has to travel as structured metadata, not as prose the model must
+ * notice. See lib/recency.js.
  */
 
 /** Chunks are kept small — one fact each — so top-5 retrieval stays precise. */
@@ -19,13 +28,24 @@ const slug = (s) =>
         .replace(/^-|-$/g, '')
         .slice(0, 60);
 
-export function makeChunk(source, title, text) {
+/** Keep only the metadata keys we understand, and drop empty values. */
+function pruneMeta(meta) {
+    const out = {};
+    for (const key of ['date', 'kind', 'url']) {
+        const value = meta?.[key];
+        if (value != null && value !== '') out[key] = value;
+    }
+    return out;
+}
+
+export function makeChunk(source, title, text, meta = {}) {
     const clean = String(text).replace(/\s+/g, ' ').trim();
     return {
         id: `${source}:${slug(title)}`,
         source,
         title: String(title).trim(),
         text: clean,
+        ...pruneMeta(meta),
     };
 }
 
@@ -33,9 +53,9 @@ export function makeChunk(source, title, text) {
  * Split text that exceeds MAX_CHARS on sentence boundaries, with a little overlap
  * so a fact spanning a split is still retrievable from either half.
  */
-export function splitLong(source, title, text) {
+export function splitLong(source, title, text, meta = {}) {
     const clean = String(text).replace(/\s+/g, ' ').trim();
-    if (clean.length <= MAX_CHARS) return [makeChunk(source, title, clean)];
+    if (clean.length <= MAX_CHARS) return [makeChunk(source, title, clean, meta)];
 
     const sentences = clean.match(/[^.!?]+[.!?]*/g) || [clean];
     const parts = [];
@@ -51,10 +71,12 @@ export function splitLong(source, title, text) {
     }
     if (buf.trim()) parts.push(buf.trim());
 
-    return parts.map((part, i) => {
-        const chunk = makeChunk(source, `${title} (${i + 1}/${parts.length})`, part);
-        return chunk;
-    });
+    // Metadata is copied onto every part. A post split into three pieces used to
+    // leave its date on the final fragment only, so retrieving fragment 1 gave the
+    // model undated text and it would confidently invent a date.
+    return parts.map((part, i) =>
+        makeChunk(source, `${title} (${i + 1}/${parts.length})`, part, meta),
+    );
 }
 
 /**

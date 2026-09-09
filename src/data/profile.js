@@ -70,8 +70,11 @@ export const resumes = [
         description: 'Technical resume — projects, stack, experience',
     },
     {
+        // The institute's placement cell mandates this format and signs off on it.
+        // Flagging that here stops a recruiter reading it as Hetav's own resume
+        // and judging him on a template he didn't choose.
         label: 'IMNU Resume',
         href: '/Hetav_Shah_IMNU.pdf',
-        description: 'Management resume — academics, positions, achievements',
+        description: 'SPOC-approved institute format — not my own resume',
     },
 ];

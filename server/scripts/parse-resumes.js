@@ -1,8 +1,8 @@
 /**
  * Derives structured JSON from the two resume source files at the repo root.
  *
- *   Hetav_Shah_Resume.tex      -> server/data/resume.json
- *   23BTM026_Hetav Shah.docx   -> server/data/resume-imnu.json
+ *   Hetav_Shah_Resume.tex          -> server/data/resume.json
+ *   23BTM026_Hetav_Shah_SPOC.docx  -> server/data/resume-imnu.json
  *
  * The PDFs are deliberately NOT parsed: they use subset-embedded fonts, so text
  * extraction returns garbage. They exist to be served to visitors, nothing more.
@@ -24,7 +24,9 @@ const ROOT = path.join(HERE, '..', '..');
 const DATA = path.join(HERE, '..', 'data');
 
 const TEX = path.join(ROOT, 'Hetav_Shah_Resume.tex');
-const IMNU_DOCX = path.join(ROOT, '23BTM026_Hetav Shah.docx');
+// The IMNU resume is the SPOC-approved institute format — a template the
+// placement cell mandates, not a resume Hetav wrote or would send by choice.
+const IMNU_DOCX = path.join(ROOT, '23BTM026_Hetav_Shah_SPOC.docx');
 
 /* ------------------------------------------------------------------ LaTeX -- */
 

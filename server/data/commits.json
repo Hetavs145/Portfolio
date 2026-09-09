@@ -1,0 +1,84 @@
+{
+  "Hetavs145/Portfolio": [
+    {
+      "date": "2026-09-09",
+      "message": "feat: switch to NVIDIA NIM inference (Nemotron-3 30B Omni) and 1B embeddings"
+    },
+    {
+      "date": "2026-09-09",
+      "message": "feat: upgrade AI model to Llama 3.3 70B and hide magic banner on chat route"
+    },
+    {
+      "date": "2026-09-09",
+      "message": "chore: refresh knowledge base [skip ci]"
+    },
+    {
+      "date": "2026-09-08",
+      "message": "docs: update README with 3D mech assembly, Arc Reactor interactions, and 113-chunk RAG pipeline"
+    },
+    {
+      "date": "2026-09-08",
+      "message": "chore: re-embed full vector index with 113 chunks including 22 LinkedIn posts"
+    }
+  ],
+  "Hetavs145/youtube-renderer": [
+    {
+      "date": "2026-09-08",
+      "message": "feat: end-to-end n8n pipeline for one daily YouTube short"
+    },
+    {
+      "date": "2026-06-01",
+      "message": "Delete .github"
+    },
+    {
+      "date": "2026-06-01",
+      "message": "Create .github"
+    },
+    {
+      "date": "2026-06-01",
+      "message": "Initial commit"
+    }
+  ],
+  "fjiolla/Kontexo": [
+    {
+      "date": "2026-04-13",
+      "message": "Update Upon V2"
+    },
+    {
+      "date": "2026-04-12",
+      "message": "Version 2.0.0"
+    }
+  ],
+  "Hetavs145/ET-Gen-Hackathon": [
+    {
+      "date": "2026-03-29",
+      "message": "Fix: include frontend source directly (remove embedded git)"
+    },
+    {
+      "date": "2026-03-29",
+      "message": "Submission: docs, README, video script"
+    }
+  ],
+  "Hetavs145/VaquaH": [
+    {
+      "date": "2026-03-28",
+      "message": "Major  Update Version 3.0.0"
+    },
+    {
+      "date": "2026-03-28",
+      "message": "chore(release): v3.0.0 — docs, infra, RAG & voice services"
+    },
+    {
+      "date": "2026-02-23",
+      "message": "patch update v2.0.2"
+    },
+    {
+      "date": "2026-02-16",
+      "message": "Gesture and Voice based navigation Added"
+    },
+    {
+      "date": "2026-01-01",
+      "message": "Minor bug fixes"
+    }
+  ]
+}

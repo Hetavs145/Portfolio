@@ -38,23 +38,7 @@
     "Automated routine support queries with 5 RAG chatbot modules covering 50+ interaction flows",
     "Led the intern team, merging 11 pull requests through structured Git workflows"
   ],
-  "projects": [
-    "TrafficMind: AI Co-Pilot for Traffic Incident Command",
-    "Architected an autonomous 6-agent LangGraph fan-out/fan-in pipeline on Llama 3.3 70B, at 0.34s",
-    "Automates slow incident triage: SOP-backed decisions on 250 road segments in under a second",
-    "Kontexo: Agentic MCP Gateway",
-    "Engineered a JSON-RPC 2.0 MCP server of 19 tools on a 10-node LangGraph state machine",
-    "Automates manual tool-by-tool work: one prompt drives 4 services, gated by human approval",
-    "VaquaH: HVAC Services Platform",
-    "Built a React and Node.js commerce platform with Razorpay and a voice/gesture RAG chatbot",
-    "Automates phone-led ordering and scheduling into round-the-clock self-service",
-    "HetChat: Messaging Platform",
-    "Built a React and Node.js chat app on Socket.io with Firebase Auth and Firestore",
-    "Fixes message loss and stale presence in polled chat, keeping all devices in sync",
-    "Portfolio",
-    "Built a React and Three.js site with a Groq Llama 3.3 70B RAG agent on Vercel serverless",
-    "Automates recruiter queries a static resume cannot answer, at zero hosting cost"
-  ],
+  "projects": [],
   "positions": [
     "Swayam Club, Nirma University",
     "Member and Student Coordinator, Swayam - The Entrepreneurship Club, IMNU (2026-2028)",
@@ -62,14 +46,6 @@
   ],
   "extracurricular": [
     "Hackathon Winner - 1st Place, Aetrix 2026, PDEU",
-    "Won 1st place with TrafficMind in Smart Transportation, Team 2AM Coders, over 36 hours, judged across all 3 phases",
-    "Power BI",
-    "Power BI for Beginners, Simplilearn, data visualisation and business intelligence",
-    "AI Agent Builder",
-    "n8n Course: No Code AI Agent Builder, Simplilearn, no code workflow automation",
-    "LangGraph",
-    "Introduction to LangGraph, Simplilearn, custom agents and automation",
-    "C Programming",
-    "C for Everyone, Part 2: Structured Programming, UC Santa Cruz, Coursera"
+    "Won 1st place with TrafficMind in Smart Transportation, Team 2AM Coders, over 36 hours, judged across all 3 phases"
   ]
 }

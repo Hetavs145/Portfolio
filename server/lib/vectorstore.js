@@ -19,6 +19,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const INDEX_PATH = path.join(HERE, '..', 'data', 'index.json');
 
 let store = null; // { model, dim, builtAt, chunks: [{ id, source, title, text, vector }] }
+let loadedMtimeMs = 0; // mtime of the file `store` was built from
 
 /** Cosine similarity. Vectors are not pre-normalised, so divide by both norms. */
 export function cosine(a, b) {
@@ -40,12 +41,21 @@ export function cosine(a, b) {
  * build script regenerates it.
  */
 export function loadIndex({ quiet = false } = {}) {
-    if (store) return store;
-
     if (!fs.existsSync(INDEX_PATH)) {
         if (!quiet) console.warn(`[vectorstore] no index at ${INDEX_PATH} — lexical retrieval only`);
         return null;
     }
+
+    // Reload when the file changes underneath us. Without this the first request
+    // pins the index in module state for the life of the process, so a rebuilt
+    // and redeployed index.json would still be answered from the old vectors on
+    // any host that keeps the process warm.
+    const mtimeMs = fs.statSync(INDEX_PATH).mtimeMs;
+    if (store && mtimeMs === loadedMtimeMs) return store;
+    if (store && !quiet) {
+        console.log('[vectorstore] index.json changed on disk — reloading');
+    }
+    store = null;
 
     try {
         const parsed = JSON.parse(fs.readFileSync(INDEX_PATH, 'utf8'));
@@ -60,6 +70,7 @@ export function loadIndex({ quiet = false } = {}) {
             );
             // Keep the chunks: their text is still usable for lexical retrieval.
             store = { ...parsed, vectorsUsable: false };
+            loadedMtimeMs = mtimeMs;
             return store;
         }
         // Decode once at load; topK then runs against Float32Arrays.
@@ -67,6 +78,7 @@ export function loadIndex({ quiet = false } = {}) {
             if (c.v && !c.vector) c.vector = decodeVector(c.v, c.s);
         }
         store = { ...parsed, vectorsUsable: true };
+        loadedMtimeMs = mtimeMs;
         if (!quiet) {
             console.log(
                 `[vectorstore] loaded ${store.chunks.length} chunks (dim ${store.dim}, built ${store.builtAt})`,
@@ -82,6 +94,7 @@ export function loadIndex({ quiet = false } = {}) {
 /** Drop the cached index so the next load re-reads from disk. Used by build scripts. */
 export function resetIndex() {
     store = null;
+    loadedMtimeMs = 0;
 }
 
 /** All chunks, or [] when no index is present. */
@@ -89,12 +102,26 @@ export function allChunks() {
     return loadIndex({ quiet: true })?.chunks ?? [];
 }
 
+/**
+ * Chunks eligible for similarity search.
+ *
+ * Timeline chunks are excluded. They are navigation artifacts — dense lists of
+ * dates and clipped sentences spanning every topic — so they score high against
+ * almost any query and were crowding real answers out of the top-k ("is the IMNU
+ * resume your actual resume?" returned three LinkedIn timelines). They are still
+ * retrieved, but deliberately, by the recency layer that pins them for temporal
+ * questions. See lib/recency.js.
+ */
+function searchableChunks() {
+    return allChunks().filter((c) => c.kind !== 'timeline');
+}
+
 /** Semantic search. Requires a loaded index with usable vectors. */
 export function topK(queryVector, k = TOP_K) {
     const idx = loadIndex({ quiet: true });
     if (!idx || !idx.vectorsUsable) return [];
 
-    return idx.chunks
+    return searchableChunks()
         .map((c) => ({ chunk: c, score: cosine(queryVector, c.vector) }))
         .sort((a, b) => b.score - a.score)
         .slice(0, k);
@@ -122,7 +149,7 @@ const tokenize = (s) =>
  * OpenRouter quota is spent. Worse than vector search, but never a hard failure.
  */
 export function lexicalTopK(query, k = TOP_K) {
-    const chunks = allChunks();
+    const chunks = searchableChunks();
     if (chunks.length === 0) return [];
 
     const qTerms = [...new Set(tokenize(query))];

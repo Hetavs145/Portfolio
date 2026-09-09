@@ -69,13 +69,21 @@ jobs:
           LINKEDIN_DMA_TOKEN: ${{ secrets.LINKEDIN_DMA_TOKEN }}
         run: node server/scripts/refresh-linkedin.js ${{ steps.scope.outputs.args }}
 
+      # Full rebuild every run: the previous index.json is deleted and every chunk
+      # is re-embedded from scratch. GITHUB_TOKEN is the Actions-scoped token —
+      # it lifts the API rate limit to ~1000/hr so commit data is genuinely live,
+      # and it cannot read any private repository (it is scoped to this repo, and
+      # the scraper drops anything flagged private regardless).
       - name: Rebuild vector index
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
           NVIDIA_EMBED_KEY: ${{ secrets.NVIDIA_EMBED_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
-        run: node server/scripts/build-index.js
+        # --strict fails the run if any source fell back to cached or stale data,
+        # so a degraded night is a red X rather than a quiet shipment of old text.
+        run: node server/scripts/build-index.js --strict
 
       - name: Verify project links still resolve
         continue-on-error: true
@@ -85,8 +93,12 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # commits.json is the last-good GitHub commit cache: without committing
+          # it, every CI run starts cold and a rate-limited scrape loses the
+          # "what am I working on now" chunks entirely.
           git add server/data/index.json server/data/linkedin.json \
-                  server/data/resume.json server/data/resume-imnu.json 2>/dev/null || true
+                  server/data/resume.json server/data/resume-imnu.json \
+                  server/data/commits.json 2>/dev/null || true
           # `builtAt` changes on every build, so diff the content that matters.
           if git diff --cached --quiet; then
             echo "No changes — nothing to commit."
@@ -98,3 +110,21 @@ jobs:
             git commit -m "chore: refresh knowledge base [skip ci]"
             git push
           fi
+
+      # The server holds the index in module state, so a committed file only
+      # reaches visitors once the process restarts. Render redeploys on push when
+      # auto-deploy is on; set RENDER_DEPLOY_HOOK if it isn't, otherwise the bot
+      # keeps serving the previous vectors no matter how fresh the commit is.
+      - name: Trigger Render redeploy
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        # Guarded in shell, not with `if:` — a step's own `env:` isn't visible to
+        # its `if` expression, so that form would silently never run.
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
+            echo "No RENDER_DEPLOY_HOOK secret set — relying on Render auto-deploy from the push."
+            echo "If auto-deploy is off, the live bot keeps serving the previous index."
+            exit 0
+          fi
+          curl -fsS -X POST "$RENDER_DEPLOY_HOOK" > /dev/null
+          echo "Redeploy triggered." 

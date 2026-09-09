@@ -4,6 +4,13 @@
  *   npm run build:index                # everything
  *   npm run build:index -- --no-github # skip the GitHub scrape
  *   npm run build:index -- --dry       # chunk only, no embedding calls
+ *   npm run build:index -- --strict    # fail if any source fell back to cache
+ *
+ * Every run is a full rebuild. The old index is read into memory (so a failed
+ * source can carry its last-good chunks forward), then deleted from disk before
+ * anything is collected, then written fresh. No vector is ever reused: all
+ * chunks are re-embedded every time, and a crash mid-run leaves no half-updated
+ * file behind pretending to be current.
  *
  * The vectors are genuine OpenRouter `nvidia/nemotron-3-embed-1b:free` output.
  * They're generated here rather than at server boot because both Render free
@@ -23,6 +30,7 @@ import { embed } from '../lib/openrouter.js';
 import { EMBED_MODEL } from '../lib/config.js';
 import { dedupeIds } from '../lib/chunk.js';
 import { encodeVector } from '../lib/vectorcodec.js';
+import { staleSources, freshnessReport } from '../lib/freshness.js';
 import { resumeChunks } from '../lib/sources/resume.js';
 import { githubChunks } from '../lib/sources/github.js';
 import { siteChunks } from '../lib/sources/site.js';
@@ -34,7 +42,45 @@ const OUT = path.join(HERE, '..', 'data', 'index.json');
 const args = process.argv.slice(2);
 const has = (flag) => args.includes(flag);
 
-async function collect() {
+/** The index currently on disk, or null. Used to survive a failed source fetch. */
+function previousIndex() {
+    try {
+        return JSON.parse(fs.readFileSync(OUT, 'utf8'));
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Chunks from the previous index for one source, stripped of their vectors so
+ * they get re-embedded with the rest.
+ *
+ * A rate-limited GitHub scrape used to drop every repo chunk from the index and
+ * still write the file, so the bot would quietly forget its own projects until
+ * someone noticed. Carrying the last good chunks forward makes a failed fetch a
+ * staleness problem rather than an amnesia problem.
+ */
+function carryForward(prev, source) {
+    return (prev?.chunks ?? [])
+        .filter((c) => c.source === source)
+        .map(({ v, s, vector, ...chunk }) => chunk);
+}
+
+/**
+ * Delete the committed index before rebuilding.
+ *
+ * Overwriting at the end would be equivalent on the happy path, but an explicit
+ * purge makes the contract visible and means a build that dies halfway leaves no
+ * stale index masquerading as fresh. Callers must read `previousIndex()` first if
+ * they want its chunks.
+ */
+function purgeIndex() {
+    if (!fs.existsSync(OUT)) return;
+    fs.rmSync(OUT);
+    console.log('  purged previous index.json — every chunk is re-embedded from scratch');
+}
+
+async function collect(prev) {
     const chunks = [];
 
     const resume = resumeChunks();
@@ -53,16 +99,31 @@ async function collect() {
     );
 
     if (has('--no-github')) {
-        console.log('  github      0 chunks  (skipped via --no-github)');
+        const kept = carryForward(prev, 'github');
+        chunks.push(...kept);
+        console.log(`  github    ${String(kept.length).padStart(3)} chunks  (--no-github: kept previous)`);
     } else {
+        let gh = [];
+        let failure = null;
         try {
-            const gh = await githubChunks();
-            chunks.push(...gh);
-            console.log(`  github    ${String(gh.length).padStart(3)} chunks`);
+            gh = await githubChunks();
         } catch (err) {
             // A GitHub outage or rate limit must not block an index rebuild —
             // the resume and site sources still make a usable corpus.
-            console.warn(`  github      0 chunks  (failed: ${err.message})`);
+            failure = err.message;
+        }
+
+        if (gh.length) {
+            chunks.push(...gh);
+            console.log(`  github    ${String(gh.length).padStart(3)} chunks`);
+        } else {
+            const kept = carryForward(prev, 'github');
+            chunks.push(...kept);
+            console.warn(
+                `  github    ${String(kept.length).padStart(3)} chunks  ` +
+                    `(fetch returned nothing${failure ? `: ${failure}` : ''} — kept previous index's chunks)`,
+            );
+            if (!kept.length) console.warn('  github    WARNING: no previous chunks either — index has no GitHub data');
         }
     }
 
@@ -71,7 +132,16 @@ async function collect() {
 
 async function main() {
     console.log(`Building index with ${EMBED_MODEL}\n`);
-    const chunks = await collect();
+    // Captured before the write — reading it back afterwards would compare the
+    // new index against itself.
+    const prev = previousIndex();
+    const previousCount = prev?.chunks?.length ?? 0;
+
+    // Read first, then purge, then rebuild: the in-memory copy is what a failed
+    // source falls back to, so deleting the file loses nothing.
+    if (!has('--dry')) purgeIndex();
+
+    const chunks = await collect(prev);
     console.log(`\n  total     ${chunks.length} chunks`);
 
     if (chunks.length === 0) throw new Error('No chunks collected — nothing to embed');
@@ -123,6 +193,31 @@ async function main() {
         return acc;
     }, {});
     console.log(`  by source: ${JSON.stringify(bySource)}`);
+
+    // A quiet 30% shrink is how a knowledge base rots: nothing errors, the bot
+    // just knows less. Say it out loud.
+    const stale = staleSources();
+    if (stale.length) {
+        console.warn(
+            `\n  DEGRADED: ${stale.map((r) => `${r.source} (${r.reason})`).join(', ')}`,
+        );
+    } else if (freshnessReport().length) {
+        console.log(`  all live sources fresh`);
+    }
+
+    if (has('--strict') && stale.length) {
+        throw new Error(
+            `--strict: ${stale.length} source(s) served cached or stale data: ` +
+                stale.map((r) => `${r.source} — ${r.reason}`).join('; '),
+        );
+    }
+
+    if (previousCount && index.chunks.length < previousCount * 0.7) {
+        console.warn(
+            `\n  WARNING: chunk count fell from ${previousCount} to ${index.chunks.length}. ` +
+                `Check for a failed source fetch before committing this index.`,
+        );
+    }
 }
 
 main().catch((err) => {

@@ -69,7 +69,10 @@ export const REFERER = process.env.SITE_URL || "https://github.com/Hetavs145/Por
 export const TITLE = "Hetav Shah Portfolio Agent";
 
 // Retrieval
-export const TOP_K = 5;
+export const TOP_K = 6;
+// How many of TOP_K a temporal question ("latest post?") may spend on
+// newest-first pins before similarity fills the rest.
+export const RECENCY_PINS = 3;
 export const EMBED_BATCH = 48; // texts per embeddings request
 
 // Generation

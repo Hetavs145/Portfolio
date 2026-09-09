@@ -32,6 +32,27 @@ function entryText(e) {
 
 export function resumeChunks() {
     const chunks = [];
+
+    // A recruiter's actual first question is "which resume do I read?", and none
+    // of the chunks below answer it: they are titled "Education", "Project — X",
+    // "Contact and links", so the bare word "resume" matches nothing and the bot
+    // used to claim it had no resume at all. This chunk exists to be that answer.
+    chunks.push(
+        makeChunk(
+            'resume',
+            'Resumes — which one to read and where to get them',
+            `Hetav publishes two resumes on his portfolio site, both from the "Get Resume" ` +
+                `dropdown. (1) His main technical resume, at /Hetav_Shah_Resume.pdf — projects, ` +
+                `stack and experience. This is his real resume and the right one for engineering, ` +
+                `AI or software roles, and the one to read if you only read one. ` +
+                `(2) The IMNU resume, at /Hetav_Shah_IMNU.pdf — the SPOC-approved resume in the ` +
+                `format mandated by the Institute of Management, Nirma University placement cell. ` +
+                `It is not his own resume and not one he wrote by choice; it follows the institute ` +
+                `template, and covers academics, positions of responsibility and achievements for ` +
+                `management and finance roles.`,
+        ),
+    );
+
     const r = readJson('resume.json');
 
     if (r) {
@@ -85,6 +106,21 @@ export function resumeChunks() {
 
     const imnu = readJson('resume-imnu.json');
     if (imnu) {
+        // The bot gets asked "which resume should I read?". It should know the
+        // IMNU one is an institute-mandated format the placement SPOC approves,
+        // not a resume Hetav wrote — otherwise it defends its formatting as his.
+        chunks.push(
+            makeChunk(
+                'resume-imnu',
+                'About the IMNU resume',
+                `The IMNU resume is the SPOC-approved resume in the format mandated by the ` +
+                    `Institute of Management, Nirma University placement cell. It is not Hetav's own ` +
+                    `resume and not the one he would send by choice — its structure and wording follow ` +
+                    `the institute template. His actual resume is the technical one, which is the ` +
+                    `better read for engineering roles.`,
+            ),
+        );
+
         chunks.push(
             makeChunk(
                 'resume-imnu',

@@ -94,16 +94,6 @@
       ]
     },
     {
-      "title": "An Autonomous AI-Powered Warehouse Inventory Robot",
-      "meta": "Apr 2026",
-      "subtitle": "LangGraph, Groq, Flask, OpenCV, Minor Project, Nirma University",
-      "subtitleMeta": "",
-      "bullets": [
-        "Built an autonomous 8-state navigation FSM with route memory, plus a QR and vision pipeline for automated product verification.",
-        "Automates manual stock checks: a LangGraph agent routes spoken commands over 9 intents, with a Commander dashboard and offline QR fallback."
-      ]
-    },
-    {
       "title": "VaquaH: HVAC and Cooling Services Platform",
       "meta": "Oct 2025 -- Present",
       "subtitle": "React, Node.js, Express, Firebase, Razorpay",
@@ -125,10 +115,11 @@
     {
       "title": "Portfolio: RAG-Backed Personal Site",
       "meta": "2026",
-      "subtitle": null,
-      "subtitleMeta": null,
+      "subtitle": "React, Vite, Three.js, Node.js, Express, NVIDIA NIM, Render",
+      "subtitleMeta": "",
       "bullets": [
-        "Built a React, Vite and Three.js site with an embedded RAG agent on Groq Llama 3.3 70B, running as a Vercel serverless function at zero hosting cost."
+        "Built an interactive site with a procedural Three.js 3D scene and a vector RAG agent searching 116 indexed knowledge chunks drawn from GitHub repos, LinkedIn posts and resumes.",
+        "Automates its own upkeep: a nightly GitHub Actions job re-scrapes and re-embeds the knowledge base, with multi-model fallback, 12-turn memory and per-IP rate limiting for uptime."
       ]
     }
   ],
