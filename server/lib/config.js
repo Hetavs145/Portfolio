@@ -1,58 +1,76 @@
 /**
  * Central configuration. Everything reads env; nothing here holds a secret value.
  *
- * OpenRouter keys are NOT model-scoped — one key works for both embeddings and chat.
- * The split exists so you can point embeddings at a second account and double the
- * free-tier quota (20 req/min, 50 req/day per account).
+ * Supports both NVIDIA NIM direct API (https://integrate.api.nvidia.com/v1)
+ * and OpenRouter (https://openrouter.ai/api/v1).
  */
 
-export const OPENROUTER_BASE = 'https://openrouter.ai/api/v1';
+export const NVIDIA_BASE = "https://integrate.api.nvidia.com/v1";
+export const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
 
-export const EMBED_MODEL = 'nvidia/nemotron-3-embed-1b:free';
-export const CHAT_MODEL = 'meta-llama/llama-3.3-70b-instruct:free';
+export const nvidiaChatKey = () => process.env.NVIDIA_API_KEY || "";
+export const nvidiaEmbedKey = () =>
+    process.env.NVIDIA_EMBED_KEY || process.env.NVIDIA_API_KEY || "";
+export const openrouterChatKey = () => process.env.OPENROUTER_API_KEY || "";
+export const openrouterEmbedKey = () =>
+    process.env.OPENROUTER_EMBED_KEY || process.env.OPENROUTER_API_KEY || "";
 
-/**
- * Free models are served from per-provider shared pools that saturate across ALL
- * OpenRouter free users — a 429 here usually means "Google's pool is busy right
- * now", not "you are out of quota". Observed in practice: both Gemma models 429
- * simultaneously while NVIDIA answered fine.
- *
- * So we fall through to models on *different* providers, in order. Ordering is
- * deliberate: the requested Gemma first, then NVIDIA, then back to Gemma's
- * smaller sibling as a last resort.
- */
-const DEFAULT_CHAT_CHAIN = [
+export const isNvidiaChat = () => Boolean(nvidiaChatKey());
+export const isNvidiaEmbed = () => Boolean(nvidiaEmbedKey());
+
+export const chatKey = () => nvidiaChatKey() || openrouterChatKey();
+export const embedKey = () => nvidiaEmbedKey() || openrouterEmbedKey();
+
+export const EMBED_MODEL =
+    process.env.EMBED_MODEL ||
+    (isNvidiaEmbed() ? "nvidia/nemotron-3-embed-1b" : "nvidia/nemotron-3-embed-1b:free");
+
+export const CHAT_MODEL =
+    process.env.CHAT_MODEL ||
+    (isNvidiaChat()
+        ? "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning"
+        : "meta-llama/llama-3.3-70b-instruct:free");
+
+const DEFAULT_NVIDIA_CHAT_CHAIN = [
     CHAT_MODEL,
-    'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
-    'google/gemma-4-31b-it:free',
-    'nvidia/nemotron-3-super-120b-a12b:free',
-    'liquid/lfm-2.5-2.6b:free',
+    "nvidia/nemotron-3-super-120b-a12b",
+    "meta/llama-3.2-11b-vision-instruct",
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
 ];
 
-/**
- * Override with OPENROUTER_CHAT_MODELS (comma-separated) to change the chain
- * without a code edit — useful when a provider's free pool goes bad, and it
- * makes the fallback path testable in isolation.
- */
-export const CHAT_FALLBACKS = (process.env.OPENROUTER_CHAT_MODELS || '')
-    .split(',')
+const DEFAULT_OPENROUTER_CHAT_CHAIN = [
+    CHAT_MODEL,
+    "meta-llama/llama-3.3-70b-instruct:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "google/gemma-4-31b-it:free",
+];
+
+const DEFAULT_CHAT_CHAIN = isNvidiaChat()
+    ? DEFAULT_NVIDIA_CHAT_CHAIN
+    : DEFAULT_OPENROUTER_CHAT_CHAIN;
+
+export const CHAT_FALLBACKS = (
+    process.env.NVIDIA_CHAT_MODELS ||
+    process.env.OPENROUTER_CHAT_MODELS ||
+    ""
+)
+    .split(",")
     .map((m) => m.trim())
-    .filter(Boolean)
-    .length
-    ? process.env.OPENROUTER_CHAT_MODELS.split(',').map((m) => m.trim()).filter(Boolean)
+    .filter(Boolean).length
+    ? (process.env.NVIDIA_CHAT_MODELS || process.env.OPENROUTER_CHAT_MODELS)
+          .split(",")
+          .map((m) => m.trim())
+          .filter(Boolean)
     : DEFAULT_CHAT_CHAIN;
 
-export const chatKey = () => process.env.OPENROUTER_API_KEY || '';
-export const embedKey = () =>
-    process.env.OPENROUTER_EMBED_KEY || process.env.OPENROUTER_API_KEY || '';
-
-// Sent as OpenRouter attribution headers; harmless if unset.
-export const REFERER = process.env.SITE_URL || 'https://github.com/Hetavs145/Portfolio';
-export const TITLE = 'Hetav Shah Portfolio Agent';
+// Attribution headers for OpenRouter / clients
+export const REFERER = process.env.SITE_URL || "https://github.com/Hetavs145/Portfolio";
+export const TITLE = "Hetav Shah Portfolio Agent";
 
 // Retrieval
 export const TOP_K = 5;
-export const EMBED_BATCH = 48; // texts per embeddings request — keeps the corpus to ~3 calls
+export const EMBED_BATCH = 48; // texts per embeddings request
 
 // Generation
 export const MAX_TOKENS = 400;
@@ -69,14 +87,13 @@ export const RATE_PER_DAY = 40;
 
 /**
  * Origins allowed to call /api/chat. Comma-separated env, plus localhost for dev.
- * An empty ALLOWED_ORIGINS means "allow all" so a fresh clone still works.
  */
 export function allowedOrigins() {
-    const raw = (process.env.ALLOWED_ORIGINS || '').trim();
+    const raw = (process.env.ALLOWED_ORIGINS || "").trim();
     if (!raw) return null; // null = allow all
     return raw
-        .split(',')
+        .split(",")
         .map((o) => o.trim())
         .filter(Boolean)
-        .concat(['http://localhost:5173', 'http://localhost:4173']);
+        .concat(["http://localhost:5173", "http://localhost:4173"]);
 }

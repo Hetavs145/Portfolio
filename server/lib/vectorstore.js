@@ -53,7 +53,8 @@ export function loadIndex({ quiet = false } = {}) {
             console.warn('[vectorstore] index.json has no chunks');
             return null;
         }
-        if (parsed.model !== EMBED_MODEL) {
+        const norm = (m) => (m || "").replace(/:free$/, "");
+        if (norm(parsed.model) !== norm(EMBED_MODEL)) {
             console.warn(
                 `[vectorstore] index built with "${parsed.model}" but config expects "${EMBED_MODEL}" — ignoring vectors`,
             );

@@ -16,13 +16,13 @@ A modern, interactive developer portfolio built with React, Three.js, and Framer
 
 ### 🤖 AI Chat Agent & RAG Pipeline
 
-- **Real Vector RAG**: High-dimensional vector search using `nvidia/nemotron-3-embed-1b:free` (dim 2048) over **113 indexed knowledge chunks** across:
+- **Real Vector RAG**: High-dimensional vector search using NVIDIA `nvidia/nemotron-3-embed-1b` (dim 2048) over **116 indexed knowledge chunks** across:
   - 💼 **LinkedIn**: 43 chunks (including 22 live posts, certifications, and experience)
   * 🐙 **GitHub**: 26 chunks (all project repositories & cleaned READMEs)
   * 📄 **Resumes**: 24 chunks (standard `.tex` & IMNU `.docx`)
   * 🌐 **Site Content**: 20 chunks
 - **Automated Daily Sync**: GitHub Actions workflow (`refresh-kb.yml`) automatically runs every night at 03:00 UTC to re-scrape latest LinkedIn posts and GitHub repos, re-embed changes, and push updates.
-- **OpenRouter Multi-Model Fallback Chain**: Primary chat with `google/gemma-4-31b-it:free`, cascading to `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` and `google/gemma-4-26b-a4b-it:free`.
+- **High-Performance NVIDIA NIM Inference & Multi-Model Fallback**: Native direct integration with NVIDIA NIM API (`integrate.api.nvidia.com`), primarily powered by `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` with automated fallback cascading to `nvidia/nemotron-3-super-120b-a12b`, `meta/llama-3.2-11b-vision-instruct`, and OpenRouter (`meta-llama/llama-3.3-70b-instruct`).
 - **Graceful Degradation**: Falls back to lexical IDF scoring if embedding limits are hit, ensuring 100% uptime.
 - **Conversation Memory**: 12-turn conversational memory with LRU caching for zero-quota repeat queries.
 

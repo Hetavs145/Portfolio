@@ -81,6 +81,7 @@ app.get('/', (_req, res) => {
     res.json({
         status: 'ok',
         agent: 'portfolio-rag-agent',
+        provider: process.env.NVIDIA_API_KEY ? 'nvidia-nim' : 'openrouter',
         retrieval: index?.vectorsUsable ? 'vector' : index ? 'lexical (index model mismatch)' : 'lexical (no index)',
         chunks: index?.chunks.length ?? 0,
         indexBuiltAt: index?.builtAt ?? null,
@@ -88,8 +89,8 @@ app.get('/', (_req, res) => {
 });
 
 app.post('/api/chat', rateLimit, async (req, res) => {
-    if (!process.env.OPENROUTER_API_KEY) {
-        return res.status(500).json({ error: 'OPENROUTER_API_KEY not configured' });
+    if (!process.env.NVIDIA_API_KEY && !process.env.OPENROUTER_API_KEY) {
+        return res.status(500).json({ error: 'NVIDIA_API_KEY or OPENROUTER_API_KEY not configured' });
     }
 
     const { messages } = req.body ?? {};

@@ -71,6 +71,8 @@ jobs:
 
       - name: Rebuild vector index
         env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_EMBED_KEY: ${{ secrets.NVIDIA_EMBED_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
         run: node server/scripts/build-index.js

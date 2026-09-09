@@ -6,8 +6,8 @@ server.
 
 | Where | What runs there | Keys it needs |
 | --- | --- | --- |
-| **Render** | `server/index.js` — the chat API | `OPENROUTER_API_KEY`, `OPENROUTER_EMBED_KEY`, `ALLOWED_ORIGINS`, `SITE_URL` |
-| **GitHub Actions** | daily knowledge-base refresh | `OPENROUTER_API_KEY`, `OPENROUTER_EMBED_KEY`, `RAPIDAPI_KEY` |
+| **Render** | `server/index.js` — the chat API | `NVIDIA_API_KEY`, `NVIDIA_EMBED_KEY` (or `OPENROUTER_API_KEY`), `ALLOWED_ORIGINS`, `SITE_URL` |
+| **GitHub Actions** | daily knowledge-base refresh | `NVIDIA_API_KEY`, `NVIDIA_EMBED_KEY` (or `OPENROUTER_API_KEY`), `RAPIDAPI_KEY` |
 | **Vercel** (or your static host) | the React site | `VITE_AGENT_API_URL` |
 
 ---
