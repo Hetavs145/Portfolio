@@ -14,7 +14,8 @@
     "check:links": "node server/scripts/check-links.js",
     "server": "node --env-file=.env server/index.js",
     "verify:codec": "node --env-file=.env server/scripts/verify-codec.js",
-    "verify:render": "node server/scripts/verify-render.js"
+    "verify:render": "node server/scripts/verify-render.js",
+    "refresh:website": "node --env-file=.env server/scripts/refresh-website.js"
   },
   "dependencies": {
     "@react-three/drei": "^9.88.0",

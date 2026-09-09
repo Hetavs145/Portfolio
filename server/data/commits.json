@@ -2,6 +2,10 @@
   "Hetavs145/Portfolio": [
     {
       "date": "2026-09-09",
+      "message": "fix: redact academic scores from agent prompt and resume data; rebuild index"
+    },
+    {
+      "date": "2026-09-09",
       "message": "feat: rename technical resume to current resume and add refresh chat with 30-day history"
     },
     {
@@ -15,10 +19,6 @@
     {
       "date": "2026-09-09",
       "message": "feat: switch to NVIDIA NIM inference (Nemotron-3 30B Omni) and 1B embeddings"
-    },
-    {
-      "date": "2026-09-09",
-      "message": "feat: upgrade AI model to Llama 3.3 70B and hide magic banner on chat route"
     }
   ],
   "Hetavs145/youtube-renderer": [

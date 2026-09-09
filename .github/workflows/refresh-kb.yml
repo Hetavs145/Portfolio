@@ -69,6 +69,26 @@ jobs:
           LINKEDIN_DMA_TOKEN: ${{ secrets.LINKEDIN_DMA_TOKEN }}
         run: node server/scripts/refresh-linkedin.js ${{ steps.scope.outputs.args }}
 
+      # The deployed site is a source in its own right: About and Experience keep
+      # their copy inline in JSX, so nothing else in the pipeline can see them.
+      # Needs a browser binary; --with-deps is not required on ubuntu-latest.
+      - name: Install Playwright and Chromium for the site crawl
+        continue-on-error: true
+        # `npm ci --prefix server` above installs only the server's dependencies,
+        # and playwright is a devDependency of the ROOT package — without this the
+        # crawler's dynamic import fails and the run silently uses a stale crawl.
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium
+
+      - name: Crawl the portfolio site
+        # Never fails the run: the crawler keeps its last good snapshot, and
+        # --strict below is what turns a stale crawl into a red build.
+        continue-on-error: true
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://portfolio.vaquah.in' }}
+        run: node server/scripts/refresh-website.js
+
       # Full rebuild every run: the previous index.json is deleted and every chunk
       # is re-embedded from scratch. GITHUB_TOKEN is the Actions-scoped token —
       # it lifts the API rate limit to ~1000/hr so commit data is genuinely live,
@@ -98,7 +118,7 @@ jobs:
           # "what am I working on now" chunks entirely.
           git add server/data/index.json server/data/linkedin.json \
                   server/data/resume.json server/data/resume-imnu.json \
-                  server/data/commits.json 2>/dev/null || true
+                  server/data/commits.json server/data/website.json 2>/dev/null || true
           # `builtAt` changes on every build, so diff the content that matters.
           if git diff --cached --quiet; then
             echo "No changes — nothing to commit."

@@ -34,6 +34,7 @@ import { staleSources, freshnessReport } from '../lib/freshness.js';
 import { resumeChunks } from '../lib/sources/resume.js';
 import { githubChunks } from '../lib/sources/github.js';
 import { siteChunks } from '../lib/sources/site.js';
+import { websiteChunks } from '../lib/sources/website.js';
 import { linkedinChunks } from '../lib/sources/linkedin/index.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -91,6 +92,21 @@ async function collect(prev) {
     chunks.push(...site);
     console.log(`  site      ${String(site.length).padStart(3)} chunks`);
 
+    // Rendered copy from the live site. Complements site.js: that one reads the
+    // data modules, this one reads whatever a visitor actually sees (About and
+    // Experience keep their prose inline in JSX, so nothing else covers them).
+    const website = websiteChunks();
+    const keptWebsite = website.length ? website : carryForward(prev, 'website');
+    chunks.push(...keptWebsite);
+    console.log(
+        `  website   ${String(keptWebsite.length).padStart(3)} chunks` +
+            (website.length === 0
+                ? keptWebsite.length
+                    ? '  (no fresh crawl — kept previous)'
+                    : '  (no crawl yet — run `npm run refresh:website`)'
+                : ''),
+    );
+
     const linkedin = linkedinChunks();
     chunks.push(...linkedin);
     console.log(
@@ -114,8 +130,26 @@ async function collect(prev) {
         }
 
         if (gh.length) {
-            chunks.push(...gh);
-            console.log(`  github    ${String(gh.length).padStart(3)} chunks`);
+            // Partial loss is the common case, not total failure: a rate limit
+            // part-way through drops the READMEs it didn't reach, so the fetch
+            // "succeeds" with a quietly thinner corpus. When the source reports
+            // itself degraded, top the fresh set back up from the previous index
+            // rather than shipping the gap.
+            const degraded = staleSources().some((r) => r.source === 'github');
+            let merged = gh;
+            if (degraded) {
+                const haveIds = new Set(gh.map((c) => c.id));
+                const restored = carryForward(prev, 'github').filter((c) => !haveIds.has(c.id));
+                if (restored.length) {
+                    merged = [...gh, ...restored];
+                    console.warn(
+                        `  github    restored ${restored.length} chunk(s) from the previous index ` +
+                            `(fetch was degraded and returned fewer)`,
+                    );
+                }
+            }
+            chunks.push(...merged);
+            console.log(`  github    ${String(merged.length).padStart(3)} chunks`);
         } else {
             const kept = carryForward(prev, 'github');
             chunks.push(...kept);

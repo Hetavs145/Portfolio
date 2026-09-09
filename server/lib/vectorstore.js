@@ -146,12 +146,34 @@ const STOPWORDS = new Set([
     'current', 'currently', 'today',
 ]);
 
-const tokenize = (s) =>
-    s
-        .toLowerCase()
-        .replace(/[^a-z0-9+#./\s-]/g, ' ')
-        .split(/\s+/)
-        .filter((t) => t.length > 1 && !STOPWORDS.has(t));
+/**
+ * Tokenise, emitting compound names both whole and in parts.
+ *
+ * "ET-Gen-Hackathon" used to produce the single token `et-gen-hackathon`, which
+ * the query "what was the et gen post" could never match — so the bot claimed no
+ * knowledge of a repo sitting right there in the index. The same silence applied
+ * to Treat-o-Meter, Spam-Email-Detector, Sign2Text and every dotted name.
+ *
+ * Keeping the whole token too means an exact mention still scores highest.
+ */
+const tokenize = (s) => {
+    const out = [];
+    const keep = (t) => {
+        if (t.length > 1 && !STOPWORDS.has(t)) out.push(t);
+    };
+
+    for (const raw of s.toLowerCase().replace(/[^a-z0-9+#./\s-]/g, ' ').split(/\s+/)) {
+        keep(raw);
+        if (/[-./]/.test(raw)) {
+            for (const part of raw.split(/[-./]+/)) keep(part);
+        }
+        // Split letter/digit runs: "sign2text" -> sign, 2, text.
+        if (/[a-z][0-9]|[0-9][a-z]/.test(raw)) {
+            for (const part of raw.split(/(?<=[a-z])(?=[0-9])|(?<=[0-9])(?=[a-z])/)) keep(part);
+        }
+    }
+    return out;
+};
 
 /**
  * Query terms rare enough to be identifying — proper nouns, essentially.
