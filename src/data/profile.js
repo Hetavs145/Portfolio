@@ -66,7 +66,7 @@ export const cursorKeywords = [
 export const resumes = [
     {
         label: 'Current Resume',
-        href: '/Hetav_Shah_Resume.pdf',
+        href: '/Hetav_Shah_Resume.pdf?v=20260911',
         description: 'Current resume — projects, stack, experience',
     },
     {
@@ -74,7 +74,7 @@ export const resumes = [
         // Flagging that here stops a recruiter reading it as Hetav's own resume
         // and judging him on a template he didn't choose.
         label: 'IMNU Resume',
-        href: '/Hetav_Shah_IMNU.pdf',
+        href: '/Hetav_Shah_IMNU.pdf?v=20260911',
         description: 'SPOC-approved institute format — not my own resume',
     },
 ];

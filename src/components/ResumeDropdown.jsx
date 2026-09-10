@@ -86,6 +86,11 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
                 ? 'bottom-full mb-2 left-0 right-0 w-full sm:w-72 sm:left-0 sm:right-auto'
                 : 'top-full mt-2 left-0 right-0 w-full sm:w-72 sm:left-0 sm:right-auto';
 
+    const getFreshHref = (href) => {
+        const base = href.split('?')[0];
+        return base + '?v=' + Date.now();
+    };
+
     return (
         <div
             ref={containerRef}
@@ -120,12 +125,16 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
                             <a
                                 key={r.href}
                                 ref={(el) => (itemRefs.current[i] = el)}
-                                href={r.href}
+                                href={getFreshHref(r.href)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 role="menuitem"
                                 onKeyDown={(e) => onItemKeyDown(e, i)}
-                                onClick={() => {
+                                onPointerDown={(e) => {
+                                    e.currentTarget.href = getFreshHref(r.href);
+                                }}
+                                onClick={(e) => {
+                                    e.currentTarget.href = getFreshHref(r.href);
                                     setOpen(false);
                                     onNavigate?.();
                                 }}
