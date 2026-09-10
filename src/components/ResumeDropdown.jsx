@@ -15,6 +15,7 @@ import { resumes } from '../data/profile';
  */
 const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
     const [open, setOpen] = useState(false);
+    const [openUpwards, setOpenUpwards] = useState(false);
     const containerRef = useRef(null);
     const itemRefs = useRef([]);
 
@@ -40,9 +41,22 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
         };
     }, [open]);
 
+    const toggleOpen = () => {
+        if (!open && containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            // If less than 220px below trigger, open upwards to avoid clipping on mobile
+            setOpenUpwards(window.innerHeight - rect.bottom < 220);
+        }
+        setOpen((v) => !v);
+    };
+
     const onTriggerKeyDown = (e) => {
-        if (e.key === 'ArrowDown') {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
+            if (containerRef.current) {
+                const rect = containerRef.current.getBoundingClientRect();
+                setOpenUpwards(window.innerHeight - rect.bottom < 220);
+            }
             setOpen(true);
             requestAnimationFrame(() => itemRefs.current[0]?.focus());
         }
@@ -58,16 +72,28 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
         }
     };
 
+    const isUpwards = variant !== 'nav' && openUpwards;
+
     const triggerClass =
         variant === 'nav'
             ? 'flex items-center gap-1.5 border border-teal-400 text-teal-400 px-4 py-2 rounded-full hover:bg-teal-400/10 transition-colors font-mono text-sm'
             : 'flex items-center justify-center gap-2 bg-teal-400 text-navy-900 px-8 py-4 rounded border border-teal-400 hover:bg-teal-300 transition-colors font-mono text-sm font-bold w-full sm:w-auto';
 
+    const menuPositionClass =
+        variant === 'nav'
+            ? 'top-full mt-2 right-0 w-64 max-w-[calc(100vw-3rem)]'
+            : isUpwards
+                ? 'bottom-full mb-2 left-0 right-0 w-full sm:w-72 sm:left-0 sm:right-auto'
+                : 'top-full mt-2 left-0 right-0 w-full sm:w-72 sm:left-0 sm:right-auto';
+
     return (
-        <div ref={containerRef} className="relative inline-block">
+        <div
+            ref={containerRef}
+            className={`relative ${variant === 'cta' ? 'w-full sm:w-auto' : 'inline-block'}`}
+        >
             <button
                 type="button"
-                onClick={() => setOpen((v) => !v)}
+                onClick={toggleOpen}
                 onKeyDown={onTriggerKeyDown}
                 aria-haspopup="menu"
                 aria-expanded={open}
@@ -84,13 +110,11 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
                 {open && (
                     <motion.div
                         role="menu"
-                        initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                        initial={{ opacity: 0, y: isUpwards ? 8 : -8, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                        exit={{ opacity: 0, y: isUpwards ? 8 : -8, scale: 0.97 }}
                         transition={{ duration: 0.15, ease: 'easeOut' }}
-                        // right-0 keeps the panel inside the viewport when the
-                        // trigger sits near the right edge (the Navbar case).
-                        className="glass absolute right-0 sm:left-0 sm:right-auto mt-2 w-64 max-w-[calc(100vw-3rem)] rounded-lg p-1.5 z-50"
+                        className={`glass absolute ${menuPositionClass} rounded-lg p-1.5 z-50`}
                     >
                         {resumes.map((r, i) => (
                             <a
