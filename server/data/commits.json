@@ -2,6 +2,14 @@
   "Hetavs145/Portfolio": [
     {
       "date": "2026-09-09",
+      "message": "fix(chat): enable trackpad and wheel scroll inside chat container"
+    },
+    {
+      "date": "2026-09-09",
+      "message": "feat: website source, refresh script, strict mode handling, and restored GitHub chunks"
+    },
+    {
+      "date": "2026-09-09",
       "message": "fix: redact academic scores from agent prompt and resume data; rebuild index"
     },
     {
@@ -11,14 +19,6 @@
     {
       "date": "2026-09-09",
       "message": "fix: remove Warehouse Inventory Robot from projects tab"
-    },
-    {
-      "date": "2026-09-09",
-      "message": "fix: temporal grounding, recency, hybrid retrieval, and resume updates"
-    },
-    {
-      "date": "2026-09-09",
-      "message": "feat: switch to NVIDIA NIM inference (Nemotron-3 30B Omni) and 1B embeddings"
     }
   ],
   "Hetavs145/youtube-renderer": [
