@@ -286,10 +286,10 @@ const RealTimeDemo = () => {
     return (
         <section
             id="demo"
-            className="min-h-screen pt-24 md:pt-32 pb-10 md:pb-20 bg-navy-800/50 flex items-start justify-center"
+            className="min-h-screen pt-20 sm:pt-24 md:pt-32 pb-8 md:pb-20 bg-navy-800/50 flex items-start justify-center"
         >
             <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
-                <div className="flex items-center mb-8 md:mb-12">
+                <div className="flex items-center mb-5 sm:mb-8 md:mb-12">
                     <h2 className="text-2xl md:text-3xl font-bold text-slate-lighter">
                         Talk to My Agent
                     </h2>
@@ -368,7 +368,7 @@ const RealTimeDemo = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -8 }}
                                         transition={{ duration: 0.18 }}
-                                        className="h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-18rem)] md:h-[28rem] flex flex-col bg-navy-900"
+                                        className="h-[22rem] sm:h-[25rem] md:h-[28rem] flex flex-col bg-navy-900"
                                     >
                                         {/* History Header */}
                                         <div className="p-3 sm:p-3.5 border-b border-navy-600 flex items-center justify-between bg-navy-900/95">
@@ -496,7 +496,7 @@ const RealTimeDemo = () => {
                                         key="chat-messages"
                                         ref={chatContainerRef}
                                         data-lenis-prevent
-                                        className="h-[calc(100dvh-16rem)] sm:h-[calc(100dvh-18rem)] md:h-[28rem] overflow-y-auto overscroll-y-contain p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800"
+                                        className="h-[22rem] sm:h-[25rem] md:h-[28rem] overflow-y-auto overscroll-y-contain p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800"
                                     >
                                         <AnimatePresence>
                                             {messages.map((msg) => (
