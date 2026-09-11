@@ -39,46 +39,82 @@
       "message": "Initial commit"
     }
   ],
-  "fjiolla/Kontexo": [
+  "Hetavs145/Smart-Delivery-Drone-Path-Finder": [
     {
-      "date": "2026-04-13",
-      "message": "Update Upon V2"
+      "date": "2026-09-10",
+      "message": "Wire real pathfinding backend, fix auth bypass, repair broken git tracking"
     },
     {
-      "date": "2026-04-12",
-      "message": "Version 2.0.0"
+      "date": "2025-11-12",
+      "message": "Initial project import"
+    },
+    {
+      "date": "2025-11-12",
+      "message": "Initial project import"
     }
   ],
-  "Hetavs145/ET-Gen-Hackathon": [
+  "Hetavs145/Phishing-detector": [
     {
-      "date": "2026-03-29",
-      "message": "Fix: include frontend source directly (remove embedded git)"
+      "date": "2026-09-10",
+      "message": "Correct hardcoded accuracy/feature-count claims to match real model"
     },
     {
-      "date": "2026-03-29",
-      "message": "Submission: docs, README, video script"
+      "date": "2026-09-10",
+      "message": "Fix broken model, remove hardcoded phishing shortcut and fake fallback"
+    },
+    {
+      "date": "2025-11-14",
+      "message": "Initial commit"
     }
   ],
-  "Hetavs145/VaquaH": [
+  "Hetavs145/Spam-Email-Detector": [
     {
-      "date": "2026-03-28",
-      "message": "Major  Update Version 3.0.0"
+      "date": "2026-09-10",
+      "message": "Fix broken inference pipeline and remove fake-prediction fallback"
     },
     {
-      "date": "2026-03-28",
-      "message": "chore(release): v3.0.0 — docs, infra, RAG & voice services"
+      "date": "2025-11-12",
+      "message": "Remove KNN model and update frontend/README; exclude dataset via .gitignore"
+    }
+  ],
+  "Hetavs145/Hetchat": [
+    {
+      "date": "2026-09-10",
+      "message": "Fix critical auth bypass, private-message leak, and deploy config"
     },
     {
-      "date": "2026-02-23",
-      "message": "patch update v2.0.2"
+      "date": "2025-11-29",
+      "message": "Update copyright holder in LICENSE file"
     },
     {
-      "date": "2026-02-16",
-      "message": "Gesture and Voice based navigation Added"
+      "date": "2025-11-12",
+      "message": "Fix"
     },
     {
-      "date": "2026-01-01",
-      "message": "Minor bug fixes"
+      "date": "2025-11-12",
+      "message": "Readme Fixations"
+    },
+    {
+      "date": "2025-11-12",
+      "message": "Update: latest changes"
+    }
+  ],
+  "Hetavs145/Treat-o-Meter": [
+    {
+      "date": "2026-09-10",
+      "message": "Add Firestore cloud sync, fix data-loss and security bugs, polish nav"
+    },
+    {
+      "date": "2026-01-10",
+      "message": "Patch update"
+    },
+    {
+      "date": "2026-01-10",
+      "message": "Add LICENSE"
+    },
+    {
+      "date": "2026-01-10",
+      "message": "Initial Commit V1.0.0"
     }
   ]
 }
