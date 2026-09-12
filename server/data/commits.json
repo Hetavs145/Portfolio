@@ -1,24 +1,24 @@
 {
   "Hetavs145/Portfolio": [
     {
-      "date": "2026-09-09",
-      "message": "fix(chat): enable trackpad and wheel scroll inside chat container"
+      "date": "2026-09-11",
+      "message": "chore: refresh knowledge base [skip ci]"
     },
     {
-      "date": "2026-09-09",
-      "message": "feat: website source, refresh script, strict mode handling, and restored GitHub chunks"
+      "date": "2026-09-10",
+      "message": "fix(resume): update resume, reindex, and prevent mobile cache"
     },
     {
-      "date": "2026-09-09",
-      "message": "fix: redact academic scores from agent prompt and resume data; rebuild index"
+      "date": "2026-09-10",
+      "message": "fix(chat): optimize chat window height and layout for mobile screens"
     },
     {
-      "date": "2026-09-09",
-      "message": "feat: rename technical resume to current resume and add refresh chat with 30-day history"
+      "date": "2026-09-10",
+      "message": "Merge remote-tracking branch 'origin/main'"
     },
     {
-      "date": "2026-09-09",
-      "message": "fix: remove Warehouse Inventory Robot from projects tab"
+      "date": "2026-09-10",
+      "message": "fix(dropdown): fix mobile resume dropdown clipping and alignment"
     }
   ],
   "Hetavs145/youtube-renderer": [
@@ -115,6 +115,26 @@
     {
       "date": "2026-01-10",
       "message": "Initial Commit V1.0.0"
+    }
+  ],
+  "Hetavs145/Sign2Text": [
+    {
+      "date": "2026-09-11",
+      "message": "Add real client-side ML inference, replacing 100% fake predictions"
+    },
+    {
+      "date": "2025-11-12",
+      "message": "Initial commit"
+    }
+  ],
+  "Hetavs145/SKYON": [
+    {
+      "date": "2026-09-11",
+      "message": "Fix broken build pipeline, add real backend, wire real safety/SOS features"
+    },
+    {
+      "date": "2025-09-18",
+      "message": "Initial commit"
     }
   ]
 }
