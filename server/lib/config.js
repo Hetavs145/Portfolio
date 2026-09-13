@@ -3,6 +3,8 @@
  *
  * Supports both NVIDIA NIM direct API (https://integrate.api.nvidia.com/v1)
  * and OpenRouter (https://openrouter.ai/api/v1).
+ *
+ * NVIDIA NIM is primary; OpenRouter serves as automatic backup on rate limits.
  */
 
 export const NVIDIA_BASE = "https://integrate.api.nvidia.com/v1";
@@ -17,52 +19,61 @@ export const openrouterEmbedKey = () =>
 
 export const isNvidiaChat = () => Boolean(nvidiaChatKey());
 export const isNvidiaEmbed = () => Boolean(nvidiaEmbedKey());
+export const isOpenrouterChat = () => Boolean(openrouterChatKey());
+export const isOpenrouterEmbed = () => Boolean(openrouterEmbedKey());
 
 export const chatKey = () => nvidiaChatKey() || openrouterChatKey();
 export const embedKey = () => nvidiaEmbedKey() || openrouterEmbedKey();
 
+export const NVIDIA_EMBED_MODEL = process.env.NVIDIA_EMBED_MODEL || "nvidia/nemotron-3-embed-1b";
+export const OPENROUTER_EMBED_MODEL = process.env.OPENROUTER_EMBED_MODEL || "nvidia/nemotron-3-embed-1b:free";
+
 export const EMBED_MODEL =
     process.env.EMBED_MODEL ||
-    (isNvidiaEmbed() ? "nvidia/nemotron-3-embed-1b" : "nvidia/nemotron-3-embed-1b:free");
+    (isNvidiaEmbed() ? NVIDIA_EMBED_MODEL : OPENROUTER_EMBED_MODEL);
 
-export const CHAT_MODEL =
+export const NVIDIA_CHAT_MODEL =
+    process.env.NVIDIA_CHAT_MODEL ||
     process.env.CHAT_MODEL ||
-    (isNvidiaChat()
-        ? "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning"
-        : "meta-llama/llama-3.3-70b-instruct:free");
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning";
 
-const DEFAULT_NVIDIA_CHAT_CHAIN = [
-    CHAT_MODEL,
+export const OPENROUTER_CHAT_MODEL =
+    process.env.OPENROUTER_CHAT_MODEL ||
+    "nvidia/nemotron-3-super-120b-a12b:free";
+
+export const CHAT_MODEL = isNvidiaChat() ? NVIDIA_CHAT_MODEL : OPENROUTER_CHAT_MODEL;
+
+export const DEFAULT_NVIDIA_CHAT_CHAIN = [
+    NVIDIA_CHAT_MODEL,
     "nvidia/nemotron-3-super-120b-a12b",
     "meta/llama-3.2-11b-vision-instruct",
     "nvidia/nemotron-3.5-lightning-30b-a3b",
 ];
 
-const DEFAULT_OPENROUTER_CHAT_CHAIN = [
-    CHAT_MODEL,
-    "meta-llama/llama-3.3-70b-instruct:free",
-    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "nvidia/nemotron-3-super-120b-a12b:free",
+export const DEFAULT_OPENROUTER_CHAT_CHAIN = [
+    OPENROUTER_CHAT_MODEL,
+    "nvidia/nemotron-3.5-lightning:free",
     "google/gemma-4-31b-it:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
 ];
 
-const DEFAULT_CHAT_CHAIN = isNvidiaChat()
-    ? DEFAULT_NVIDIA_CHAT_CHAIN
-    : DEFAULT_OPENROUTER_CHAT_CHAIN;
-
-export const CHAT_FALLBACKS = (
-    process.env.NVIDIA_CHAT_MODELS ||
-    process.env.OPENROUTER_CHAT_MODELS ||
-    ""
-)
+export const NVIDIA_CHAT_MODELS = (process.env.NVIDIA_CHAT_MODELS || "")
     .split(",")
     .map((m) => m.trim())
     .filter(Boolean).length
-    ? (process.env.NVIDIA_CHAT_MODELS || process.env.OPENROUTER_CHAT_MODELS)
-          .split(",")
-          .map((m) => m.trim())
-          .filter(Boolean)
-    : DEFAULT_CHAT_CHAIN;
+    ? process.env.NVIDIA_CHAT_MODELS.split(",").map((m) => m.trim()).filter(Boolean)
+    : DEFAULT_NVIDIA_CHAT_CHAIN;
+
+export const OPENROUTER_CHAT_MODELS = (process.env.OPENROUTER_CHAT_MODELS || "")
+    .split(",")
+    .map((m) => m.trim())
+    .filter(Boolean).length
+    ? process.env.OPENROUTER_CHAT_MODELS.split(",").map((m) => m.trim()).filter(Boolean)
+    : DEFAULT_OPENROUTER_CHAT_CHAIN;
+
+export const CHAT_FALLBACKS = isNvidiaChat()
+    ? NVIDIA_CHAT_MODELS
+    : OPENROUTER_CHAT_MODELS;
 
 // Attribution headers for OpenRouter / clients
 export const REFERER = process.env.SITE_URL || "https://github.com/Hetavs145/Portfolio";

@@ -1,17 +1,22 @@
 /**
  * Client for LLM and Embeddings — supports NVIDIA NIM (https://integrate.api.nvidia.com/v1)
  * and OpenRouter (https://openrouter.ai/api/v1).
+ *
+ * Primary provider: NVIDIA NIM (direct fast inference)
+ * Backup provider:  OpenRouter (used automatically as fallback if NVIDIA NIM keys get rate-limited)
  */
 
 import {
     NVIDIA_BASE,
     OPENROUTER_BASE,
-    EMBED_MODEL,
-    CHAT_FALLBACKS,
-    chatKey,
-    embedKey,
-    isNvidiaChat,
-    isNvidiaEmbed,
+    NVIDIA_EMBED_MODEL,
+    OPENROUTER_EMBED_MODEL,
+    NVIDIA_CHAT_MODELS,
+    OPENROUTER_CHAT_MODELS,
+    nvidiaChatKey,
+    nvidiaEmbedKey,
+    openrouterChatKey,
+    openrouterEmbedKey,
     REFERER,
     TITLE,
     EMBED_BATCH,
@@ -60,14 +65,7 @@ function apiError(status, body, provider = "API") {
     return err;
 }
 
-export async function embed(texts) {
-    const isNv = isNvidiaEmbed();
-    const key = embedKey();
-    if (!key) throw new Error("NVIDIA_EMBED_KEY or OPENROUTER_API_KEY is not set");
-
-    const baseUrl = isNv ? NVIDIA_BASE : OPENROUTER_BASE;
-    const model = isNv ? EMBED_MODEL.replace(/:free$/, "") : EMBED_MODEL;
-
+async function embedWithProvider(texts, { baseUrl, key, model, providerName }) {
     const inputs = Array.isArray(texts) ? texts : [texts];
     if (inputs.length === 0) return [];
 
@@ -85,11 +83,11 @@ export async function embed(texts) {
                 }),
             });
 
-            if (!res.ok) throw apiError(res.status, await res.text(), isNv ? "NVIDIA" : "OpenRouter");
+            if (!res.ok) throw apiError(res.status, await res.text(), providerName);
 
             const json = await res.json();
             if (!Array.isArray(json.data)) {
-                throw new Error((isNv ? "NVIDIA" : "OpenRouter") + " embeddings: unexpected response shape");
+                throw new Error(providerName + " embeddings: unexpected response shape");
             }
             return json.data
                 .slice()
@@ -102,6 +100,42 @@ export async function embed(texts) {
         throw new Error("Embedding count mismatch: got " + out.length + ", expected " + inputs.length);
     }
     return out;
+}
+
+export async function embed(texts) {
+    const nvKey = nvidiaEmbedKey();
+    const orKey = openrouterEmbedKey();
+
+    if (!nvKey && !orKey) {
+        throw new Error("Neither NVIDIA_EMBED_KEY/NVIDIA_API_KEY nor OPENROUTER_API_KEY is set");
+    }
+
+    // 1. Primary: NVIDIA NIM embeddings
+    if (nvKey) {
+        try {
+            return await embedWithProvider(texts, {
+                baseUrl: NVIDIA_BASE,
+                key: nvKey,
+                model: NVIDIA_EMBED_MODEL.replace(/:free$/, ""),
+                providerName: "NVIDIA",
+            });
+        } catch (err) {
+            if (!orKey) throw err;
+            console.warn(
+                `[embed] NVIDIA NIM embeddings failed (${err.status || err.message}), falling back to backup OpenRouter key...`
+            );
+        }
+    }
+
+    // 2. Backup: OpenRouter embeddings
+    if (orKey) {
+        return await embedWithProvider(texts, {
+            baseUrl: OPENROUTER_BASE,
+            key: orKey,
+            model: OPENROUTER_EMBED_MODEL,
+            providerName: "OpenRouter",
+        });
+    }
 }
 
 export async function embedOne(text) {
@@ -126,9 +160,8 @@ function stripMarkdown(text) {
 
 const REASONING_REQUIRED = /reasoning is mandatory|cannot be disabled/i;
 
-async function completeWith(model, messages, key, maxTokens, temperature, { disableReasoning, isNv }) {
-    const baseUrl = isNv ? NVIDIA_BASE : OPENROUTER_BASE;
-    const actualModel = isNv ? model.replace(/:free$/, "") : model;
+async function completeWith(model, messages, key, maxTokens, temperature, { disableReasoning, baseUrl, providerName }) {
+    const actualModel = providerName === "NVIDIA" ? model.replace(/:free$/, "") : model;
 
     const body = {
         model: actualModel,
@@ -152,7 +185,7 @@ async function completeWith(model, messages, key, maxTokens, temperature, { disa
             err.needsReasoning = true;
             throw err;
         }
-        throw apiError(res.status, text, isNv ? "NVIDIA" : "OpenRouter");
+        throw apiError(res.status, text, providerName);
     }
 
     const json = await res.json();
@@ -160,7 +193,7 @@ async function completeWith(model, messages, key, maxTokens, temperature, { disa
     const content = msg.content || "";
 
     if (!content.trim()) {
-        const err = new Error((isNv ? "NVIDIA" : "OpenRouter") + " chat (" + actualModel + "): empty completion");
+        const err = new Error(providerName + " chat (" + actualModel + "): empty completion");
         err.emptyCompletion = true;
         err.status = 502;
         throw err;
@@ -168,13 +201,9 @@ async function completeWith(model, messages, key, maxTokens, temperature, { disa
     return stripMarkdown(content);
 }
 
-export async function chat(messages, { maxTokens = MAX_TOKENS, temperature = TEMPERATURE } = {}) {
-    const isNv = isNvidiaChat();
-    const key = chatKey();
-    if (!key) throw new Error("NVIDIA_API_KEY (or OPENROUTER_API_KEY) is not set");
-
+async function tryChatChain({ providerName, baseUrl, key, models, messages, maxTokens, temperature }) {
     let lastErr;
-    for (const model of CHAT_FALLBACKS) {
+    for (const model of models) {
         for (const attempt of [
             { disableReasoning: true, tokens: maxTokens },
             { disableReasoning: false, tokens: maxTokens * 4 },
@@ -186,22 +215,78 @@ export async function chat(messages, { maxTokens = MAX_TOKENS, temperature = TEM
                     key,
                     attempt.tokens,
                     temperature,
-                    { disableReasoning: attempt.disableReasoning, isNv },
+                    { disableReasoning: attempt.disableReasoning, baseUrl, providerName },
                 );
-                return { text, model: isNv ? model.replace(/:free$/, "") : model };
+                return {
+                    text,
+                    model: providerName === "NVIDIA" ? model.replace(/:free$/, "") : model,
+                    provider: providerName,
+                };
             } catch (err) {
                 lastErr = err;
                 if (attempt.disableReasoning && (err.needsReasoning || err.emptyCompletion)) {
-                    console.warn("[" + (isNv ? "nvidia" : "openrouter") + "] " + model + ": retrying with reasoning enabled");
+                    console.warn(`[${providerName.toLowerCase()}] ${model}: retrying with reasoning enabled`);
                     continue;
                 }
                 if (err.status === 429 || err.status === 403 || err.status === 404 || err.status >= 500) {
-                    console.warn("[" + (isNv ? "nvidia" : "openrouter") + "] " + model + " unavailable (" + err.status + "), trying next");
+                    console.warn(`[${providerName.toLowerCase()}] ${model} unavailable (${err.status}), trying next`);
                     break;
                 }
                 throw err;
             }
         }
     }
+    throw lastErr;
+}
+
+export async function chat(messages, { maxTokens = MAX_TOKENS, temperature = TEMPERATURE } = {}) {
+    const nvKey = nvidiaChatKey();
+    const orKey = openrouterChatKey();
+
+    if (!nvKey && !orKey) {
+        throw new Error("Neither NVIDIA_API_KEY nor OPENROUTER_API_KEY is set");
+    }
+
+    let lastErr;
+
+    // 1. Primary: NVIDIA NIM
+    if (nvKey) {
+        try {
+            return await tryChatChain({
+                providerName: "NVIDIA",
+                baseUrl: NVIDIA_BASE,
+                key: nvKey,
+                models: NVIDIA_CHAT_MODELS,
+                messages,
+                maxTokens,
+                temperature,
+            });
+        } catch (err) {
+            lastErr = err;
+            if (!orKey) throw err;
+            console.warn(
+                `[chat] NVIDIA NIM models unavailable or rate-limited (${err.status || err.message}). Falling back to backup OpenRouter key...`
+            );
+        }
+    }
+
+    // 2. Backup / Fallback: OpenRouter
+    if (orKey) {
+        try {
+            return await tryChatChain({
+                providerName: "OpenRouter",
+                baseUrl: OPENROUTER_BASE,
+                key: orKey,
+                models: OPENROUTER_CHAT_MODELS,
+                messages,
+                maxTokens,
+                temperature,
+            });
+        } catch (err) {
+            lastErr = err;
+            throw err;
+        }
+    }
+
     throw lastErr;
 }

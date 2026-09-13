@@ -82,6 +82,7 @@ app.get('/', (_req, res) => {
         status: 'ok',
         agent: 'portfolio-rag-agent',
         provider: process.env.NVIDIA_API_KEY ? 'nvidia-nim' : 'openrouter',
+        backupProvider: process.env.NVIDIA_API_KEY && process.env.OPENROUTER_API_KEY ? 'openrouter' : null,
         retrieval: index?.vectorsUsable ? 'vector' : index ? 'lexical (index model mismatch)' : 'lexical (no index)',
         chunks: index?.chunks.length ?? 0,
         indexBuiltAt: index?.builtAt ?? null,
