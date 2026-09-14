@@ -1,6 +1,14 @@
 {
   "Hetavs145/Portfolio": [
     {
+      "date": "2026-09-13",
+      "message": "feat(llm): add OpenRouter backup fallback on NVIDIA NIM rate limits"
+    },
+    {
+      "date": "2026-09-13",
+      "message": "chore: refresh knowledge base [skip ci]"
+    },
+    {
       "date": "2026-09-12",
       "message": "chore: refresh knowledge base [skip ci]"
     },
@@ -11,14 +19,6 @@
     {
       "date": "2026-09-10",
       "message": "fix(resume): update resume, reindex, and prevent mobile cache"
-    },
-    {
-      "date": "2026-09-10",
-      "message": "fix(chat): optimize chat window height and layout for mobile screens"
-    },
-    {
-      "date": "2026-09-10",
-      "message": "Merge remote-tracking branch 'origin/main'"
     }
   ],
   "Hetavs145/youtube-renderer": [
@@ -118,6 +118,10 @@
     }
   ],
   "Hetavs145/Sign2Text": [
+    {
+      "date": "2026-09-13",
+      "message": "Update .gitignore for web client build artifacts"
+    },
     {
       "date": "2026-09-11",
       "message": "Add real client-side ML inference, replacing 100% fake predictions"
