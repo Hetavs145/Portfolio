@@ -1,6 +1,10 @@
 {
   "Hetavs145/Portfolio": [
     {
+      "date": "2026-09-18",
+      "message": "chore: refresh knowledge base [skip ci]"
+    },
+    {
       "date": "2026-09-17",
       "message": "chore: refresh knowledge base [skip ci]"
     },
@@ -15,10 +19,6 @@
     {
       "date": "2026-09-14",
       "message": "chore: refresh knowledge base [skip ci]"
-    },
-    {
-      "date": "2026-09-13",
-      "message": "feat(llm): add OpenRouter backup fallback on NVIDIA NIM rate limits"
     }
   ],
   "Hetavs145/youtube-renderer": [
