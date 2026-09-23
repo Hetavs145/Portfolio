@@ -1,6 +1,10 @@
 {
   "Hetavs145/Portfolio": [
     {
+      "date": "2026-09-22",
+      "message": "chore: refresh knowledge base [skip ci]"
+    },
+    {
       "date": "2026-09-21",
       "message": "chore: refresh knowledge base [skip ci]"
     },
@@ -15,28 +19,6 @@
     {
       "date": "2026-09-18",
       "message": "chore: refresh knowledge base [skip ci]"
-    },
-    {
-      "date": "2026-09-17",
-      "message": "chore: refresh knowledge base [skip ci]"
-    }
-  ],
-  "Hetavs145/youtube-renderer": [
-    {
-      "date": "2026-09-08",
-      "message": "feat: end-to-end n8n pipeline for one daily YouTube short"
-    },
-    {
-      "date": "2026-06-01",
-      "message": "Delete .github"
-    },
-    {
-      "date": "2026-06-01",
-      "message": "Create .github"
-    },
-    {
-      "date": "2026-06-01",
-      "message": "Initial commit"
     }
   ],
   "Hetavs145/Smart-Delivery-Drone-Path-Finder": [
