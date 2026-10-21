@@ -1,6 +1,10 @@
 {
   "Hetavs145/Portfolio": [
     {
+      "date": "2026-10-20",
+      "message": "chore: refresh knowledge base [skip ci]"
+    },
+    {
       "date": "2026-10-19",
       "message": "chore: refresh knowledge base [skip ci]"
     },
@@ -15,10 +19,24 @@
     {
       "date": "2026-10-16",
       "message": "chore: refresh knowledge base [skip ci]"
+    }
+  ],
+  "Hetavs145/Sai-AC-Services-Micro-WebApp": [
+    {
+      "date": "2026-10-21",
+      "message": "feat: add PartyProfile support and GST-free calculation"
     },
     {
-      "date": "2026-10-15",
-      "message": "chore: refresh knowledge base [skip ci]"
+      "date": "2026-10-20",
+      "message": "fix: enforce light mode and improve numeric safety"
+    },
+    {
+      "date": "2026-10-20",
+      "message": "feat: initialize BillFlow AI application"
+    },
+    {
+      "date": "2026-10-20",
+      "message": "Initial commit"
     }
   ],
   "Hetavs145/Sign2Text": [
@@ -57,20 +75,6 @@
     {
       "date": "2025-11-12",
       "message": "Initial project import"
-    }
-  ],
-  "Hetavs145/Phishing-detector": [
-    {
-      "date": "2026-09-10",
-      "message": "Correct hardcoded accuracy/feature-count claims to match real model"
-    },
-    {
-      "date": "2026-09-10",
-      "message": "Fix broken model, remove hardcoded phishing shortcut and fake fallback"
-    },
-    {
-      "date": "2025-11-14",
-      "message": "Initial commit"
     }
   ]
 }
