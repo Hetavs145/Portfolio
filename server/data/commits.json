@@ -1,6 +1,10 @@
 {
   "Hetavs145/Portfolio": [
     {
+      "date": "2026-10-24",
+      "message": "chore: refresh knowledge base [skip ci]"
+    },
+    {
       "date": "2026-10-23",
       "message": "chore: refresh knowledge base [skip ci]"
     },
@@ -15,13 +19,13 @@
     {
       "date": "2026-10-20",
       "message": "chore: refresh knowledge base [skip ci]"
-    },
-    {
-      "date": "2026-10-19",
-      "message": "chore: refresh knowledge base [skip ci]"
     }
   ],
   "Hetavs145/Sai-AC-Services-Micro-WebApp": [
+    {
+      "date": "2026-10-24",
+      "message": "feat: implement real-time Firestore sync"
+    },
     {
       "date": "2026-10-21",
       "message": "feat: add PartyProfile support and GST-free calculation"
