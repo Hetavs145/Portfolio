@@ -1,7 +1,7 @@
 {
   "source": "rapidapi",
   "profileUrl": "https://www.linkedin.com/in/hetav-shah-26601722b/",
-  "fetchedAt": "2026-10-25T03:17:06.592Z",
+  "fetchedAt": "2026-10-26T03:20:16.080Z",
   "profile": {
     "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
     "summary": "Student Coordinator at SWAYAM - The Entrepreneurship Club of IMNU| 🏆&nbsp;Aetrix (PDEU) Grand Prize Winner -Turned 36 hours of caffeine into a working product|Noisy Like a Photon and Silent like a Wave🌀|A explorer in search of a \"Right Destination\"👨‍💻|J Shaped Progressor📈😉|LazyAmbitious",
@@ -12,7 +12,7 @@
         "companyName": "SWAYAM – The Entrepreneurship Club of IMNU",
         "companyUsername": "swayam-the-entrepreneurship-club-of-imnu",
         "companyURL": "https://www.linkedin.com/company/swayam-the-entrepreneurship-club-of-imnu/",
-        "companyLogo": "https://media.licdn.com/dms/image/v2/D4D0BAQFOhCtw_UquAw/company-logo_100_100/B4DaDASzvWJgAM-/0/1789932551344/swayam_the_entrepreneurship_club_of_imnu_logo?e=1793836800&v=beta&t=_cgod5iIj_Z_ud7_2dihGeKtuoGDF3ljUBbPNLNZA78",
+        "companyLogo": "https://media.licdn.com/dms/image/v2/D4D0BAQFOhCtw_UquAw/company-logo_100_100/B4DaDASzvWJgAM-/0/1789932551344/swayam_the_entrepreneurship_club_of_imnu_logo?e=1794441600&v=beta&t=N2SzRZCyuB8Ckk8YsOOoi08H7iV6UdYIeuCipyY1vUM",
         "companyIndustry": "Higher Education",
         "companyStaffCountRange": "11 - 50",
         "title": "Student Coordinator",
@@ -21,6 +21,9 @@
         },
         "multiLocaleCompanyName": {
           "en_US": "SWAYAM – The Entrepreneurship Club of IMNU"
+        },
+        "multiLocaleDescription": {
+          "en_US": "Responsible for Administration,Public Relations and Events Management"
         },
         "location": "Ahmedabad",
         "locationType": "",
@@ -42,7 +45,7 @@
         "companyName": "NTS Nihon Global",
         "companyUsername": "nts-nihon-global",
         "companyURL": "https://www.linkedin.com/company/nts-nihon-global/",
-        "companyLogo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_400_400/company-logo_400_400/0/1677356542717?e=1793836800&v=beta&t=nAlQY-r6ePasDCWoHD00osiGEsh06tnuw6Vf0-5bPtc",
+        "companyLogo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_400_400/company-logo_400_400/0/1677356542717?e=1794441600&v=beta&t=KwSHuxLgMiSR1JGa5VsshO8IgmXrQn-oA45L9CDNaE0",
         "companyIndustry": "Computer Software",
         "companyStaffCountRange": "501 - 1000",
         "title": "Full-stack Developer Intern",
@@ -51,6 +54,9 @@
         },
         "multiLocaleCompanyName": {
           "en_US": "NTS Nihon Global"
+        },
+        "multiLocaleDescription": {
+          "en_US": "Led the Project and Worked on Firebase-based backend architecture, including authentication, Firestore rules, and secure data handling along with minor tweeks and improvements in the Frontend.\nImplemented structured error handling for login and onboarding flows, improving application stability.\nLed the Kaamigo chatbot feature development — defined interaction flows, integrated model inference endpoints, and coordinated UI revisions.\nActively participated in code reviews, Git workflows, and cross‑team development for web and mobile platforms.\nBuilt and tested real‑time chat functionality and user activity synchronization.\nRecieved Letter of Recommendation for the same."
         },
         "location": "Remote",
         "locationType": "",
@@ -90,17 +96,17 @@
         "schoolId": "15096420",
         "logo": [
           {
-            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_200_200/company-logo_200_200/0/1708176267470?e=1793836800&v=beta&t=y5SvSIDC4OKyARX4U9hk2HttzUHCA8EDXEBJpwb104o",
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_200_200/company-logo_200_200/0/1708176267470?e=1794441600&v=beta&t=mkH4wojl_nouMNLLMzvkFINcXthZH20_jOtB1_YywSE",
             "width": 200,
             "height": 200
           },
           {
-            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_100_100/company-logo_100_100/0/1708176267470?e=1793836800&v=beta&t=rH5l89ukciHHcBZNgpogHJomK8cBK6IVOM-Y-yS_ZzQ",
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_100_100/company-logo_100_100/0/1708176267470?e=1794441600&v=beta&t=M899Y-QlylCj9yhFQegfHuh2u7C9KXsyhTymUb8rpPk",
             "width": 100,
             "height": 100
           },
           {
-            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_400_400/company-logo_400_400/0/1708176267470?e=1793836800&v=beta&t=tCqZbDemIgHMXFy_Fo8c0i4nUVAhFbkOZmEf9FOeZ98",
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_400_400/company-logo_400_400/0/1708176267470?e=1794441600&v=beta&t=YJ0cQPcySOYvPZCEmdFW4eJio_EDnJxTLpvfMSSm-3E",
             "width": 400,
             "height": 400
           }
@@ -353,7 +359,7 @@
         "company": {
           "name": "Simplilearn",
           "universalName": "simplilearn",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1793836800&v=beta&t=mN2fG0XxXYhFBJmcFzp1zRt0QhzZUhdIvqn-p_Fl9EA",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1794441600&v=beta&t=G_MP3KbyiZsYZ-J0OwpeUWFE7U3xd9A4FxO7uqZb3LQ",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -386,7 +392,7 @@
         "company": {
           "name": "People Labs Pvt Ltd",
           "universalName": "people-labs-pvt-ltd",
-          "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQGQktgJYxX_pw/company-logo_200_200/company-logo_200_200/0/1630586375036/people_labs_pvt_ltd_logo?e=1793836800&v=beta&t=SHjcsQimXev0z7O1gJTNRQ_Q6BFJkLFbxchy11HPEnc",
+          "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQGQktgJYxX_pw/company-logo_200_200/company-logo_200_200/0/1630586375036/people_labs_pvt_ltd_logo?e=1794441600&v=beta&t=0-kuJFoQQZDkpCwST60cgOqlg7o7DhLVsIZFj3h9Mro",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -419,7 +425,7 @@
         "company": {
           "name": "Amazon Web Services (AWS)",
           "universalName": "amazon-web-services",
-          "logo": "https://media.licdn.com/dms/image/v2/D4E0BAQFqdm1TZ-RZKQ/company-logo_400_400/B4EZgOay6gHEAg-/0/1752588562343/amazon_web_services_logo?e=1793836800&v=beta&t=Tw5RWmSqMFHZhIFX-Qwpc0nUXmmn8yjFdqZkzt_vVb0",
+          "logo": "https://media.licdn.com/dms/image/v2/D4E0BAQFqdm1TZ-RZKQ/company-logo_400_400/B4EZgOay6gHEAg-/0/1752588562343/amazon_web_services_logo?e=1794441600&v=beta&t=j4zNltgMsJEe07-adayAnKnGb1rmiwNQCbZ6YAegSRc",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -452,7 +458,7 @@
         "company": {
           "name": "Simplilearn",
           "universalName": "simplilearn",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1793836800&v=beta&t=mN2fG0XxXYhFBJmcFzp1zRt0QhzZUhdIvqn-p_Fl9EA",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1794441600&v=beta&t=G_MP3KbyiZsYZ-J0OwpeUWFE7U3xd9A4FxO7uqZb3LQ",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -485,7 +491,7 @@
         "company": {
           "name": "Hero MotoCorp",
           "universalName": "heromotocorp",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGWyWL5FO6LCQ/company-logo_200_200/B56ZpxxW.tI4AM-/0/1762845356644?e=1793836800&v=beta&t=EJmhmbXc_F0yKrwOPfzfz3DQ8RoDqeA7nB4Gy04K3J8",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGWyWL5FO6LCQ/company-logo_200_200/B56ZpxxW.tI4AM-/0/1762845356644?e=1794441600&v=beta&t=uqP8qcbjveMqQUEcfTvvs_0oMSb7HFGlgcdZWWDaiI0",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -518,7 +524,7 @@
         "company": {
           "name": "Nation with NaMo",
           "universalName": "nationwithnamo",
-          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQHRGUz46gfLaw/company-logo_200_200/company-logo_200_200/0/1644842003637/nationwithnamo_logo?e=1793836800&v=beta&t=1MgEvyjZL6bmqtAeIUNlRLYQAZvwMHqOIb23PQUkKxs",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQHRGUz46gfLaw/company-logo_200_200/company-logo_200_200/0/1644842003637/nationwithnamo_logo?e=1794441600&v=beta&t=CjkoFw7F0Mc9FNdgg3c41nnD2lHkgvsq9etd5cE7QrA",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -551,7 +557,7 @@
         "company": {
           "name": "Unstop",
           "universalName": "unstop",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1793836800&v=beta&t=pwNKFhW6TusdHbW8YQnpplPi82QO0eJ01FNkgr7NUHk",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1794441600&v=beta&t=8pe3f8_MszmJUOCgDNp_t8xbgbKr73iXoP_HG7qEZFo",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -584,7 +590,7 @@
         "company": {
           "name": "NTS Nihon Global",
           "universalName": "nts-nihon-global",
-          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_200_200/company-logo_200_200/0/1677356542717?e=1793836800&v=beta&t=-p-ZuYDc45VyrQCCpekFA6n_799rX2dhKboARM1gAOQ",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_200_200/company-logo_200_200/0/1677356542717?e=1794441600&v=beta&t=ciax8oqW_vAf9wNaOVY_x4kEK37qgMqhfTyKubnTIEo",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -617,7 +623,7 @@
         "company": {
           "name": "Unstop",
           "universalName": "unstop",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1793836800&v=beta&t=pwNKFhW6TusdHbW8YQnpplPi82QO0eJ01FNkgr7NUHk",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1794441600&v=beta&t=8pe3f8_MszmJUOCgDNp_t8xbgbKr73iXoP_HG7qEZFo",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -650,7 +656,7 @@
         "company": {
           "name": "Coursera",
           "universalName": "coursera",
-          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQGexnfBxeEG-g/company-logo_200_200/company-logo_200_200/0/1630530042036/coursera_logo?e=1793836800&v=beta&t=A2JRP9rikgafNIMqrK_miZ7_nh03KWLYbo2UkiWTZKM",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQGexnfBxeEG-g/company-logo_200_200/company-logo_200_200/0/1630530042036/coursera_logo?e=1794441600&v=beta&t=5V53f7orDtB2X7PL6IRTJzsIwaHOeb7iF5xW1eFwsnA",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -694,116 +700,22 @@
               {
                 "width": 800,
                 "height": 800,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1793836800&v=beta&t=dJ3rYd1VQvZOH4ti2ADsUmvigsBt-vvhfsOktYyw-sg"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1794441600&v=beta&t=E2JwILk9iH3lsQH61duJrDvQ-CcvjNHLH1VfVd5xmC8"
               },
               {
                 "width": 200,
                 "height": 200,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1793836800&v=beta&t=FDef5EUrGPDvVBTaj0yApTJyuh_pZVnu7w3oPtYQ2hk"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1794441600&v=beta&t=gHiTBkUwUg6i_j0TV1MQS77z2XsEuWZSAlNH0iq7DNA"
               },
               {
                 "width": 400,
                 "height": 400,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1793836800&v=beta&t=a_LYxeNooNU79Fvut4XWLf8VcIzS_dk9l4jZtA9JeMg"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1794441600&v=beta&t=NWR_8zCBCWmDEOoVzFRFdkXFOr9fpor5lbzgTKFHlxo"
               },
               {
                 "width": 100,
                 "height": 100,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1793836800&v=beta&t=vt5DHfNKdC4Yl0iw11pASQroQR-WJfX-CKmPnvefrpQ"
-              }
-            ],
-            "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
-            "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
-          }
-        ]
-      },
-      {
-        "title": "Phishguard- Phising Website Detector",
-        "description": "PhisGuard is a lightweight yet highly effective phishing-detection system designed to keep users safe from malicious links and deceptive websites. At its core, PhisGuard uses a Decision Tree classification model, trained on real-world phishing and legitimate URL datasets to deliver fast and reliable detection.\nWith an accuracy of around 90%, the system analyzes URL patterns, domain features, and structural attributes to instantly classify whether a link is safe or suspicious. PhisGuard provides clear alerts, seamless integration, and real-time protection — without the heavy computational cost of deep learning models.\nWhether you're browsing online, checking emails, or validating shared links, PhisGuard ensures every click is smarter and safer.\nPhisGuard — Simple, accurate, and efficient phishing protection powered by Decision Trees.",
-        "start": {
-          "year": 0,
-          "month": 0,
-          "day": 0
-        },
-        "end": {
-          "year": 0,
-          "month": 0,
-          "day": 0
-        },
-        "contributors": [
-          {
-            "urn": "ACoAADl9Ma4BOdYtO_253gREo-hGgafKDvYeaK4",
-            "username": "hetav-shah-26601722b",
-            "fullName": "Hetav Shah",
-            "firstName": "Hetav",
-            "lastName": "Shah",
-            "profilePicture": [
-              {
-                "width": 800,
-                "height": 800,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1793836800&v=beta&t=dJ3rYd1VQvZOH4ti2ADsUmvigsBt-vvhfsOktYyw-sg"
-              },
-              {
-                "width": 200,
-                "height": 200,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1793836800&v=beta&t=FDef5EUrGPDvVBTaj0yApTJyuh_pZVnu7w3oPtYQ2hk"
-              },
-              {
-                "width": 400,
-                "height": 400,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1793836800&v=beta&t=a_LYxeNooNU79Fvut4XWLf8VcIzS_dk9l4jZtA9JeMg"
-              },
-              {
-                "width": 100,
-                "height": 100,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1793836800&v=beta&t=vt5DHfNKdC4Yl0iw11pASQroQR-WJfX-CKmPnvefrpQ"
-              }
-            ],
-            "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
-            "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
-          }
-        ]
-      },
-      {
-        "title": "Spam Detection AI",
-        "description": "The Spam Email Detector is a machine learning–based text classification system designed to accurately detect spam messages in real time. Built using classical ML algorithms and trained on the combined_data.csv dataset, this system analyzes email or SMS text and instantly classifies it as Spam or Not Spam with high precision.\nAt the core, the project uses a Decision Tree Classifier,Naïve Bayes and SVM classifiers achieving an impressive 99.06% accuracy during evaluation. Allowing users to switch between models and compare performance in real-time.\nBy extracting text features using TF-IDF and applying supervised learning techniques, the detector quickly identifies suspicious keywords, patterns, and structures commonly found in phishing or spam messages. The result is an intuitive, visually appealing dashboard that shows:\n🔍 Confidence Score\n📬 Spam vs. Not Spam Probability\n🤖 Model Used (Decision Tree / Naïve Bayes / SVM)\n⚡ Real-time text analysis\nThe detector is optimized for practical use, educational demonstrations, and ML workflow understanding. With its clean UI, interactive model selection, and extremely high accuracy, it serves as a complete end-to-end ML project—from preprocessing to deployment.\nSpam Email Detector — Fast, accurate, and model-flexible. Powered by Decision Tree (99.06% accurate).",
-        "start": {
-          "year": 0,
-          "month": 0,
-          "day": 0
-        },
-        "end": {
-          "year": 0,
-          "month": 0,
-          "day": 0
-        },
-        "contributors": [
-          {
-            "urn": "ACoAADl9Ma4BOdYtO_253gREo-hGgafKDvYeaK4",
-            "username": "hetav-shah-26601722b",
-            "fullName": "Hetav Shah",
-            "firstName": "Hetav",
-            "lastName": "Shah",
-            "profilePicture": [
-              {
-                "width": 800,
-                "height": 800,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1793836800&v=beta&t=dJ3rYd1VQvZOH4ti2ADsUmvigsBt-vvhfsOktYyw-sg"
-              },
-              {
-                "width": 200,
-                "height": 200,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1793836800&v=beta&t=FDef5EUrGPDvVBTaj0yApTJyuh_pZVnu7w3oPtYQ2hk"
-              },
-              {
-                "width": 400,
-                "height": 400,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1793836800&v=beta&t=a_LYxeNooNU79Fvut4XWLf8VcIzS_dk9l4jZtA9JeMg"
-              },
-              {
-                "width": 100,
-                "height": 100,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1793836800&v=beta&t=vt5DHfNKdC4Yl0iw11pASQroQR-WJfX-CKmPnvefrpQ"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1794441600&v=beta&t=g5jdZm55higzv7GTYvTP5JQEvcDEhmaXC6vddZvTRjY"
               }
             ],
             "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
@@ -835,22 +747,22 @@
               {
                 "width": 800,
                 "height": 800,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1793836800&v=beta&t=dJ3rYd1VQvZOH4ti2ADsUmvigsBt-vvhfsOktYyw-sg"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1794441600&v=beta&t=E2JwILk9iH3lsQH61duJrDvQ-CcvjNHLH1VfVd5xmC8"
               },
               {
                 "width": 200,
                 "height": 200,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1793836800&v=beta&t=FDef5EUrGPDvVBTaj0yApTJyuh_pZVnu7w3oPtYQ2hk"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1794441600&v=beta&t=gHiTBkUwUg6i_j0TV1MQS77z2XsEuWZSAlNH0iq7DNA"
               },
               {
                 "width": 400,
                 "height": 400,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1793836800&v=beta&t=a_LYxeNooNU79Fvut4XWLf8VcIzS_dk9l4jZtA9JeMg"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1794441600&v=beta&t=NWR_8zCBCWmDEOoVzFRFdkXFOr9fpor5lbzgTKFHlxo"
               },
               {
                 "width": 100,
                 "height": 100,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1793836800&v=beta&t=vt5DHfNKdC4Yl0iw11pASQroQR-WJfX-CKmPnvefrpQ"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1794441600&v=beta&t=g5jdZm55higzv7GTYvTP5JQEvcDEhmaXC6vddZvTRjY"
               }
             ],
             "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
