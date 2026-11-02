@@ -1,18 +1,18 @@
 {
   "source": "rapidapi",
   "profileUrl": "https://www.linkedin.com/in/hetav-shah-26601722b/",
-  "fetchedAt": "2026-11-01T03:12:38.192Z",
+  "fetchedAt": "2026-11-02T03:12:29.249Z",
   "profile": {
-    "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
-    "summary": "Student Coordinator at SWAYAM - The Entrepreneurship Club of IMNU| 🏆&nbsp;Aetrix (PDEU) Grand Prize Winner -Turned 36 hours of caffeine into a working product|Noisy Like a Photon and Silent like a Wave🌀|A explorer in search of a \"Right Destination\"👨‍💻|J Shaped Progressor📈😉|LazyAmbitious",
-    "location": "Greater Vadodara Area",
+    "headline": "Curious Maverick & Nomad in search of the Right Destination | Agentic AI 🤖 | Machine Learning| Full Stack Dev | Dedicated to Advancing Technology|Tech Freak",
+    "summary": "🏆&nbsp;Aetrix (PDEU) Grand Prize Winner : Turned 36 hours of caffeine into a working product | Noisy Like a Photon and Silent like a Wave🌀 | A explorer in search of a \"Right Destination\"👨‍💻 | J Shaped Progressor📈😉|LazyAmbitious",
+    "location": "India",
     "positions": [
       {
         "companyId": 145194768,
         "companyName": "SWAYAM – The Entrepreneurship Club of IMNU",
         "companyUsername": "swayam-the-entrepreneurship-club-of-imnu",
         "companyURL": "https://www.linkedin.com/company/swayam-the-entrepreneurship-club-of-imnu/",
-        "companyLogo": "https://media.licdn.com/dms/image/v2/D4D0BAQFOhCtw_UquAw/company-logo_100_100/B4DaDASzvWJgAM-/0/1789932551344/swayam_the_entrepreneurship_club_of_imnu_logo?e=1794441600&v=beta&t=N2SzRZCyuB8Ckk8YsOOoi08H7iV6UdYIeuCipyY1vUM",
+        "companyLogo": "https://media.licdn.com/dms/image/v2/D4D0BAQFOhCtw_UquAw/company-logo_100_100/B4DaDASzvWJgAM-/0/1789932551344/swayam_the_entrepreneurship_club_of_imnu_logo?e=1795046400&v=beta&t=erfWkxDRYayz48eTqTI4q_2sdFAVEqgJektmiS1agu4",
         "companyIndustry": "Higher Education",
         "companyStaffCountRange": "11 - 50",
         "title": "Student Coordinator",
@@ -26,6 +26,7 @@
           "en_US": "Responsible for Administration,Public Relations and Events Management"
         },
         "location": "Ahmedabad",
+        "locationId": 104990346,
         "locationType": "",
         "description": "Responsible for Administration,Public Relations and Events Management",
         "employmentType": "",
@@ -41,11 +42,45 @@
         }
       },
       {
+        "companyId": 107745252,
+        "companyName": "Harkeswanen",
+        "companyUsername": "harkeswanen",
+        "companyURL": "https://www.linkedin.com/company/harkeswanen/",
+        "companyLogo": "https://media.licdn.com/dms/image/v2/D4D0BAQEEH310J9ph9Q/company-logo_200_200/B4DaFz7dk1HkAE-/0/1792946330301/harkeswanen_logo?e=1795046400&v=beta&t=Nqj9MJTT1EHd5jt0gQpu8OAUjOy8fksp1zSz8wegJS0",
+        "companyIndustry": "Computer Software",
+        "companyStaffCountRange": "2 - 10",
+        "title": "Founder",
+        "multiLocaleTitle": {
+          "en_US": "Founder"
+        },
+        "multiLocaleCompanyName": {
+          "en_US": "Harkeswanen"
+        },
+        "multiLocaleDescription": {
+          "en_US": "Founder of the Harkeswanen and Aven by Harkeswanen both serving as in different domains i.e Harkeswanen is focused more on Building a Emotionally Intelligent Being,while Aven is an Agentic AI and Software Engineering Studio Focusing on catering clients with Top quality production ready softwares,workflow and systems."
+        },
+        "location": "Vadodara",
+        "locationId": 106728703,
+        "locationType": "",
+        "description": "Founder of the Harkeswanen and Aven by Harkeswanen both serving as in different domains i.e Harkeswanen is focused more on Building a Emotionally Intelligent Being,while Aven is an Agentic AI and Software Engineering Studio Focusing on catering clients with Top quality production ready softwares,workflow and systems.",
+        "employmentType": "Self-employed",
+        "start": {
+          "year": 2025,
+          "month": 6,
+          "day": 0
+        },
+        "end": {
+          "year": 0,
+          "month": 0,
+          "day": 0
+        }
+      },
+      {
         "companyId": 90968733,
         "companyName": "NTS Nihon Global",
         "companyUsername": "nts-nihon-global",
         "companyURL": "https://www.linkedin.com/company/nts-nihon-global/",
-        "companyLogo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_400_400/company-logo_400_400/0/1677356542717?e=1794441600&v=beta&t=KwSHuxLgMiSR1JGa5VsshO8IgmXrQn-oA45L9CDNaE0",
+        "companyLogo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_400_400/company-logo_400_400/0/1677356542717?e=1795046400&v=beta&t=8AxHQnNAL7eYbO8_D9LNt6hz1-01mAtfCiBd9zb-jBk",
         "companyIndustry": "Computer Software",
         "companyStaffCountRange": "501 - 1000",
         "title": "Full-stack Developer Intern",
@@ -96,17 +131,17 @@
         "schoolId": "15096420",
         "logo": [
           {
-            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_200_200/company-logo_200_200/0/1708176267470?e=1794441600&v=beta&t=mkH4wojl_nouMNLLMzvkFINcXthZH20_jOtB1_YywSE",
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_200_200/company-logo_200_200/0/1708176267470?e=1795046400&v=beta&t=eRdZ4Iizb2GRghud7_uT6h30jhktGrY99KH-d2i8m5Y",
             "width": 200,
             "height": 200
           },
           {
-            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_100_100/company-logo_100_100/0/1708176267470?e=1794441600&v=beta&t=M899Y-QlylCj9yhFQegfHuh2u7C9KXsyhTymUb8rpPk",
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_100_100/company-logo_100_100/0/1708176267470?e=1795046400&v=beta&t=FhwiC4nt9odofGMjGdp2GBGr8HLJKwhESbvXwYt6lSY",
             "width": 100,
             "height": 100
           },
           {
-            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_400_400/company-logo_400_400/0/1708176267470?e=1794441600&v=beta&t=YJ0cQPcySOYvPZCEmdFW4eJio_EDnJxTLpvfMSSm-3E",
+            "url": "https://media.licdn.com/dms/image/v2/D4D0BAQHZ6vmo4k-kqw/company-logo_400_400/company-logo_400_400/0/1708176267470?e=1795046400&v=beta&t=ThxZzeUa4TBiQCyz5ilqLcRIMmYBEvak-jLxGiMYx5c",
             "width": 400,
             "height": 400
           }
@@ -141,6 +176,14 @@
       }
     ],
     "skills": [
+      {
+        "name": "Start-up Ventures",
+        "passedSkillAssessment": false
+      },
+      {
+        "name": "Start-up Leadership",
+        "passedSkillAssessment": false
+      },
       {
         "name": "Event Planning",
         "passedSkillAssessment": false
@@ -332,14 +375,6 @@
       {
         "name": "User Interface Design",
         "passedSkillAssessment": false
-      },
-      {
-        "name": "SQL",
-        "passedSkillAssessment": false
-      },
-      {
-        "name": "Retrieval-Augmented Generation (RAG)",
-        "passedSkillAssessment": false
       }
     ],
     "certifications": [
@@ -359,7 +394,7 @@
         "company": {
           "name": "Simplilearn",
           "universalName": "simplilearn",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1794441600&v=beta&t=G_MP3KbyiZsYZ-J0OwpeUWFE7U3xd9A4FxO7uqZb3LQ",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1795046400&v=beta&t=UxHgJsaF5EY-kO2YoGkVSJxTgbaEtH4JxNxff4Yb_lU",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -392,7 +427,7 @@
         "company": {
           "name": "People Labs Pvt Ltd",
           "universalName": "people-labs-pvt-ltd",
-          "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQGQktgJYxX_pw/company-logo_200_200/company-logo_200_200/0/1630586375036/people_labs_pvt_ltd_logo?e=1794441600&v=beta&t=0-kuJFoQQZDkpCwST60cgOqlg7o7DhLVsIZFj3h9Mro",
+          "logo": "https://media.licdn.com/dms/image/v2/C4E0BAQGQktgJYxX_pw/company-logo_200_200/company-logo_200_200/0/1630586375036/people_labs_pvt_ltd_logo?e=1795046400&v=beta&t=j5x5jjfofwVSR71CxLpu9J7DZlPy63Pq5zW9FX-Q6Tc",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -425,7 +460,7 @@
         "company": {
           "name": "Amazon Web Services (AWS)",
           "universalName": "amazon-web-services",
-          "logo": "https://media.licdn.com/dms/image/v2/D4E0BAQFqdm1TZ-RZKQ/company-logo_400_400/B4EZgOay6gHEAg-/0/1752588562343/amazon_web_services_logo?e=1794441600&v=beta&t=j4zNltgMsJEe07-adayAnKnGb1rmiwNQCbZ6YAegSRc",
+          "logo": "https://media.licdn.com/dms/image/v2/D4E0BAQFqdm1TZ-RZKQ/company-logo_400_400/B4EZgOay6gHEAg-/0/1752588562343/amazon_web_services_logo?e=1795046400&v=beta&t=PokVKuugksr8XKtn19awDfvfgGajG7MMAyoMfjqyO30",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -458,7 +493,7 @@
         "company": {
           "name": "Simplilearn",
           "universalName": "simplilearn",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1794441600&v=beta&t=G_MP3KbyiZsYZ-J0OwpeUWFE7U3xd9A4FxO7uqZb3LQ",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGrNBFNEIlxNg/company-logo_400_400/B56ZzhMj53KYAY-/0/1773304692834/simplilearn_logo?e=1795046400&v=beta&t=UxHgJsaF5EY-kO2YoGkVSJxTgbaEtH4JxNxff4Yb_lU",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -491,7 +526,7 @@
         "company": {
           "name": "Hero MotoCorp",
           "universalName": "heromotocorp",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGWyWL5FO6LCQ/company-logo_200_200/B56ZpxxW.tI4AM-/0/1762845356644?e=1794441600&v=beta&t=uqP8qcbjveMqQUEcfTvvs_0oMSb7HFGlgcdZWWDaiI0",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQGWyWL5FO6LCQ/company-logo_200_200/B56ZpxxW.tI4AM-/0/1762845356644?e=1795046400&v=beta&t=Keq8s2WSKOSsVB8j8lBDV8gUvghlForVm_iNzatjnL4",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -524,7 +559,7 @@
         "company": {
           "name": "Nation with NaMo",
           "universalName": "nationwithnamo",
-          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQHRGUz46gfLaw/company-logo_200_200/company-logo_200_200/0/1644842003637/nationwithnamo_logo?e=1794441600&v=beta&t=CjkoFw7F0Mc9FNdgg3c41nnD2lHkgvsq9etd5cE7QrA",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQHRGUz46gfLaw/company-logo_200_200/company-logo_200_200/0/1644842003637/nationwithnamo_logo?e=1795046400&v=beta&t=_yLXoCxKQcvkiTk8F2meQuY2ZYQ0xUe8203vCW_ZKeg",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -557,7 +592,7 @@
         "company": {
           "name": "Unstop",
           "universalName": "unstop",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1794441600&v=beta&t=8pe3f8_MszmJUOCgDNp_t8xbgbKr73iXoP_HG7qEZFo",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1795046400&v=beta&t=OGuePfI6e8mUESjIyxKCkRoXB1hQwhY55-2PtXrs3P4",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -590,7 +625,7 @@
         "company": {
           "name": "NTS Nihon Global",
           "universalName": "nts-nihon-global",
-          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_200_200/company-logo_200_200/0/1677356542717?e=1794441600&v=beta&t=ciax8oqW_vAf9wNaOVY_x4kEK37qgMqhfTyKubnTIEo",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQE6f3jhCOxwxA/company-logo_200_200/company-logo_200_200/0/1677356542717?e=1795046400&v=beta&t=xDklxtt6XgIjKhgkc8LhfSd5Fc_rxaS_0Gp-_ByDpNQ",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -623,7 +658,7 @@
         "company": {
           "name": "Unstop",
           "universalName": "unstop",
-          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1794441600&v=beta&t=8pe3f8_MszmJUOCgDNp_t8xbgbKr73iXoP_HG7qEZFo",
+          "logo": "https://media.licdn.com/dms/image/v2/D560BAQHqqREuYOZewQ/company-logo_200_200/company-logo_200_200/0/1701272685881/unstop_logo?e=1795046400&v=beta&t=OGuePfI6e8mUESjIyxKCkRoXB1hQwhY55-2PtXrs3P4",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -656,7 +691,7 @@
         "company": {
           "name": "Coursera",
           "universalName": "coursera",
-          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQGexnfBxeEG-g/company-logo_200_200/company-logo_200_200/0/1630530042036/coursera_logo?e=1794441600&v=beta&t=5V53f7orDtB2X7PL6IRTJzsIwaHOeb7iF5xW1eFwsnA",
+          "logo": "https://media.licdn.com/dms/image/v2/C4D0BAQGexnfBxeEG-g/company-logo_200_200/company-logo_200_200/0/1630530042036/coursera_logo?e=1795046400&v=beta&t=80SteMvfhowi8SHO-yzHW7F8BLHkTGz3bfOXfo7yRSI",
           "staffCountRange": {},
           "headquarter": {}
         },
@@ -698,27 +733,27 @@
             "lastName": "Shah",
             "profilePicture": [
               {
-                "width": 800,
-                "height": 800,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1794441600&v=beta&t=E2JwILk9iH3lsQH61duJrDvQ-CcvjNHLH1VfVd5xmC8"
-              },
-              {
-                "width": 200,
-                "height": 200,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1794441600&v=beta&t=gHiTBkUwUg6i_j0TV1MQS77z2XsEuWZSAlNH0iq7DNA"
-              },
-              {
                 "width": 400,
                 "height": 400,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1794441600&v=beta&t=NWR_8zCBCWmDEOoVzFRFdkXFOr9fpor5lbzgTKFHlxo"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-scale_400_400/B4DaF5t9vxKcAg-/0/1793043456238?e=1795046400&v=beta&t=bJB4iS285Dihk13Y0giB4Vsz-7xZS4hWfwfRpVYSqB8"
               },
               {
                 "width": 100,
                 "height": 100,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1794441600&v=beta&t=g5jdZm55higzv7GTYvTP5JQEvcDEhmaXC6vddZvTRjY"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-scale_100_100/B4DaF5t9vxKcAY-/0/1793043456238?e=1795046400&v=beta&t=L_W9BP_m7UQ39KYPHZT0j6aJ8JjMMBGZn3WXb1eDPH4"
+              },
+              {
+                "width": 800,
+                "height": 800,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-crop_800_800/B4DaF5t9vxKcAI-/0/1793043456238?e=1795046400&v=beta&t=68c-6FTZvESHRRNxY-ertZyX4w2k7IpJAfWWIQ-_-dk"
+              },
+              {
+                "width": 200,
+                "height": 200,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-scale_200_200/B4DaF5t9vxKcAc-/0/1793043456238?e=1795046400&v=beta&t=BJGMpOBIkCqO31mRnxjLxbJBAwr0wFCR_qOFTjxvOqU"
               }
             ],
-            "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
+            "headline": "Curious Maverick & Nomad in search of the Right Destination | Agentic AI 🤖 | Machine Learning| Full Stack Dev | Dedicated to Advancing Technology|Tech Freak",
             "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
           }
         ]
@@ -745,27 +780,27 @@
             "lastName": "Shah",
             "profilePicture": [
               {
-                "width": 800,
-                "height": 800,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_800_800/B4DZaDobo7G4Ac-/0/1745965137506?e=1794441600&v=beta&t=E2JwILk9iH3lsQH61duJrDvQ-CcvjNHLH1VfVd5xmC8"
-              },
-              {
-                "width": 200,
-                "height": 200,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_200_200/B4DZaDobo7G4AY-/0/1745965137506?e=1794441600&v=beta&t=gHiTBkUwUg6i_j0TV1MQS77z2XsEuWZSAlNH0iq7DNA"
-              },
-              {
                 "width": 400,
                 "height": 400,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_400_400/B4DZaDobo7G4Ag-/0/1745965137506?e=1794441600&v=beta&t=NWR_8zCBCWmDEOoVzFRFdkXFOr9fpor5lbzgTKFHlxo"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-scale_400_400/B4DaF5t9vxKcAg-/0/1793043456238?e=1795046400&v=beta&t=bJB4iS285Dihk13Y0giB4Vsz-7xZS4hWfwfRpVYSqB8"
               },
               {
                 "width": 100,
                 "height": 100,
-                "url": "https://media.licdn.com/dms/image/v2/D4D03AQGQc9DbqAngaQ/profile-displayphoto-shrink_100_100/B4DZaDobo7G4AU-/0/1745965137476?e=1794441600&v=beta&t=g5jdZm55higzv7GTYvTP5JQEvcDEhmaXC6vddZvTRjY"
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-scale_100_100/B4DaF5t9vxKcAY-/0/1793043456238?e=1795046400&v=beta&t=L_W9BP_m7UQ39KYPHZT0j6aJ8JjMMBGZn3WXb1eDPH4"
+              },
+              {
+                "width": 800,
+                "height": 800,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-crop_800_800/B4DaF5t9vxKcAI-/0/1793043456238?e=1795046400&v=beta&t=68c-6FTZvESHRRNxY-ertZyX4w2k7IpJAfWWIQ-_-dk"
+              },
+              {
+                "width": 200,
+                "height": 200,
+                "url": "https://media.licdn.com/dms/image/v2/D4D03AQEX016INFxUHw/profile-displayphoto-scale_200_200/B4DaF5t9vxKcAc-/0/1793043456238?e=1795046400&v=beta&t=BJGMpOBIkCqO31mRnxjLxbJBAwr0wFCR_qOFTjxvOqU"
               }
             ],
-            "headline": "Curious Maverick & Nomad |Agentic AI🤖|LangGraph/Smith|N8N|Hermes|Computer Vision|NLP|Machine Learning|Full Stack/Android/iOS Developer|Dedicated to Advancing Technology|Tech Freak🤖|Docker Basics|GCP|AWS Basics",
+            "headline": "Curious Maverick & Nomad in search of the Right Destination | Agentic AI 🤖 | Machine Learning| Full Stack Dev | Dedicated to Advancing Technology|Tech Freak",
             "url": "https://www.linkedin.com/in/hetav-shah-26601722b"
           }
         ]
