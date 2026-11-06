@@ -116,6 +116,21 @@
   }
 }
 
+/* ---------- Contact hub docking ----------
+   At the bottom of the page the robot's chest sits near viewport centre.
+   This padding keeps the arc-reactor hub (h-96 desktop / h-80 phone) centred
+   on it whatever the viewport height; phones have a taller stacked footer and
+   a smaller robot, hence the separate offset. */
+.contact-dock {
+  padding-bottom: max(2.5rem, calc(50svh - 330px));
+}
+
+@media (max-width: 639px) {
+  .contact-dock {
+    padding-bottom: max(0.5rem, calc(50svh - 395px));
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

@@ -178,10 +178,9 @@ const Contact = () => {
     return (
         <section
             id="contact"
-            className="relative z-10 pt-28 md:pt-36"
-            // At the bottom of the page the robot's chest sits near viewport
-            // centre; this keeps the hub (384px) centred over it on any height.
-            style={{ paddingBottom: 'max(2.5rem, calc(50svh - 330px))' }}
+            // contact-dock: bottom padding that keeps the arc-reactor hub
+            // centred on the robot's chest at the end of the page (index.css).
+            className="contact-dock relative z-10 pt-28 md:pt-36"
         >
             <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-[60px]">
                 <SectionHeader mod="05" title="Contact" meta="Open channel" />
