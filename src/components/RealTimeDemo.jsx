@@ -4,6 +4,7 @@ import SectionHeader from "./SectionHeader";
 import { PENDING_QUESTION_KEY } from "../data/agent";
 import { streamAgent } from "../lib/agentClient";
 import SourceChips from "./SourceChips";
+import RecruiterMode from "./RecruiterMode";
 import {
     Send,
     Bot,
@@ -104,6 +105,8 @@ const RealTimeDemo = () => {
     const [isTyping, setIsTyping] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    // "chat" or "recruiter" — recruiter mode is a separate panel on the same page.
+    const [mode, setMode] = useState("chat");
 
     const chatContainerRef = useRef(null);
     const inputRef = useRef(null);
@@ -317,6 +320,29 @@ const RealTimeDemo = () => {
                 </div>
 
                 <div className="max-w-xl mx-auto">
+                    <div role="tablist" aria-label="Agent mode" className="flex gap-1 p-1 mb-4 rounded-xl border border-ink/20 bg-ice-panel/70 backdrop-blur-md w-fit mx-auto">
+                        {[
+                            ["chat", "Chat"],
+                            ["recruiter", "Recruiter mode"],
+                        ].map(([key, label]) => (
+                            <button
+                                key={key}
+                                role="tab"
+                                aria-selected={mode === key}
+                                onClick={() => setMode(key)}
+                                className={`label px-4 py-2.5 rounded-md transition-colors ${
+                                    mode === key ? "bg-ink text-ice-hi" : "text-ink hover:bg-ink/[0.06]"
+                                }`}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {mode === "recruiter" ? (
+                        <RecruiterMode />
+                    ) : (
+                    <>
                     <div data-lenis-prevent className="bg-ice-panel/90 backdrop-blur-md rounded-xl overflow-hidden border-[1.5px] border-ink shadow-[0_30px_60px_-35px_rgba(13,17,23,0.5)]">
                         {/* Chat Header */}
                         <div className="bg-ice-hi p-3 md:p-4 flex justify-between items-center border-b border-ink/15">
@@ -628,6 +654,8 @@ const RealTimeDemo = () => {
                     <p className="text-center text-ink-mute text-xs font-mono mt-4">
                         A LangGraph-based intelligent RAG human-like replier agent
                     </p>
+                    </>
+                    )}
                 </div>
             </div>
         </section>
