@@ -72,8 +72,75 @@ function readCsv(name) {
 }
 
 /** True when at least one expected CSV is present, so the cascade can skip it cleanly. */
+export const EXPORT_DIR = DIR;
+
 export function hasExport() {
     return fs.existsSync(DIR) && fs.readdirSync(DIR).some((f) => f.toLowerCase().endsWith('.csv'));
+}
+
+/**
+ * The only export files this pipeline reads. scripts/import-linkedin-export.js
+ * copies exactly these out of the archive, and .gitignore refuses everything
+ * else in the folder — the full archive also holds messages, connections and
+ * email addresses, none of which belong in a public repo.
+ */
+export const EXPORT_FILES = [
+    'Profile.csv',
+    'Positions.csv',
+    'Education.csv',
+    'Skills.csv',
+    'Certifications.csv',
+    'Honors.csv',
+    'Projects.csv',
+    'Shares.csv',
+];
+
+/** When the export was imported (written by the import script), or null. */
+export function exportImportedAt() {
+    try {
+        const meta = JSON.parse(fs.readFileSync(path.join(DIR, 'meta.json'), 'utf8'));
+        return meta.importedAt ?? null;
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Shares the exporter marks as visible to connections only. The bot is public,
+ * so those stay out of its knowledge base.
+ */
+const isConnectionsOnly = (row) => /connection/i.test(row['Visibility'] ?? '');
+
+/**
+ * Profile and full post history from the export, or null when none is present.
+ * Unlike the live adapters this is not capped at a page of recent posts: the
+ * export carries every share, so it backfills the archive in one go.
+ */
+export function readExport() {
+    if (!hasExport()) return null;
+    const profileRow = readCsv('Profile.csv')[0] ?? {};
+    return {
+        importedAt: exportImportedAt(),
+        profile: {
+            headline: profileRow['Headline'] || null,
+            summary: profileRow['Summary'] || null,
+            location: profileRow['Geo Location'] || profileRow['Location'] || null,
+            positions: readCsv('Positions.csv'),
+            education: readCsv('Education.csv'),
+            skills: readCsv('Skills.csv').map((r) => r['Name'] ?? r['Skill'] ?? '').filter(Boolean),
+            certifications: readCsv('Certifications.csv'),
+            honors: readCsv('Honors.csv'),
+            projects: readCsv('Projects.csv'),
+        },
+        posts: readCsv('Shares.csv')
+            .filter((r) => !isConnectionsOnly(r))
+            .map((r) => ({
+                text: r['ShareCommentary'] ?? '',
+                postedAt: r['Date'] ?? null,
+                url: r['ShareLink'] || null,
+                reactions: null,
+            })),
+    };
 }
 
 export async function fetchLinkedIn() {

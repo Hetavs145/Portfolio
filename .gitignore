@@ -118,3 +118,19 @@ dist
 
 # macOS
 .DS_Store
+
+# LinkedIn: per-run check stamp (CI-local, never committed)
+server/data/linkedin.checked.json
+
+# LinkedIn export: only the whitelisted profile/post CSVs may be committed.
+# The full archive also holds messages, connections and emails.
+server/data/linkedin-export/*
+!server/data/linkedin-export/Profile.csv
+!server/data/linkedin-export/Positions.csv
+!server/data/linkedin-export/Education.csv
+!server/data/linkedin-export/Skills.csv
+!server/data/linkedin-export/Certifications.csv
+!server/data/linkedin-export/Honors.csv
+!server/data/linkedin-export/Projects.csv
+!server/data/linkedin-export/Shares.csv
+!server/data/linkedin-export/meta.json
