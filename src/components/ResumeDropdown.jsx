@@ -128,7 +128,7 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
                 aria-expanded={open}
                 className={variant === 'nav' ? 'btn-ink h-11 px-4' : 'btn-line w-full sm:w-auto'}
             >
-                {variant === 'nav' ? 'Résumé' : 'Get résumé'}
+                {variant === 'nav' ? 'Resume' : 'Get Resume'}
                 <ChevronDown
                     size={14}
                     className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}

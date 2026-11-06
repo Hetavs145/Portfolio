@@ -1,6 +1,6 @@
 /**
- * Recruiter-mode lead capture: validate, then hand off to notify() (your Hermes
- * webhook and/or Telegram). Nothing is stored on the server — Render's disk is
+ * Recruiter-mode lead capture: validate, then send it to Hetav on Telegram
+ * (lib/notify.js). Nothing is stored on the server — Render's disk is
  * ephemeral — so delivery is the whole job, and the visitor is told plainly if
  * it didn't go through.
  */

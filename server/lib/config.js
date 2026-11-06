@@ -7,9 +7,8 @@
  * NVIDIA NIM is primary; OpenRouter serves as automatic backup on rate limits.
  */
 
-// Overridable so the eval harness and local tests can point at a mock server.
-export const NVIDIA_BASE = process.env.NVIDIA_BASE_URL || "https://integrate.api.nvidia.com/v1";
-export const OPENROUTER_BASE = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1";
+export const NVIDIA_BASE = "https://integrate.api.nvidia.com/v1";
+export const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
 
 export const nvidiaChatKey = () => process.env.NVIDIA_API_KEY || "";
 export const nvidiaEmbedKey = () =>

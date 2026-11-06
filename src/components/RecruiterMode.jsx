@@ -8,7 +8,7 @@ const MIN_JD = 80;
 /**
  * Recruiter mode: paste a job description, get an honest fit summary from the
  * same knowledge base as the chat, then optionally leave contact details —
- * which reach Hetav via his notification webhook (Hermes / Telegram).
+ * which reach Hetav as a Telegram message.
  */
 const RecruiterMode = () => {
     const [jd, setJd] = useState('');

@@ -16,7 +16,6 @@
     "verify:codec": "node --env-file=.env server/scripts/verify-codec.js",
     "verify:render": "node server/scripts/verify-render.js",
     "refresh:website": "node --env-file=.env server/scripts/refresh-website.js",
-    "import:linkedin": "node server/scripts/import-linkedin-export.js",
     "eval": "node --env-file=.env server/scripts/eval.js"
   },
   "dependencies": {

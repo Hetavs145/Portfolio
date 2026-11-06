@@ -3,15 +3,8 @@
  *
  * LINKEDIN_SOURCE picks the live adapter: 'rapidapi' (default) | 'dma' | 'export' | 'off'.
  *
- * Three layers feed the knowledge base, all free:
- *   1. The official LinkedIn export (server/data/linkedin-export/, imported with
- *      scripts/import-linkedin-export.js) — the authoritative profile and the
- *      full post history. Manual, every few months.
- *   2. Posts written in content/posts/*.md and then shared to LinkedIn — picked
- *      up on push, no scraping involved.
- *   3. The live adapter (RapidAPI free tier: posts daily, profile weekly) — tops
- *      up whatever changed on LinkedIn in between.
- * Layers 1 and 2 are merged at chunk time, so they work even when 3 is off or down.
+ * Fully automated: the refresh-kb GitHub Action calls the live adapter every
+ * night (posts) and weekly (profile) on the RapidAPI free tier — no manual step.
  *
  * The cascade never hard-fails. If the live adapter errors or the monthly credit
  * budget is spent, we keep the last good server/data/linkedin.json and log a
@@ -23,8 +16,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { makeChunk, splitLong } from '../../chunk.js';
 import { reportSource } from '../../freshness.js';
-import { readExport } from './export.js';
-import { readOwnPosts, mergeOwnPosts } from './own-posts.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const SNAPSHOT = path.join(HERE, '..', '..', '..', 'data', 'linkedin.json');
@@ -249,54 +240,23 @@ const MAX_SNAPSHOT_AGE_DAYS = 30;
 /** Newest ISO timestamp of those given (ignores empties). */
 const newest = (...stamps) => stamps.filter(Boolean).sort().at(-1) ?? null;
 
-/**
- * Profile fields from the live snapshot and the export, taking each field from
- * whichever layer is more recent and actually has it.
- */
-function mergeProfile(live, liveAt, exported, exportedAt) {
-    if (!exported) return live ?? {};
-    if (!live) return exported;
-    const preferExport = (exportedAt ?? '') > (liveAt ?? '');
-    const [first, second] = preferExport ? [exported, live] : [live, exported];
-    const out = {};
-    for (const key of new Set([...Object.keys(first), ...Object.keys(second)])) {
-        const a = first[key];
-        const has = Array.isArray(a) ? a.length > 0 : a != null && a !== '';
-        out[key] = has ? a : second[key];
-    }
-    return out;
-}
-
-/** The live snapshot with the export and repo-authored posts layered in. */
+/** The snapshot, with the check stamp from this CI run layered in. */
 function assembleLinkedIn() {
     const live = readSnapshot();
-    const exported = readExport();
-    const own = readOwnPosts();
-    if (!live && !exported && !own.length) return null;
-
-    const liveAt = newest(live?.fetchedAt);
-    const profile = mergeProfile(live?.profile, liveAt, exported?.profile, exported?.importedAt);
-    const posts = mergeOwnPosts(mergePosts(exported?.posts, live?.posts ?? []), own);
-
+    if (!live) return null;
     return {
-        profile,
-        posts,
-        // Content date: when any layer last brought in new material.
-        fetchedAt: newest(liveAt, exported?.importedAt, ...own.map((p) => p.postedAt)),
-        // Check date: when the data was last confirmed current.
-        checkedAt: newest(readCheckedAt(), liveAt, exported?.importedAt),
-        layers: {
-            live: Boolean(live),
-            export: Boolean(exported),
-            repoPosts: own.length,
-        },
+        ...live,
+        // Content date: when LinkedIn content last changed.
+        fetchedAt: live.fetchedAt ?? null,
+        // Check date: when the scraper last confirmed it current.
+        checkedAt: newest(readCheckedAt(), live.fetchedAt),
     };
 }
 
 export function linkedinChunks() {
     const snap = assembleLinkedIn();
     if (!snap) {
-        reportSource('linkedin', { fresh: false, reason: 'no snapshot, export or repo posts on disk' });
+        reportSource('linkedin', { fresh: false, reason: 'no snapshot on disk' });
         return [];
     }
 

@@ -44,7 +44,7 @@ const shortDate = (iso) => {
 const afterDash = (title) => (title.split(' — ')[1] || title).replace(/\s*\(\d+\/\d+\)$/, '').trim();
 
 /**
- * A visitor-facing label and link for one chunk. Relative links (the résumés)
+ * A visitor-facing label and link for one chunk. Relative links (the resumes)
  * resolve against the portfolio's own origin.
  */
 export function sourceRef(chunk) {
@@ -57,9 +57,9 @@ export function sourceRef(chunk) {
             if (kind === 'repo' || kind === 'commit') return { type: 'github', label: `GitHub · ${afterDash(title)}`, url: url || GITHUB_PROFILE };
             return { type: 'github', label: 'GitHub activity', url: GITHUB_PROFILE };
         case 'resume':
-            return { type: 'resume', label: 'Résumé', url: '/Hetav_Shah_Resume.pdf' };
+            return { type: 'resume', label: 'Resume', url: '/Hetav_Shah_Resume.pdf' };
         case 'resume-imnu':
-            return { type: 'resume', label: 'IMNU résumé', url: '/Hetav_Shah_IMNU.pdf' };
+            return { type: 'resume', label: 'IMNU Resume', url: '/Hetav_Shah_IMNU.pdf' };
         case 'site': {
             const project = projects.find((p) => title.endsWith(p.title));
             if (project) return { type: 'project', label: project.title, url: project.live || project.github || '#work' };

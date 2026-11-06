@@ -112,7 +112,7 @@ const Navbar = () => {
                     </button>
                 </div>
 
-                {/* Right: résumé + mobile controls */}
+                {/* Right: resume + mobile controls */}
                 <div className="flex items-center gap-2">
                     <div className="hidden lg:block">
                         <ResumeDropdown variant="nav" />

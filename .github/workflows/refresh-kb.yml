@@ -1,7 +1,6 @@
 name: Refresh knowledge base
 
 # Keeps the chatbot current without manual steps: re-scrapes LinkedIn and GitHub,
-# merges your repo posts (content/posts) and the LinkedIn export,
 # re-embeds, and commits the updated index. Render auto-deploys on push.
 #
 # This repo is public, so Actions minutes are free and unlimited.
@@ -13,14 +12,11 @@ name: Refresh knowledge base
 #   OPENROUTER_EMBED_KEY, RAPIDAPI_KEY_FALLBACK, LINKEDIN_DMA_TOKEN
 
 on:
-  # A post written in content/posts/ or a fresh LinkedIn export reaches the bot
-  # minutes after it's pushed — no scraping, no credits.
+  # An answer added to content/faq.md reaches the bot minutes after it's pushed.
   push:
     branches: [main]
     paths:
-      - 'content/posts/**'
       - 'content/faq.md'
-      - 'server/data/linkedin-export/**'
   schedule:
     # 03:00 UTC daily
     - cron: '0 3 * * *'
@@ -66,8 +62,8 @@ jobs:
           fi
 
       - name: Refresh LinkedIn
-        # Skipped on push: those runs are about repo posts / the export, and
-        # spending a scraper credit on them adds nothing.
+        # Skipped on push: those runs only add FAQ answers, and spending a
+        # scraper credit on them adds nothing.
         if: github.event_name != 'push'
         # Never fails the run: the adapter cascade keeps the last good snapshot,
         # and a scraper outage must not block the rest of the rebuild.

@@ -210,7 +210,7 @@ const Contact = () => {
                         <div>
                             <div className="label text-ink">Ask my AI twin</div>
                             <p className="label text-ink-mute mt-1.5 normal-case tracking-normal text-[12.5px]">
-                                A RAG agent over my résumé, GitHub and LinkedIn.
+                                A RAG agent over my resume, GitHub and LinkedIn.
                             </p>
                         </div>
                         <SignalPrompt />

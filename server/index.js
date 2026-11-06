@@ -134,7 +134,7 @@ app.post('/api/fit', fitLimit, (req, res) => {
     return respondFit(req, res, jd);
 });
 
-// Recruiter mode: "leave your email" -> your Hermes webhook / Telegram.
+// Recruiter mode: "leave your email" -> Telegram message to Hetav.
 app.post('/api/lead', leadLimit, async (req, res) => {
     const check = validateLead(req.body);
     if (!check.ok) return res.status(400).json({ error: check.error });
