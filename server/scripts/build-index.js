@@ -36,6 +36,7 @@ import { githubChunks } from '../lib/sources/github.js';
 import { siteChunks } from '../lib/sources/site.js';
 import { websiteChunks } from '../lib/sources/website.js';
 import { linkedinChunks } from '../lib/sources/linkedin/index.js';
+import { faqChunks } from '../lib/sources/faq.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(HERE, '..', 'data', 'index.json');
@@ -112,6 +113,20 @@ async function collect(prev) {
     console.log(
         `  linkedin  ${String(linkedin.length).padStart(3)} chunks` +
             (linkedin.length === 0 ? '  (no snapshot yet — run refresh-linkedin.js)' : ''),
+    );
+
+    // Answers to past misses: content/faq.md plus answered kb-miss issues. If the
+    // issues API is unreachable, keep the previous issue-sourced answers.
+    const faq = await faqChunks();
+    let keptFaq = faq.chunks;
+    if (faq.issuesFailed) {
+        const fileIds = new Set(faq.chunks.map((c) => c.id));
+        keptFaq = [...faq.chunks, ...carryForward(prev, 'faq').filter((c) => c.url && !fileIds.has(c.id))];
+    }
+    chunks.push(...keptFaq);
+    console.log(
+        `  faq       ${String(keptFaq.length).padStart(3)} chunks` +
+            (faq.issuesFailed ? `  (kb-miss issues unavailable: ${faq.issuesFailed} — kept previous)` : ''),
     );
 
     if (has('--no-github')) {

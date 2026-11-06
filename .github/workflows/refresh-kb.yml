@@ -19,6 +19,7 @@ on:
     branches: [main]
     paths:
       - 'content/posts/**'
+      - 'content/faq.md'
       - 'server/data/linkedin-export/**'
   schedule:
     # 03:00 UTC daily
