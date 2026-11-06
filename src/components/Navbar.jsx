@@ -146,7 +146,9 @@ const Navbar = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.18, ease: 'easeOut' }}
-                        className="fixed inset-0 bg-ice/95 backdrop-blur-lg flex flex-col justify-center z-40 lg:hidden pointer-events-auto px-8"
+                        data-lenis-prevent
+                        // Scrolls on short phones instead of pushing items off-screen.
+                        className="fixed inset-0 bg-ice/95 backdrop-blur-lg flex flex-col z-40 lg:hidden pointer-events-auto px-8 pt-20 pb-10 overflow-y-auto"
                     >
                         <button
                             onClick={() => setIsOpen(false)}
@@ -155,6 +157,7 @@ const Navbar = () => {
                         >
                             <X size={20} />
                         </button>
+                        <div className="my-auto">
                         <ul className="border-t-[1.5px] border-ink">
                             {navLinks.map((link, index) => (
                                 <li key={link.name} className="border-b border-ink/15">
@@ -171,6 +174,7 @@ const Navbar = () => {
                         </ul>
                         <div className="pt-8">
                             <ResumeDropdown variant="cta" onNavigate={() => setIsOpen(false)} />
+                        </div>
                         </div>
                     </motion.div>
                 )}
