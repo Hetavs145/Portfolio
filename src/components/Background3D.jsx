@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 /**
  * Background3D
@@ -58,8 +60,16 @@ const Background3D = () => {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
 
+    // Image-based lighting: a neutral studio environment gives the glossy
+    // armor something to reflect. Background stays transparent.
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    const envTexture = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+    scene.environment = envTexture;
+
     // --- 2. Lighting System ---
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
+    // Ambient is lower than before because the environment map now supplies
+    // most of the fill light.
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.55);
     scene.add(ambientLight);
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
@@ -100,23 +110,25 @@ const Background3D = () => {
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particleSystem);
 
-    // --- 4. Materials (PBR Metallic Armor) ---
-    const crimsonMaterial = new THREE.MeshStandardMaterial({
-      color: 0x991b1b,
-      metalness: 0.75,
-      roughness: 0.28
+    // --- 4. Materials ("Cryo" armor: pearl shell, red trim, gunmetal undersuit) ---
+    const shellMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0xeef2f6,
+      metalness: 0.05,
+      roughness: 0.3,
+      clearcoat: 1,
+      clearcoatRoughness: 0.1
     });
 
-    const goldMaterial = new THREE.MeshStandardMaterial({
-      color: 0xd97706,
+    const trimMaterial = new THREE.MeshStandardMaterial({
+      color: 0xd9412a,
+      metalness: 1,
+      roughness: 0.26
+    });
+
+    const underMaterial = new THREE.MeshStandardMaterial({
+      color: 0x2a3140,
       metalness: 0.85,
-      roughness: 0.22
-    });
-
-    const darkMetalMaterial = new THREE.MeshStandardMaterial({
-      color: 0x1e293b,
-      metalness: 0.8,
-      roughness: 0.4
+      roughness: 0.45
     });
 
     const cyanEmissiveMaterial = new THREE.MeshBasicMaterial({
@@ -226,7 +238,7 @@ const Background3D = () => {
     // 3D Ear Caps (Gold mechanical discs on sides of head)
     const leftEar = new THREE.Mesh(
       new THREE.CylinderGeometry(0.48, 0.48, 0.2, 24),
-      goldMaterial
+      trimMaterial
     );
     leftEar.rotation.z = Math.PI / 2;
     leftEar.position.set(-1.72, 0, 0);
@@ -234,7 +246,7 @@ const Background3D = () => {
 
     const rightEar = new THREE.Mesh(
       new THREE.CylinderGeometry(0.48, 0.48, 0.2, 24),
-      goldMaterial
+      trimMaterial
     );
     rightEar.rotation.z = Math.PI / 2;
     rightEar.position.set(1.72, 0, 0);
@@ -260,327 +272,147 @@ const Background3D = () => {
     antennaLight.position.set(0, 2.1, 0.2);
     headGroup.add(antennaLight);
 
+    // Armor part helpers. Every part keeps the original group and resting
+    // position, so the scroll assembly, turntable and flight are unchanged.
+    const roundedBox = (w, h, d, r, material) =>
+      new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 4, Math.min(r, w / 2 - 0.001, h / 2 - 0.001, d / 2 - 0.001)), material);
+    const place = (mesh, parent, x, y, z) => {
+      mesh.position.set(x, y, z);
+      parent.add(mesh);
+      return mesh;
+    };
+    const facingDisc = (radius, depth, material) => {
+      const disc = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, depth, 32), material);
+      disc.rotation.x = Math.PI / 2;
+      return disc;
+    };
+
     // [B] Torso & Chest Armor Group
     const torsoGroup = new THREE.Group();
     suitGroup.add(torsoGroup);
 
-    // 3D Chest Block (X: 3.0, Y: 2.3, Z: 1.8)
-    const chestPlate = new THREE.Mesh(
-      new THREE.BoxGeometry(3.0, 2.3, 1.8),
-      crimsonMaterial
-    );
-    torsoGroup.add(chestPlate);
+    place(new THREE.Mesh(new THREE.CylinderGeometry(0.75, 0.85, 0.5, 32), underMaterial), torsoGroup, 0, 1.05, 0); // neck ring
+    place(roundedBox(3.0, 1.75, 1.85, 0.32, shellMaterial), torsoGroup, 0, 0.3, 0);                                  // chest shell
+    for (const side of [-1, 1]) {
+      const pectoral = place(roundedBox(1.18, 0.82, 0.3, 0.12, shellMaterial), torsoGroup, side * 0.68, 0.42, 0.9);
+      pectoral.rotation.y = -side * 0.14;
+    }
+    place(roundedBox(2.6, 0.16, 0.3, 0.06, trimMaterial), torsoGroup, 0, 1.0, 0.82);                                 // collar trim
 
-    // Gold Collar / Pectoral Insets
-    const leftPectoral = new THREE.Mesh(
-      new THREE.BoxGeometry(1.0, 0.7, 0.25),
-      goldMaterial
-    );
-    leftPectoral.position.set(-0.75, 0.45, 0.95);
-    torsoGroup.add(leftPectoral);
-
-    const rightPectoral = new THREE.Mesh(
-      new THREE.BoxGeometry(1.0, 0.7, 0.25),
-      goldMaterial
-    );
-    rightPectoral.position.set(0.75, 0.45, 0.95);
-    torsoGroup.add(rightPectoral);
-
-    // Arc Reactor Core (Real 3D Extruded Cylinder + Light)
-    const arcRing = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.48, 0.48, 0.2, 32),
-      goldMaterial
-    );
-    arcRing.rotation.x = Math.PI / 2;
-    arcRing.position.set(0, 0.1, 0.98);
-    torsoGroup.add(arcRing);
-
-    const arcInnerWell = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.38, 0.38, 0.22, 32),
-      darkMetalMaterial
-    );
-    arcInnerWell.rotation.x = Math.PI / 2;
-    arcInnerWell.position.set(0, 0.1, 1.0);
-    torsoGroup.add(arcInnerWell);
-
-    const arcCore = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.30, 0.30, 0.25, 32),
-      cyanEmissiveMaterial
-    );
-    arcCore.rotation.x = Math.PI / 2;
-    arcCore.position.set(0, 0.1, 1.02);
-    torsoGroup.add(arcCore);
-
+    // Arc reactor: red ring, recessed well, glowing core + light
+    place(new THREE.Mesh(new THREE.TorusGeometry(0.44, 0.09, 16, 48), trimMaterial), torsoGroup, 0, 0.05, 1.02);
+    place(facingDisc(0.4, 0.12, underMaterial), torsoGroup, 0, 0.05, 0.98);
+    place(facingDisc(0.32, 0.08, cyanEmissiveMaterial), torsoGroup, 0, 0.05, 1.05);
     const arcLight = new THREE.PointLight(0x38bdf8, 3.5, 6);
-    arcLight.position.set(0, 0.1, 1.3);
+    arcLight.position.set(0, 0.05, 1.3);
     torsoGroup.add(arcLight);
 
-    // 3 Articulated Abdominal Plates (Stomach)
-    for (let s = 0; s < 3; s++) {
-      const plate = new THREE.Mesh(
-        new THREE.BoxGeometry(2.3 - s * 0.2, 0.26, 1.5 - s * 0.1),
-        s % 2 === 0 ? goldMaterial : crimsonMaterial
-      );
-      plate.position.set(0, -1.35 - s * 0.32, 0.05);
-      torsoGroup.add(plate);
+    // Waist undersuit, segmented ab plates and belt
+    place(roundedBox(2.1, 1.15, 1.45, 0.22, underMaterial), torsoGroup, 0, -0.95, 0);
+    for (let row = 0; row < 3; row++) {
+      for (const side of [-1, 1]) {
+        place(roundedBox(0.82, 0.26, 0.24, 0.08, shellMaterial), torsoGroup, side * 0.45, -0.6 - row * 0.31, 0.7);
+      }
+    }
+    place(roundedBox(2.45, 0.3, 1.7, 0.12, trimMaterial), torsoGroup, 0, -1.55, 0);
+
+    // Rear spine, twin thrusters (seen when the turntable shows the back) and shoulder joints
+    place(roundedBox(1.5, 1.9, 0.45, 0.15, underMaterial), torsoGroup, 0, 0.2, -0.95);
+    for (const side of [-1, 1]) {
+      const thruster = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.3, 0.5, 24), trimMaterial);
+      thruster.rotation.x = Math.PI / 2;
+      place(thruster, torsoGroup, side * 0.55, 0.4, -1.18);
+      const thrusterCore = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.52, 24), cyanEmissiveMaterial);
+      thrusterCore.rotation.x = Math.PI / 2;
+      place(thrusterCore, torsoGroup, side * 0.55, 0.4, -1.2);
+      place(new THREE.Mesh(new THREE.SphereGeometry(0.42, 24, 16), underMaterial), torsoGroup, side * 1.62, 0.55, 0);
     }
 
-    // Rear Armor Spine & Twin Thrusters (For full 3D 180° rotation view)
-    const spinePlate = new THREE.Mesh(
-      new THREE.BoxGeometry(1.4, 2.1, 0.4),
-      darkMetalMaterial
-    );
-    spinePlate.position.set(0, 0.1, -0.95);
-    torsoGroup.add(spinePlate);
+    // [C]/[D] Arms: pauldron, upper arm, elbow, forearm, cuff, hand + repulsor
+    const buildArm = () => {
+      const arm = new THREE.Group();
+      const pauldron = new THREE.Mesh(new THREE.SphereGeometry(0.62, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), shellMaterial);
+      pauldron.scale.set(1.05, 0.95, 1.05);
+      place(pauldron, arm, 0, 0.45, 0);
+      place(new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.12, 32), trimMaterial), arm, 0, 0.45, 0);
+      place(new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.7, 24), underMaterial), arm, 0, 0.05, 0);
+      place(new THREE.Mesh(new THREE.SphereGeometry(0.33, 24, 16), trimMaterial), arm, 0, -0.35, 0);
+      place(roundedBox(0.82, 1.05, 0.86, 0.2, shellMaterial), arm, 0, -0.92, 0);
+      place(new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.42, 0.2, 32), trimMaterial), arm, 0, -1.48, 0);
+      place(roundedBox(0.62, 0.46, 0.56, 0.14, underMaterial), arm, 0, -1.76, 0);
+      place(facingDisc(0.18, 0.08, cyanEmissiveMaterial), arm, 0, -1.76, 0.29); // palm repulsor
+      const repulsorLight = new THREE.PointLight(0x38bdf8, 1.8, 3);
+      repulsorLight.position.set(0, -1.76, 0.55);
+      arm.add(repulsorLight);
+      return { arm, repulsorLight };
+    };
 
-    const leftThruster = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.24, 0.28, 0.45, 24),
-      darkMetalMaterial
-    );
-    leftThruster.rotation.x = Math.PI / 2;
-    leftThruster.position.set(-0.55, 0.35, -1.1);
-    torsoGroup.add(leftThruster);
-
-    const leftThrusterCore = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18, 0.18, 0.47, 24),
-      cyanEmissiveMaterial
-    );
-    leftThrusterCore.rotation.x = Math.PI / 2;
-    leftThrusterCore.position.set(-0.55, 0.35, -1.12);
-    torsoGroup.add(leftThrusterCore);
-
-    const rightThruster = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.24, 0.28, 0.45, 24),
-      darkMetalMaterial
-    );
-    rightThruster.rotation.x = Math.PI / 2;
-    rightThruster.position.set(0.55, 0.35, -1.1);
-    torsoGroup.add(rightThruster);
-
-    const rightThrusterCore = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18, 0.18, 0.47, 24),
-      cyanEmissiveMaterial
-    );
-    rightThrusterCore.rotation.x = Math.PI / 2;
-    rightThrusterCore.position.set(0.55, 0.35, -1.12);
-    torsoGroup.add(rightThrusterCore);
-
-    // [C] Left Arm & Gauntlet Group
-    const leftArmGroup = new THREE.Group();
+    const { arm: leftArmGroup, repulsorLight: leftRepulsorLight } = buildArm();
     suitGroup.add(leftArmGroup);
-
-    const leftShoulder = new THREE.Mesh(
-      new THREE.BoxGeometry(0.9, 0.65, 1.0),
-      crimsonMaterial
-    );
-    leftShoulder.position.set(0, 0.6, 0);
-    leftArmGroup.add(leftShoulder);
-
-    const leftGauntlet = new THREE.Mesh(
-      new THREE.BoxGeometry(0.75, 1.6, 0.8),
-      crimsonMaterial
-    );
-    leftGauntlet.position.set(0, -0.4, 0);
-    leftArmGroup.add(leftGauntlet);
-
-    const leftWrist = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.42, 0.42, 0.35, 24),
-      goldMaterial
-    );
-    leftWrist.position.set(0, -1.2, 0);
-    leftArmGroup.add(leftWrist);
-
-    const leftRepulsor = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.22, 0.22, 0.1, 24),
-      cyanEmissiveMaterial
-    );
-    leftRepulsor.rotation.x = Math.PI / 2;
-    leftRepulsor.position.set(0, -1.45, 0.25);
-    leftArmGroup.add(leftRepulsor);
-
-    const leftRepulsorLight = new THREE.PointLight(0x38bdf8, 1.8, 3);
-    leftRepulsorLight.position.set(0, -1.45, 0.5);
-    leftArmGroup.add(leftRepulsorLight);
-
-    // [D] Right Arm & Gauntlet Group
-    const rightArmGroup = new THREE.Group();
+    const { arm: rightArmGroup, repulsorLight: rightRepulsorLight } = buildArm();
     suitGroup.add(rightArmGroup);
 
-    const rightShoulder = new THREE.Mesh(
-      new THREE.BoxGeometry(0.9, 0.65, 1.0),
-      crimsonMaterial
-    );
-    rightShoulder.position.set(0, 0.6, 0);
-    rightArmGroup.add(rightShoulder);
-
-    const rightGauntlet = new THREE.Mesh(
-      new THREE.BoxGeometry(0.75, 1.6, 0.8),
-      crimsonMaterial
-    );
-    rightGauntlet.position.set(0, -0.4, 0);
-    rightArmGroup.add(rightGauntlet);
-
-    const rightWrist = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.42, 0.42, 0.35, 24),
-      goldMaterial
-    );
-    rightWrist.position.set(0, -1.2, 0);
-    rightArmGroup.add(rightWrist);
-
-    const rightRepulsor = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.22, 0.22, 0.1, 24),
-      cyanEmissiveMaterial
-    );
-    rightRepulsor.rotation.x = Math.PI / 2;
-    rightRepulsor.position.set(0, -1.45, 0.25);
-    rightArmGroup.add(rightRepulsor);
-
-    const rightRepulsorLight = new THREE.PointLight(0x38bdf8, 1.8, 3);
-    rightRepulsorLight.position.set(0, -1.45, 0.5);
-    rightArmGroup.add(rightRepulsorLight);
-
-    // [E] Legs Group (Thighs + Shins)
+    // [E] Legs: thigh, knee joint + guard, shin with inset
     const legsGroup = new THREE.Group();
     suitGroup.add(legsGroup);
+    for (const side of [-1, 1]) {
+      const x = side * 0.85;
+      place(roundedBox(1.0, 1.35, 1.02, 0.22, shellMaterial), legsGroup, x, 0.68, 0);
+      const kneeJoint = place(new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.6, 24), underMaterial), legsGroup, x, -0.1, 0);
+      kneeJoint.rotation.z = Math.PI / 2;
+      place(roundedBox(0.72, 0.5, 0.45, 0.14, trimMaterial), legsGroup, x, -0.12, 0.42);
+      place(roundedBox(0.9, 1.0, 0.94, 0.2, shellMaterial), legsGroup, x, -0.82, 0);
+      place(roundedBox(0.5, 0.7, 0.1, 0.05, underMaterial), legsGroup, x, -0.8, 0.48);
+    }
 
-    // Left Thigh
-    const leftThigh = new THREE.Mesh(
-      new THREE.BoxGeometry(0.85, 1.8, 0.95),
-      crimsonMaterial
-    );
-    leftThigh.position.set(-0.85, 0.4, 0);
-    legsGroup.add(leftThigh);
-
-    const leftKnee = new THREE.Mesh(
-      new THREE.BoxGeometry(0.72, 0.48, 0.42),
-      goldMaterial
-    );
-    leftKnee.position.set(-0.85, -0.55, 0.45);
-    legsGroup.add(leftKnee);
-
-    // Right Thigh
-    const rightThigh = new THREE.Mesh(
-      new THREE.BoxGeometry(0.85, 1.8, 0.95),
-      crimsonMaterial
-    );
-    rightThigh.position.set(0.85, 0.4, 0);
-    legsGroup.add(rightThigh);
-
-    const rightKnee = new THREE.Mesh(
-      new THREE.BoxGeometry(0.72, 0.48, 0.42),
-      goldMaterial
-    );
-    rightKnee.position.set(0.85, -0.55, 0.45);
-    legsGroup.add(rightKnee);
-
-    // [F] Sculpted 3D Boots Group with Articulated Segments & Iron Man Fire Boosters
+    // [F] Boots with fire booster plumes
     const bootsGroup = new THREE.Group();
     suitGroup.add(bootsGroup);
 
-    // Reusable builder for an articulated Iron Man Mark boot
-    const createArticulatedBoot = (isLeft) => {
+    // Downward-pointing cone with its base at y = 0
+    const createDownwardConeGeo = (radius, height) => {
+      const geo = new THREE.ConeGeometry(radius, height, 24, 1, true);
+      geo.rotateX(Math.PI);
+      geo.translate(0, -height / 2, 0);
+      return geo;
+    };
+
+    const createArticulatedBoot = () => {
       const boot = new THREE.Group();
-      const xSign = isLeft ? -1 : 1;
 
-      // 1. Ankle Collar & Armor Cuff
-      const ankleCollar = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.46, 0.44, 0.35, 24),
-        goldMaterial
-      );
-      ankleCollar.position.set(0, 0.42, 0);
-      boot.add(ankleCollar);
+      place(new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.46, 0.3, 32), trimMaterial), boot, 0, 0.42, 0); // ankle cuff
+      place(roundedBox(0.95, 0.78, 0.7, 0.18, shellMaterial), boot, 0, 0.05, -0.33);  // heel
+      place(roundedBox(0.9, 0.58, 0.82, 0.18, shellMaterial), boot, 0, 0.06, 0.2);    // vamp
+      place(roundedBox(0.86, 0.42, 0.55, 0.16, trimMaterial), boot, 0, -0.08, 0.66);  // toe cap
+      place(roundedBox(1.0, 0.2, 1.8, 0.08, underMaterial), boot, 0, -0.3, 0.15);     // sole
 
-      // 2. Reinforced Heel Armor Block
-      const heelArmor = new THREE.Mesh(
-        new THREE.BoxGeometry(0.92, 0.75, 0.65),
-        crimsonMaterial
-      );
-      heelArmor.position.set(0, 0.05, -0.35);
-      boot.add(heelArmor);
-
-      // 3. Midfoot Arch / Vamp Armor Plate
-      const vampArmor = new THREE.Mesh(
-        new THREE.BoxGeometry(0.88, 0.60, 0.8),
-        crimsonMaterial
-      );
-      vampArmor.position.set(0, 0.08, 0.18);
-      boot.add(vampArmor);
-
-      // 4. Sculpted Gold Toe Cap
-      const toeCap = new THREE.Mesh(
-        new THREE.BoxGeometry(0.84, 0.45, 0.55),
-        goldMaterial
-      );
-      toeCap.position.set(0, -0.06, 0.68);
-      boot.add(toeCap);
-
-      // 5. Heavy-Duty Treaded Sole Plate
-      const solePlate = new THREE.Mesh(
-        new THREE.BoxGeometry(0.96, 0.20, 1.75),
-        darkMetalMaterial
-      );
-      solePlate.position.set(0, -0.28, 0.15);
-      boot.add(solePlate);
-
-      // 6. Recessed Thruster Nozzles (Mounted beneath sole plate)
-      const frontNozzle = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.20, 0.24, 0.16, 24),
-        darkMetalMaterial
-      );
-      frontNozzle.position.set(0, -0.42, 0.45);
-      boot.add(frontNozzle);
-
-      const rearNozzle = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.22, 0.26, 0.16, 24),
-        darkMetalMaterial
-      );
-      rearNozzle.position.set(0, -0.42, -0.15);
-      boot.add(rearNozzle);
-
-      // Helper to generate downward-pointing cone with base at y = 0 and apex extending strictly DOWNWARDS
-      const createDownwardConeGeo = (radius, height) => {
-        const geo = new THREE.ConeGeometry(radius, height, 24, 1, true);
-        geo.rotateX(Math.PI);             // 1. Apex points down (-height/2), Base is at (+height/2)
-        geo.translate(0, -height / 2, 0); // 2. Shift so base is at y = 0, Apex extends down to -height
-        return geo;
-      };
-
-      // 7. Iron Man Fire Booster Plumes (STRICTLY BELOW SHOES, POINTING DOWNWARD)
-      // Front thruster plume (Mounted below front nozzle)
+      // Booster plumes, strictly below the sole and pointing down
       const frontBoosterGroup = new THREE.Group();
-      frontBoosterGroup.position.set(0, -0.50, 0.45);
+      frontBoosterGroup.position.set(0, -0.42, 0.45);
       boot.add(frontBoosterGroup);
-
       const frontOuterGeo = createDownwardConeGeo(0.28, 1.6);
       const frontFlameOuter = new THREE.Mesh(frontOuterGeo, flameOuterMaterial);
       frontBoosterGroup.add(frontFlameOuter);
-
       const frontInnerGeo = createDownwardConeGeo(0.16, 1.25);
       const frontFlameInner = new THREE.Mesh(frontInnerGeo, flameInnerMaterial);
       frontBoosterGroup.add(frontFlameInner);
-
       const frontCoreGeo = createDownwardConeGeo(0.07, 0.85);
       const frontFlameCore = new THREE.Mesh(frontCoreGeo, flameCoreMaterial);
       frontBoosterGroup.add(frontFlameCore);
 
-      // Rear thruster plume (Mounted below rear nozzle)
       const rearBoosterGroup = new THREE.Group();
-      rearBoosterGroup.position.set(0, -0.50, -0.15);
+      rearBoosterGroup.position.set(0, -0.42, -0.15);
       boot.add(rearBoosterGroup);
-
       const rearOuterGeo = createDownwardConeGeo(0.30, 1.75);
       const rearFlameOuter = new THREE.Mesh(rearOuterGeo, flameOuterMaterial);
       rearBoosterGroup.add(rearFlameOuter);
-
       const rearInnerGeo = createDownwardConeGeo(0.18, 1.35);
       const rearFlameInner = new THREE.Mesh(rearInnerGeo, flameInnerMaterial);
       rearBoosterGroup.add(rearFlameInner);
-
       const rearCoreGeo = createDownwardConeGeo(0.08, 0.95);
       const rearFlameCore = new THREE.Mesh(rearCoreGeo, flameCoreMaterial);
       rearBoosterGroup.add(rearFlameCore);
 
-      // Fiery Downward PointLight illuminating beneath the boot
       const thrusterLight = new THREE.PointLight(0xff5500, 4.0, 7);
       thrusterLight.position.set(0, -0.85, 0.15);
       boot.add(thrusterLight);
@@ -593,19 +425,15 @@ const Background3D = () => {
         rearFlameOuter,
         rearFlameInner,
         rearFlameCore,
-        thrusterLight,
-        flameGeos: [
-          frontOuterGeo, frontInnerGeo, frontCoreGeo,
-          rearOuterGeo, rearInnerGeo, rearCoreGeo
-        ]
+        thrusterLight
       };
     };
 
-    const leftBootData = createArticulatedBoot(true);
+    const leftBootData = createArticulatedBoot();
     leftBootData.group.position.set(-0.85, 0, 0.2);
     bootsGroup.add(leftBootData.group);
 
-    const rightBootData = createArticulatedBoot(false);
+    const rightBootData = createArticulatedBoot();
     rightBootData.group.position.set(0.85, 0, 0.2);
     bootsGroup.add(rightBootData.group);
 
@@ -1122,21 +950,23 @@ const Background3D = () => {
 
       particleGeometry.dispose();
       particleMaterial.dispose();
-      crimsonMaterial.dispose();
-      goldMaterial.dispose();
-      darkMetalMaterial.dispose();
+      // Every armor part builds its own geometry, so free them all in one pass.
+      suitGroup.traverse((obj) => {
+        if (obj.geometry) obj.geometry.dispose();
+      });
+      shellMaterial.dispose();
+      trimMaterial.dispose();
+      underMaterial.dispose();
+      envTexture.dispose();
+      pmrem.dispose();
       cyanEmissiveMaterial.dispose();
       whiteHeadMaterial.dispose();
       faceFrontMaterial.dispose();
       faceTexture.dispose();
-      headGeometry.dispose();
-      facePlateGeometry.dispose();
 
       flameOuterMaterial.dispose();
       flameInnerMaterial.dispose();
       flameCoreMaterial.dispose();
-      leftBootData.flameGeos.forEach(g => g.dispose());
-      rightBootData.flameGeos.forEach(g => g.dispose());
 
       renderer.dispose();
     };
