@@ -119,6 +119,18 @@ jobs:
         # its freshness — strictness belongs to the scheduled run.
         run: node server/scripts/build-index.js ${{ github.event_name == 'push' && '' || '--strict' }}
 
+      # Regression gate: fixed questions with expected facts and known
+      # hallucination traps (server/eval/questions.json). A failure stops the
+      # job here, so a bad index is never committed or deployed.
+      - name: Eval the rebuilt agent
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_EMBED_KEY: ${{ secrets.NVIDIA_EMBED_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
+          EVAL_MIN_PASS_RATE: ${{ vars.EVAL_MIN_PASS_RATE || '0.8' }}
+        run: node server/scripts/eval.js
+
       - name: Verify project links still resolve
         continue-on-error: true
         run: node server/scripts/check-links.js
