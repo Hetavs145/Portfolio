@@ -86,8 +86,8 @@ export const projects = [
     {
         title: 'Hetchat',
         description:
-            'Real-Time Chat App with live messaging, presence indicators, and reconnection logic.',
-        tech: ['React', 'Socket.IO', 'Node.js'],
+            'Real-time chat app with chat rooms and groups, typing indicators and online / last-seen presence. Messages are saved to Firestore and relayed live through a Node/Express Socket.IO server, with Firebase sign-in by email or Google.',
+        tech: ['React', 'Vite', 'Socket.IO', 'Node.js', 'Express', 'Firebase'],
         live: 'https://client-omega-six-11.vercel.app',
         github: 'https://github.com/Hetavs145/Hetchat',
         featured: null,
@@ -95,8 +95,8 @@ export const projects = [
     {
         title: 'Drone Path-Finder',
         description:
-            'Smart Delivery Drone Path-Finder Simulation. Optimizes delivery routes using advanced algorithms.',
-        tech: ['Python', 'Algorithms', 'Simulation'],
+            'Delivery-drone route planner: an Express API runs A* (Haversine heuristic) and Dijkstra around circular no-fly zones, and a React dashboard draws both routes side by side with distance, flight time and battery use estimated from each route\'s energy cost.',
+        tech: ['JavaScript', 'React', 'Node.js', 'Express', 'A*', 'Dijkstra'],
         live: 'https://smart-drone-path-finder.vercel.app',
         github: 'https://github.com/Hetavs145/Smart-Delivery-Drone-Path-Finder',
         featured: null,
