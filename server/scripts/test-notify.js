@@ -1,11 +1,10 @@
 /**
- * Sends one real test notification through the configured channels, so you can
- * confirm Hermes (and/or Telegram) is wired up before a recruiter ever uses it.
+ * Sends one real test notification to your Telegram, so you can confirm the bot
+ * is wired up before a recruiter ever uses it.
  *
  *   npm run notify:test
  *
- * Reads NOTIFY_WEBHOOK_URL / NOTIFY_WEBHOOK_SECRET (and optional
- * TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID) from .env.
+ * Reads TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID from .env.
  */
 
 import { notify } from '../lib/notify.js';
@@ -20,8 +19,8 @@ const delivered = await notify({
 });
 
 if (delivered) {
-    console.log('Delivered. Check Telegram (or wherever your Hermes route delivers).');
+    console.log('Delivered. Check your Telegram.');
 } else {
-    console.error('Not delivered — see the [notify] warning above. Check the URL, secret and that Hermes is reachable.');
+    console.error('Not delivered — see the [notify] warning above. Check TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID, and that you've messaged the bot once.');
     process.exit(1);
 }
