@@ -21,6 +21,6 @@ const delivered = await notify({
 if (delivered) {
     console.log('Delivered. Check your Telegram.');
 } else {
-    console.error('Not delivered — see the [notify] warning above. Check TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID, and that you've messaged the bot once.');
+    console.error('Not delivered — see the [notify] warning above. Check TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID, and that you have messaged the bot once.');
     process.exit(1);
 }
