@@ -7,7 +7,7 @@
  * `icon` is a lucide icon NAME, not a component — this module has to be
  * importable by plain Node, so it must not pull in lucide-react.
  * Achievements.jsx maps the name back to a component.
- * `color` must be one of the keys in Achievements.jsx's colorMap: teal | amber | purple.
+ * `color` must be one of the keys in Achievements.jsx's ACCENT map: teal | amber | purple.
  */
 
 export const achievements = [

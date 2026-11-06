@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import SectionHeader from "./SectionHeader";
+import { PENDING_QUESTION_KEY } from "../data/agent";
 import {
     Send,
     Bot,
@@ -228,11 +230,27 @@ const RealTimeDemo = () => {
         }
     };
 
-    const handleSend = async (e) => {
+    const handleSend = (e) => {
         e.preventDefault();
-        if (!input.trim() || isTyping) return;
+        sendText(input);
+    };
 
-        const userText = input.trim();
+    // A question typed into the Contact section's "Send a signal" prompt is
+    // parked in sessionStorage and sent as soon as this page mounts.
+    useEffect(() => {
+        let pending = null;
+        try {
+            pending = sessionStorage.getItem(PENDING_QUESTION_KEY);
+            sessionStorage.removeItem(PENDING_QUESTION_KEY);
+        } catch {}
+        if (pending && pending.trim()) sendText(pending);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    async function sendText(rawText) {
+        if (!rawText.trim() || isTyping) return;
+
+        const userText = rawText.trim();
         const newMessage = { id: Date.now(), text: userText, sender: "user" };
         const nextMessages = [...messages, newMessage];
 
@@ -281,32 +299,29 @@ const RealTimeDemo = () => {
         } finally {
             setIsTyping(false);
         }
-    };
+    }
 
     return (
         <section
             id="demo"
-            className="min-h-screen pt-20 sm:pt-24 md:pt-32 pb-8 md:pb-20 bg-navy-800/50 flex items-start justify-center"
+            className="relative z-10 min-h-screen pt-24 sm:pt-28 md:pt-36 pb-12 md:pb-24 flex items-start justify-center"
         >
-            <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
-                <div className="flex items-center mb-5 sm:mb-8 md:mb-12">
-                    <h2 className="text-2xl md:text-3xl font-bold text-slate-lighter">
-                        Talk to My Agent
-                    </h2>
-                    <div className="h-px bg-navy-600 flex-grow ml-4"></div>
+            <div className="w-full mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-[60px]">
+                <div className="mb-8 md:mb-12">
+                    <SectionHeader mod="AI" title="Ask Hetav" meta="RAG agent · 30-day memory" />
                 </div>
 
-                <div className="max-w-lg mx-auto">
-                    <div data-lenis-prevent className="bg-navy-700 rounded-lg overflow-hidden shadow-xl border border-navy-600">
+                <div className="max-w-xl mx-auto">
+                    <div data-lenis-prevent className="bg-ice-panel/90 backdrop-blur-md rounded-xl overflow-hidden border-[1.5px] border-ink shadow-[0_30px_60px_-35px_rgba(13,17,23,0.5)]">
                         {/* Chat Header */}
-                        <div className="bg-navy-900 p-3 md:p-4 flex justify-between items-center border-b border-navy-600">
+                        <div className="bg-ice-hi p-3 md:p-4 flex justify-between items-center border-b border-ink/15">
                             <div className="flex items-center space-x-2 md:space-x-3">
-                                <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-teal-400 animate-pulse"></div>
+                                <span className="w-8 h-8 border-[1.5px] border-ink rounded-[3px] grid place-items-center font-mono text-[10px] font-medium text-ink">HS</span>
                                 <div>
-                                    <h3 className="text-slate-lighter font-bold text-sm md:text-base leading-tight">
+                                    <h3 className="text-ink font-bold text-sm md:text-base leading-tight">
                                         Hetav's Agent
                                     </h3>
-                                    <span className="text-[10px] text-teal-400 font-mono hidden sm:inline-block">
+                                    <span className="text-[10px] text-arc-deep font-mono hidden sm:inline-block">
                                         RAG Agent · 30-Day Memory
                                     </span>
                                 </div>
@@ -319,12 +334,12 @@ const RealTimeDemo = () => {
                                     type="button"
                                     onClick={handleRefreshChat}
                                     title="Refresh chat (start new conversation)"
-                                    className="flex items-center gap-1 text-xs font-mono text-slate-light hover:text-teal-400 hover:bg-navy-800 px-2 sm:px-2.5 py-1.5 rounded transition-all active:scale-95 border border-transparent hover:border-navy-600"
+                                    className="flex items-center gap-1 text-xs font-mono text-ink-2 hover:text-arc-deep hover:bg-ink/[0.05] px-2 sm:px-2.5 py-1.5 rounded transition-all active:scale-95 border border-transparent hover:border-ink/15"
                                     aria-label="Refresh chat"
                                 >
                                     <RotateCcw
                                         size={14}
-                                        className={`transition-transform duration-500 ${refreshing ? "-rotate-180 text-teal-400" : ""}`}
+                                        className={`transition-transform duration-500 ${refreshing ? "-rotate-180 text-arc-deep" : ""}`}
                                     />
                                     <span className="hidden sm:inline">Refresh</span>
                                 </button>
@@ -336,8 +351,8 @@ const RealTimeDemo = () => {
                                     title="View chat history & rechat"
                                     className={`flex items-center gap-1.5 text-xs font-mono px-2 sm:px-2.5 py-1.5 rounded transition-all active:scale-95 border ${
                                         showHistory
-                                            ? "bg-teal-400 text-navy-900 border-teal-400 font-semibold"
-                                            : "text-slate-light hover:text-teal-400 hover:bg-navy-800 border-transparent hover:border-navy-600"
+                                            ? "bg-ink text-ice-hi border-ink font-semibold"
+                                            : "text-ink-2 hover:text-arc-deep hover:bg-ink/[0.05] border-transparent hover:border-ink/15"
                                     }`}
                                     aria-label="Chat history"
                                 >
@@ -347,8 +362,8 @@ const RealTimeDemo = () => {
                                         <span
                                             className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
                                                 showHistory
-                                                    ? "bg-navy-900 text-teal-400"
-                                                    : "bg-navy-800 text-teal-400 border border-teal-400/30"
+                                                    ? "bg-ice-hi text-ink"
+                                                    : "bg-arc/10 text-arc-deep border border-arc/30"
                                             }`}
                                         >
                                             {sessions.length}
@@ -368,16 +383,16 @@ const RealTimeDemo = () => {
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -8 }}
                                         transition={{ duration: 0.18 }}
-                                        className="h-[22rem] sm:h-[25rem] md:h-[28rem] flex flex-col bg-navy-900"
+                                        className="h-[22rem] sm:h-[25rem] md:h-[28rem] flex flex-col bg-ice-hi"
                                     >
                                         {/* History Header */}
-                                        <div className="p-3 sm:p-3.5 border-b border-navy-600 flex items-center justify-between bg-navy-900/95">
+                                        <div className="p-3 sm:p-3.5 border-b border-ink/15 flex items-center justify-between bg-ice-hi">
                                             <div className="flex items-center gap-2">
-                                                <History size={15} className="text-teal-400" />
-                                                <span className="text-xs sm:text-sm font-semibold text-slate-lighter font-mono">
+                                                <History size={15} className="text-arc-deep" />
+                                                <span className="text-xs sm:text-sm font-semibold text-ink font-mono">
                                                     Past Conversations
                                                 </span>
-                                                <span className="text-[10px] bg-teal-400/10 text-teal-400 border border-teal-400/20 px-2 py-0.5 rounded-full font-mono">
+                                                <span className="text-[10px] bg-arc/10 text-arc-deep border border-arc/25 px-2 py-0.5 rounded-full font-mono">
                                                     30-day retention
                                                 </span>
                                             </div>
@@ -386,7 +401,7 @@ const RealTimeDemo = () => {
                                                     type="button"
                                                     onClick={handleRefreshChat}
                                                     title="Start fresh conversation"
-                                                    className="text-xs font-mono flex items-center gap-1 text-teal-400 hover:bg-teal-400/10 px-2 py-1 rounded transition-colors"
+                                                    className="text-xs font-mono flex items-center gap-1 text-arc-deep hover:bg-arc/10 px-2 py-1 rounded transition-colors"
                                                 >
                                                     <Plus size={13} />
                                                     <span className="hidden sm:inline">New Chat</span>
@@ -395,7 +410,7 @@ const RealTimeDemo = () => {
                                                     type="button"
                                                     onClick={() => setShowHistory(false)}
                                                     title="Close history"
-                                                    className="text-slate hover:text-slate-lighter p-1 hover:bg-navy-800 rounded transition-colors"
+                                                    className="text-ink-mute hover:text-ink p-1 hover:bg-ink/[0.05] rounded transition-colors"
                                                 >
                                                     <X size={16} />
                                                 </button>
@@ -405,12 +420,12 @@ const RealTimeDemo = () => {
                                         {/* History List */}
                                         <div data-lenis-prevent className="flex-1 overflow-y-auto overscroll-y-contain p-3 space-y-2">
                                             {sessions.length === 0 ? (
-                                                <div className="h-full flex flex-col items-center justify-center text-center p-6 text-slate">
-                                                    <MessageSquare size={32} className="mb-2 text-navy-600" />
-                                                    <p className="text-sm text-slate-light font-medium">
+                                                <div className="h-full flex flex-col items-center justify-center text-center p-6 text-ink-mute">
+                                                    <MessageSquare size={32} className="mb-2 text-ink/20" />
+                                                    <p className="text-sm text-ink-2 font-medium">
                                                         No previous chats yet
                                                     </p>
-                                                    <p className="text-xs text-slate mt-1 max-w-xs leading-relaxed">
+                                                    <p className="text-xs text-ink-mute mt-1 max-w-xs leading-relaxed">
                                                         Your conversations are saved automatically for up to 30 days so you can rechat from them anytime.
                                                     </p>
                                                 </div>
@@ -427,26 +442,26 @@ const RealTimeDemo = () => {
                                                             onClick={() => handleSelectSession(session)}
                                                             className={`w-full text-left p-3 rounded-lg border transition-all cursor-pointer group flex items-start justify-between gap-3 ${
                                                                 isActive
-                                                                    ? "bg-teal-400/10 border-teal-400/50 shadow-sm"
-                                                                    : "bg-navy-800/80 border-navy-600/70 hover:border-teal-400/40 hover:bg-navy-800"
+                                                                    ? "bg-arc/10 border-arc/50 shadow-sm"
+                                                                    : "bg-ice-hi/80 border-ink/15 hover:border-arc/40 hover:bg-ink/[0.05]"
                                                             }`}
                                                         >
                                                             <div className="min-w-0 flex-1">
                                                                 <div className="flex items-center gap-2 mb-1">
                                                                     <MessageSquare
                                                                         size={13}
-                                                                        className={isActive ? "text-teal-400" : "text-slate"}
+                                                                        className={isActive ? "text-arc-deep" : "text-ink-mute"}
                                                                     />
-                                                                    <span className="text-xs sm:text-sm font-medium text-slate-lighter truncate block group-hover:text-teal-400 transition-colors">
+                                                                    <span className="text-xs sm:text-sm font-medium text-ink truncate block group-hover:text-arc-deep transition-colors">
                                                                         {session.title || "Conversation"}
                                                                     </span>
                                                                     {isActive && (
-                                                                        <span className="text-[9px] uppercase tracking-wider bg-teal-400 text-navy-950 font-bold px-1.5 py-0.5 rounded shrink-0">
+                                                                        <span className="text-[9px] uppercase tracking-wider bg-ink text-ice-hi font-bold px-1.5 py-0.5 rounded shrink-0">
                                                                             Active
                                                                         </span>
                                                                     )}
                                                                 </div>
-                                                                <div className="flex items-center gap-2.5 text-[11px] text-slate font-mono">
+                                                                <div className="flex items-center gap-2.5 text-[11px] text-ink-mute font-mono">
                                                                     <span className="flex items-center gap-1">
                                                                         <Clock size={11} />
                                                                         {formatRelativeTime(
@@ -457,7 +472,7 @@ const RealTimeDemo = () => {
                                                                     <span>
                                                                         {userMsgsCount} {userMsgsCount === 1 ? "query" : "queries"}
                                                                     </span>
-                                                                    <span className="text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] ml-auto">
+                                                                    <span className="text-arc-deep opacity-0 group-hover:opacity-100 transition-opacity text-[10px] ml-auto">
                                                                         Click to rechat →
                                                                     </span>
                                                                 </div>
@@ -467,7 +482,7 @@ const RealTimeDemo = () => {
                                                                 type="button"
                                                                 onClick={(e) => handleDeleteSession(e, session.id)}
                                                                 title="Delete conversation"
-                                                                className="text-slate hover:text-red-400 p-1 rounded hover:bg-navy-700/60 opacity-50 group-hover:opacity-100 transition-all shrink-0"
+                                                                className="text-ink-mute hover:text-hot p-1 rounded hover:bg-ink/[0.05] opacity-50 group-hover:opacity-100 transition-all shrink-0"
                                                             >
                                                                 <Trash2 size={13} />
                                                             </button>
@@ -479,12 +494,12 @@ const RealTimeDemo = () => {
 
                                         {/* History Footer */}
                                         {sessions.length > 0 && (
-                                            <div className="p-2.5 border-t border-navy-600 bg-navy-900 flex justify-between items-center text-[11px] text-slate font-mono px-4">
+                                            <div className="p-2.5 border-t border-ink/15 bg-ice-hi flex justify-between items-center text-[11px] text-ink-mute font-mono px-4">
                                                 <span>Auto-purged after 30 days</span>
                                                 <button
                                                     type="button"
                                                     onClick={handleClearAllHistory}
-                                                    className="text-slate hover:text-red-400 hover:underline transition-colors"
+                                                    className="text-ink-mute hover:text-hot hover:underline transition-colors"
                                                 >
                                                     Clear All History
                                                 </button>
@@ -496,7 +511,7 @@ const RealTimeDemo = () => {
                                         key="chat-messages"
                                         ref={chatContainerRef}
                                         data-lenis-prevent
-                                        className="h-[22rem] sm:h-[25rem] md:h-[28rem] overflow-y-auto overscroll-y-contain p-3 md:p-4 space-y-3 md:space-y-4 bg-navy-800"
+                                        className="h-[22rem] sm:h-[25rem] md:h-[28rem] overflow-y-auto overscroll-y-contain p-3 md:p-4 space-y-3 md:space-y-4 bg-ice-panel"
                                     >
                                         <AnimatePresence>
                                             {messages.map((msg) => (
@@ -514,8 +529,8 @@ const RealTimeDemo = () => {
                                                     <div
                                                         className={`max-w-[85%] sm:max-w-[80%] p-3 rounded-lg text-sm break-words leading-relaxed ${
                                                             msg.sender === "user"
-                                                                ? "bg-teal-400 text-navy-900 rounded-br-none font-medium"
-                                                                : "bg-navy-600 text-slate-lighter rounded-bl-none"
+                                                                ? "bg-ink text-ice-hi rounded-br-none"
+                                                                : "bg-ice-hi text-ink border border-ink/15 rounded-bl-none"
                                                         }`}
                                                     >
                                                         {msg.text}
@@ -531,9 +546,9 @@ const RealTimeDemo = () => {
                                                 animate={{ opacity: 1 }}
                                                 className="flex justify-start"
                                             >
-                                                <div className="bg-navy-600 text-slate-lighter rounded-lg rounded-bl-none p-3 flex items-center space-x-1">
+                                                <div className="bg-ice-hi border border-ink/15 text-ink rounded-lg rounded-bl-none p-3 flex items-center space-x-1">
                                                     <motion.span
-                                                        className="w-2 h-2 bg-teal-400 rounded-full"
+                                                        className="w-2 h-2 bg-arc rounded-full"
                                                         animate={{ y: [0, -6, 0] }}
                                                         transition={{
                                                             duration: 0.6,
@@ -542,7 +557,7 @@ const RealTimeDemo = () => {
                                                         }}
                                                     />
                                                     <motion.span
-                                                        className="w-2 h-2 bg-teal-400 rounded-full"
+                                                        className="w-2 h-2 bg-arc rounded-full"
                                                         animate={{ y: [0, -6, 0] }}
                                                         transition={{
                                                             duration: 0.6,
@@ -551,7 +566,7 @@ const RealTimeDemo = () => {
                                                         }}
                                                     />
                                                     <motion.span
-                                                        className="w-2 h-2 bg-teal-400 rounded-full"
+                                                        className="w-2 h-2 bg-arc rounded-full"
                                                         animate={{ y: [0, -6, 0] }}
                                                         transition={{
                                                             duration: 0.6,
@@ -570,7 +585,7 @@ const RealTimeDemo = () => {
                         {/* Chat Input */}
                         <form
                             onSubmit={handleSend}
-                            className="p-3 md:p-4 bg-navy-900 border-t border-navy-600 flex space-x-2"
+                            className="p-3 md:p-4 bg-ice-hi border-t border-ink/15 flex space-x-2"
                         >
                             <input
                                 ref={inputRef}
@@ -583,12 +598,12 @@ const RealTimeDemo = () => {
                                         : "Ask about Hetav..."
                                 }
                                 disabled={isTyping}
-                                className="flex-1 bg-navy-800 text-slate-lighter px-3 md:px-4 py-2 rounded text-sm md:text-base focus:outline-none focus:ring-1 focus:ring-teal-400 disabled:opacity-50"
+                                className="flex-1 bg-ice-hi border border-ink/20 text-ink placeholder:text-ink-mute px-3 md:px-4 py-2 rounded-md text-sm md:text-base focus:outline-none focus:ring-1 focus:ring-arc disabled:opacity-50"
                             />
                             <button
                                 type="submit"
                                 disabled={isTyping || !input.trim()}
-                                className="bg-teal-400 text-navy-900 p-2 rounded hover:bg-teal-300 transition-colors disabled:opacity-50"
+                                className="bg-ink text-ice-hi p-2.5 rounded-md hover:bg-ink-2 transition-colors disabled:opacity-50"
                                 aria-label="Send message"
                             >
                                 {isTyping ? (
@@ -601,7 +616,7 @@ const RealTimeDemo = () => {
                     </div>
 
                     {/* Agent description */}
-                    <p className="text-center text-slate-500 text-xs font-mono mt-4">
+                    <p className="text-center text-ink-mute text-xs font-mono mt-4">
                         A LangGraph-based intelligent RAG human-like replier agent
                     </p>
                 </div>

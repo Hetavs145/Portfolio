@@ -1,21 +1,40 @@
-import React from 'react';
-import ProjectCard from './ProjectCard';
+import React, { useState } from 'react';
+import ProjectRow from './ProjectRow';
+import SectionHeader from './SectionHeader';
 import { projects } from '../data/projects';
+import { architectures } from '../data/architectures';
 
 const Projects = () => {
+    // One row open at a time; the flagship starts open so the expand
+    // affordance is obvious on first visit.
+    const [openIndex, setOpenIndex] = useState(0);
 
     return (
-        <section id="work" className="py-20 relative z-10">
-            <div className="container mx-auto px-6 md:px-12 lg:px-24">
-                <div className="flex items-center mb-12">
-                    <span className="text-teal-400 font-mono text-xl mr-4">03.</span>
-                    <h2 className="text-3xl font-bold text-slate-lighter">Some Things I've Built</h2>
-                    <div className="h-px bg-navy-600 flex-grow ml-4"></div>
-                </div>
+        <section id="work" className="relative z-10 pt-28 md:pt-36">
+            <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-[60px]">
+                <SectionHeader
+                    mod="04"
+                    title="Work"
+                    meta={`${projects.length} builds · click a row to expand`}
+                />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="border-l border-ink/20">
+                    <div className="hidden lg:grid grid-cols-[84px_250px_1fr_280px_56px] border-r border-b border-ink/20 label text-ink-mute">
+                        <span className="px-6 py-3">ID</span>
+                        <span className="px-6 py-3">Project</span>
+                        <span className="px-6 py-3">Summary</span>
+                        <span className="px-6 py-3">Stack</span>
+                        <span />
+                    </div>
                     {projects.map((project, index) => (
-                        <ProjectCard key={index} project={project} index={index} />
+                        <ProjectRow
+                            key={project.title}
+                            project={project}
+                            index={index}
+                            diagram={architectures[project.title]}
+                            open={openIndex === index}
+                            onToggle={() => setOpenIndex(openIndex === index ? -1 : index)}
+                        />
                     ))}
                 </div>
             </div>

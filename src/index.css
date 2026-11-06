@@ -7,15 +7,22 @@
     scroll-behavior: smooth;
   }
 
+  /* The 120px lab grid lives on the body. The 3D canvas above it is
+     transparent, so the robot floats over the grid rather than a flat fill. */
   body {
-    @apply bg-navy-900 text-slate-light font-sans antialiased selection:bg-teal-400 selection:text-navy-900;
+    @apply bg-ice text-ink font-sans antialiased selection:bg-arc selection:text-white;
+    background-image:
+      linear-gradient(rgba(13, 17, 23, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13, 17, 23, 0.07) 1px, transparent 1px);
+    background-size: 120px 120px;
+    background-position: -1px -1px;
   }
 
   /* Global guard against horizontal scroll.
      `clip` rather than `hidden` so position: sticky keeps working. Decorative
-     absolutely-positioned elements (the About aura rings, the hero glitch
-     pseudo-elements) can still paint outward without dragging the document
-     into a horizontal scrollbar. */
+     absolutely-positioned elements (the hero reticle, the About aperture
+     rings) can still paint outward without dragging the document into a
+     horizontal scrollbar. */
   html,
   body {
     overflow-x: clip;
@@ -27,155 +34,85 @@
   p, li, h1, h2, h3, h4 {
     overflow-wrap: break-word;
   }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.arc.DEFAULT');
+    outline-offset: 2px;
+  }
 }
 
-@layer utilities {
-  /* Hide the native cursor only on devices that actually have one. Applied
-     globally before, which did nothing useful on touch and left phones with
-     no cursor affordance at all. */
-  @media (pointer: fine) {
-    .cursor-hidden-fine,
-    .cursor-hidden-fine * {
-      cursor: none;
-    }
+@layer components {
+  /* Small uppercase monospace label — the HUD voice of the whole site. */
+  .label {
+    @apply font-mono text-[11px] sm:text-[11.5px] uppercase tracking-label;
   }
 
+  /* Frosted lab panel. Semi-opaque so the robot reads through it, blurred so
+     text on top stays legible. */
+  .cell {
+    @apply bg-ice-panel/75 backdrop-blur-md;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 h-12 px-5 rounded-lg font-mono text-xs uppercase tracking-label transition-colors duration-200 select-none;
+  }
+
+  .btn-ink {
+    @apply btn bg-ink text-ice-hi hover:bg-ink-2;
+  }
+
+  .btn-line {
+    @apply btn border border-ink text-ink hover:bg-ink hover:text-ice-hi;
+  }
+
+  .tag {
+    @apply font-mono text-[10.5px] uppercase tracking-[0.04em] px-2 py-1 rounded border border-ink/20 text-ink-2;
+  }
+
+  /* Corner brackets framing the hero viewport. */
+  .hud-corner {
+    @apply absolute w-[18px] h-[18px] border-ink pointer-events-none;
+  }
+
+  /* Frosted dropdown surface used by ResumeDropdown. */
   .glass {
-    @apply bg-navy-800/60 backdrop-blur-md border border-white/10;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    @apply bg-ice-hi/95 backdrop-blur-md border border-ink/15;
+    box-shadow: 0 18px 40px -18px rgba(13, 17, 23, 0.35);
+  }
+}
+
+/* ---------- Hero layout ----------
+   The robot's head is rendered by the fixed canvas at the exact centre of the
+   viewport and scales with viewport HEIGHT, so the name flanks it only when
+   the screen is wide enough relative to its height. Otherwise the name sits
+   above the head and the copy below it. */
+.hero-name {
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+}
+
+.hero-name--stack {
+  font-size: clamp(52px, 15vw, 128px);
+}
+
+.hero-name--flank,
+.hero-callout {
+  display: none;
+}
+
+@media (min-width: 1024px) and (min-aspect-ratio: 5/4) {
+  .hero-name--stack {
+    display: none;
   }
 
-  .text-3d-black-border {
-    -webkit-text-stroke: 1.5px #000000;
-    text-shadow:
-      -1px -1px 0 #000000,
-       1px -1px 0 #000000,
-      -1px  1px 0 #000000,
-       1px  1px 0 #000000,
-       0px  1px 0 #000000,
-       0px  2px 0 #000000,
-       0px  3px 0 #000000,
-       0px  4px 0 #000000,
-       0px  5px 6px rgba(0, 0, 0, 0.9);
+  .hero-name--flank {
+    display: flex;
+    font-size: clamp(120px, 13vw, 220px);
   }
 
-  .text-3d-black-border-sm {
-    -webkit-text-stroke: 0.75px #000000;
-    text-shadow:
-      -1px -1px 0 #000000,
-       1px -1px 0 #000000,
-      -1px  1px 0 #000000,
-       1px  1px 0 #000000,
-       0px  1px 0 #000000,
-       0px  2px 0 #000000,
-       0px  3px 4px rgba(0, 0, 0, 0.85);
-  }
-
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-lighter via-teal-300 to-slate-light;
-  }
-
-  .neon-border {
-    @apply border border-teal-400/40;
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2), inset 0 0 12px rgba(56, 189, 248, 0.05);
-  }
-
-  .glitch-effect {
-    position: relative;
-  }
-
-  .glitch-effect::before,
-  .glitch-effect::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .glitch-effect::before {
-    left: 2px;
-    text-shadow: -1px 0 #ff00c1;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim 5s infinite linear alternate-reverse;
-  }
-
-  .glitch-effect::after {
-    left: -2px;
-    text-shadow: -1px 0 #00fff9;
-    clip: rect(44px, 450px, 56px, 0);
-    animation: glitch-anim2 5s infinite linear alternate-reverse;
-  }
-
-  @keyframes glitch-anim {
-    0% {
-      clip: rect(30px, 9999px, 10px, 0);
-    }
-
-    5% {
-      clip: rect(80px, 9999px, 90px, 0);
-    }
-
-    10% {
-      clip: rect(20px, 9999px, 60px, 0);
-    }
-
-    15% {
-      clip: rect(50px, 9999px, 30px, 0);
-    }
-
-    20% {
-      clip: rect(10px, 9999px, 80px, 0);
-    }
-
-    100% {
-      clip: rect(60px, 9999px, 40px, 0);
-    }
-  }
-
-  @keyframes glitch-anim2 {
-    0% {
-      clip: rect(10px, 9999px, 80px, 0);
-    }
-
-    5% {
-      clip: rect(50px, 9999px, 30px, 0);
-    }
-
-    10% {
-      clip: rect(20px, 9999px, 60px, 0);
-    }
-
-    15% {
-      clip: rect(80px, 9999px, 90px, 0);
-    }
-
-    20% {
-      clip: rect(30px, 9999px, 10px, 0);
-    }
-
-    100% {
-      clip: rect(40px, 9999px, 60px, 0);
-    }
-  }
-
-  /* Gen Z / Y2K Aesthetic Effects */
-  .rgb-layer {
-    @apply absolute inset-0 w-full h-full object-cover rounded-2xl;
-    mix-blend-mode: color-dodge;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  .group:hover .rgb-layer-1 {
-    opacity: 0.8;
-    transform: translate(-3px, -3px);
-  }
-
-  .group:hover .rgb-layer-2 {
-    opacity: 0.8;
-    transform: translate(3px, 3px);
+  .hero-callout {
+    display: flex;
   }
 }
 
@@ -185,11 +122,11 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-navy-900;
+  @apply bg-ice-2;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-teal-400 rounded-full hover:bg-teal-500 transition-colors;
+  @apply bg-ink/30 rounded-full hover:bg-ink/50 transition-colors;
 }
 
 /* Lenis Smooth Scroll */
@@ -207,4 +144,16 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-stopped {
   overflow: hidden;
+}
+
+@layer utilities {
+  /* Hide the native cursor only on devices that actually have one. Applied
+     globally before, which did nothing useful on touch and left phones with
+     no cursor affordance at all. */
+  @media (pointer: fine) {
+    .cursor-hidden-fine,
+    .cursor-hidden-fine * {
+      cursor: none;
+    }
+  }
 }

@@ -76,8 +76,8 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
 
     const triggerClass =
         variant === 'nav'
-            ? 'flex items-center gap-1.5 border border-teal-400 text-teal-400 px-4 py-2 rounded-full hover:bg-teal-400/10 transition-colors font-mono text-sm'
-            : 'flex items-center justify-center gap-2 bg-teal-400 text-navy-900 px-8 py-4 rounded border border-teal-400 hover:bg-teal-300 transition-colors font-mono text-sm font-bold w-full sm:w-auto';
+            ? 'btn-ink h-11 px-4'
+            : 'btn-line w-full sm:w-auto';
 
     const menuPositionClass =
         variant === 'nav'
@@ -104,9 +104,9 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
                 aria-expanded={open}
                 className={triggerClass}
             >
-                Get Resume
+                {variant === 'nav' ? 'Résumé' : 'Get résumé'}
                 <ChevronDown
-                    size={16}
+                    size={14}
                     className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                 />
             </button>
@@ -138,17 +138,17 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
                                     setOpen(false);
                                     onNavigate?.();
                                 }}
-                                className="flex items-start gap-3 rounded px-3 py-2.5 text-left hover:bg-teal-400/10 focus:bg-teal-400/10 focus:outline-none transition-colors group"
+                                className="flex items-start gap-3 rounded-md px-3 py-2.5 text-left hover:bg-ink/[0.05] focus:bg-ink/[0.05] focus:outline-none transition-colors group"
                             >
                                 <FileText
                                     size={16}
-                                    className="mt-0.5 shrink-0 text-teal-400"
+                                    className="mt-0.5 shrink-0 text-arc-deep"
                                 />
                                 <span className="min-w-0">
-                                    <span className="block font-mono text-sm text-slate-lighter group-hover:text-teal-400 transition-colors">
+                                    <span className="block font-mono text-[13px] text-ink group-hover:text-arc-deep transition-colors">
                                         {r.label}
                                     </span>
-                                    <span className="block text-xs text-slate mt-0.5">
+                                    <span className="block text-xs text-ink-mute mt-0.5">
                                         {r.description}
                                     </span>
                                 </span>

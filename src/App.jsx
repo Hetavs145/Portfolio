@@ -41,7 +41,7 @@ function AppContent() {
         // `cursor-hidden-fine` hides the native cursor only on devices that have
         // one (see index.css). Applying cursor-none globally did nothing useful on
         // touch, where ResumeAura — the canvas replacement — never mounts.
-        <div className="bg-navy-950 min-h-screen text-slate-light selection:bg-teal-400 selection:text-navy-950 cursor-hidden-fine">
+        <div className="min-h-screen text-ink cursor-hidden-fine">
             <ResumeAura />
             <Navbar />
 

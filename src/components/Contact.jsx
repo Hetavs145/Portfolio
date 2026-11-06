@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, Github, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Mail, Phone, Github, Linkedin, Instagram, Youtube, CornerDownLeft } from 'lucide-react';
+import SectionHeader from './SectionHeader';
+import { useRoute } from '../context/RouteContext';
+import { PENDING_QUESTION_KEY } from '../data/agent';
 
 const contactChannels = [
     {
@@ -10,8 +13,6 @@ const contactChannels = [
         href: "mailto:hetavs145@gmail.com?subject=Let's%20Connect&body=Hi%20Hetav,%0D%0A%0D%0AI%20would%20like%20to%20connect%20with%20you.",
         icon: Mail,
         angle: -145, // Upper Left
-        color: 'from-sky-500/20 to-teal-500/30 text-teal-300',
-        glow: 'rgba(56, 189, 248, 0.45)',
     },
     {
         id: 'github',
@@ -20,8 +21,6 @@ const contactChannels = [
         href: 'https://github.com/Hetavs145',
         icon: Github,
         angle: -180, // Middle Left
-        color: 'from-slate-700/40 to-slate-900/60 text-slate-200',
-        glow: 'rgba(255, 255, 255, 0.35)',
     },
     {
         id: 'instagram',
@@ -30,8 +29,6 @@ const contactChannels = [
         href: 'https://www.instagram.com/hetav.shah145/',
         icon: Instagram,
         angle: -215, // Lower Left
-        color: 'from-rose-500/30 to-purple-600/30 text-rose-300',
-        glow: 'rgba(244, 63, 94, 0.45)',
     },
     {
         id: 'phone',
@@ -40,8 +37,6 @@ const contactChannels = [
         href: 'tel:+918200135258',
         icon: Phone,
         angle: -35, // Upper Right
-        color: 'from-emerald-500/30 to-teal-500/30 text-emerald-300',
-        glow: 'rgba(16, 185, 129, 0.45)',
     },
     {
         id: 'linkedin',
@@ -50,8 +45,6 @@ const contactChannels = [
         href: 'https://www.linkedin.com/in/hetav-shah-26601722b/',
         icon: Linkedin,
         angle: 0, // Middle Right
-        color: 'from-blue-600/30 to-cyan-500/30 text-blue-300',
-        glow: 'rgba(59, 130, 246, 0.45)',
     },
     {
         id: 'youtube',
@@ -60,10 +53,63 @@ const contactChannels = [
         href: 'https://www.youtube.com/@NeuroStucks',
         icon: Youtube,
         angle: 35, // Lower Right
-        color: 'from-red-600/30 to-rose-500/30 text-red-400',
-        glow: 'rgba(239, 68, 68, 0.45)',
     }
 ];
+
+const SUGGESTIONS = [
+    'What did you build at Aetrix?',
+    'What is your tech stack?',
+    'Are you open to internships?',
+];
+
+/** "Send a signal" — hands a question to the Ask Hetav agent page. */
+const SignalPrompt = () => {
+    const { setCurrentPage } = useRoute();
+    const [q, setQ] = useState('');
+
+    const ask = (text) => {
+        const question = text.trim();
+        if (!question) return;
+        try {
+            sessionStorage.setItem(PENDING_QUESTION_KEY, question);
+        } catch {}
+        setCurrentPage('agent');
+        window.scrollTo(0, 0);
+    };
+
+    return (
+        <div>
+            <form
+                onSubmit={(e) => { e.preventDefault(); ask(q); }}
+                className="flex items-center gap-2 rounded-xl border border-ink/20 bg-ice-hi pl-4 pr-1.5 py-1.5 focus-within:border-ink"
+            >
+                <span className="font-mono text-sm text-ink-mute" aria-hidden="true">&gt;</span>
+                <input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="ask hetav anything about my work"
+                    aria-label="Ask Hetav a question"
+                    className="flex-1 min-w-0 bg-transparent font-mono text-sm text-ink placeholder:text-ink-mute focus:outline-none py-2"
+                />
+                <button type="submit" className="btn-ink h-10 px-4">
+                    Enter <CornerDownLeft size={13} />
+                </button>
+            </form>
+            <div className="flex flex-wrap gap-2 mt-3">
+                {SUGGESTIONS.map((s) => (
+                    <button
+                        key={s}
+                        type="button"
+                        onClick={() => ask(s)}
+                        className="font-mono text-[11.5px] px-3 py-1.5 rounded-md border border-ink/15 text-ink-2 hover:border-ink hover:text-ink transition-colors"
+                    >
+                        {s}
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
+};
 
 const Contact = () => {
     const [isNear, setIsNear] = useState(false);
@@ -94,7 +140,7 @@ const Contact = () => {
         };
         window.addEventListener('robo-touch', handleRoboTouch);
 
-        // Mouse proximity detection for desktop (cursor logic kept completely untouched!)
+        // Mouse proximity detection for desktop
         const handleWindowMouseMove = (e) => {
             if (isTouch || !hubRef.current) return;
             const rect = hubRef.current.getBoundingClientRect();
@@ -130,21 +176,51 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="py-20 mb-20 relative z-10">
-            <div className="container mx-auto px-6 md:px-12 lg:px-24 text-center">
+        <section
+            id="contact"
+            className="relative z-10 pt-28 md:pt-36"
+            // At the bottom of the page the robot's chest sits near viewport
+            // centre; this keeps the hub (384px) centred over it on any height.
+            style={{ paddingBottom: 'max(2.5rem, calc(50svh - 330px))' }}
+        >
+            <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-[60px]">
+                <SectionHeader mod="05" title="Contact" meta="Open channel" />
+
+                {/* Send a signal */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    className="grid lg:grid-cols-[1.25fr_1fr] border-l border-ink/20"
                 >
-                    <span className="text-teal-400 font-mono text-lg block mb-4">What's Next?</span>
-                    <h2 className="text-4xl md:text-5xl font-bold text-slate-lighter mb-4">Get In Touch</h2>
-                    <p className="text-slate text-base md:text-lg max-w-xl mx-auto mb-10">
-                        I’m currently looking for new opportunities, my inbox is always open. Whether you have a question or just want to say hi, I’ll try my best to get back to you!
-                    </p>
+                    <div className="cell border-r border-b border-ink/20 p-6 sm:p-10">
+                        <h3 className="text-[64px] sm:text-[88px] font-semibold tracking-display leading-[0.88] text-ink">
+                            Send a<br />signal.
+                        </h3>
+                        <p className="mt-6 max-w-md text-base sm:text-lg leading-relaxed text-ink-2">
+                            I’m currently looking for new opportunities, and my inbox is always open. Whether you have
+                            a question or just want to say hi, I’ll try my best to get back to you.
+                        </p>
+                        <div className="label mt-6 flex flex-wrap gap-x-4 gap-y-1">
+                            <a href="mailto:hetavs145@gmail.com" className="text-ink hover:text-arc-deep">hetavs145@gmail.com</a>
+                            <a href="tel:+918200135258" className="text-ink-mute hover:text-arc-deep">+91 82001 35258</a>
+                        </div>
+                    </div>
+                    <div className="cell border-r border-b border-ink/20 p-6 sm:p-10 flex flex-col justify-end gap-5">
+                        <div>
+                            <div className="label text-ink">Ask my AI twin</div>
+                            <p className="label text-ink-mute mt-1.5 normal-case tracking-normal text-[12.5px]">
+                                A RAG agent over my résumé, GitHub and LinkedIn.
+                            </p>
+                        </div>
+                        <SignalPrompt />
+                    </div>
+                </motion.div>
 
-                    {/* Interactive Robot Orbital Hub Zone */}
+                {/* Arc-reactor hub: channels bloom around the robot's chest */}
+                <div className="text-center mt-24 sm:mt-28">
+
                     <div
                         ref={hubRef}
                         className="relative w-full max-w-lg h-80 sm:h-96 mx-auto flex items-center justify-center select-none"
@@ -152,7 +228,7 @@ const Contact = () => {
                         onMouseLeave={() => !isTouch && setIsNear(false)}
                         onClick={() => toggleNear()}
                     >
-                        {/* Center Arc Reactor Interaction Prompt (No AI icon) */}
+                        {/* Centre prompt */}
                         <div
                             className={`flex flex-col items-center gap-2 transition-all duration-500 cursor-pointer ${
                                 isNear ? 'opacity-35 scale-95' : 'opacity-100 scale-100'
@@ -169,13 +245,13 @@ const Contact = () => {
                                     toggleNear();
                                 }}
                                 aria-label="Tap Arc Reactor to reveal or hide channels"
-                                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-navy-950/90 border border-cyan-400/50 hover:border-cyan-300 backdrop-blur-md shadow-[0_0_24px_rgba(56,189,248,0.35)] active:scale-95 transition-all cursor-pointer select-none"
+                                className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-lg bg-ice-hi/90 border border-arc/50 hover:border-arc backdrop-blur-md shadow-[0_10px_30px_-12px_rgba(14,141,181,0.55)] active:scale-95 transition-all cursor-pointer select-none"
                             >
-                                <span className="relative flex h-3 w-3">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-400 shadow-[0_0_8px_#38bdf8]"></span>
+                                <span className="relative flex h-2.5 w-2.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-arc opacity-60"></span>
+                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-arc"></span>
                                 </span>
-                                <span className="font-mono text-xs sm:text-sm text-cyan-300 tracking-wider font-semibold">
+                                <span className="label text-arc-deep">
                                     {isTouch
                                         ? (isNear ? 'tap arc reactor to hide' : 'tap on arc reactor')
                                         : (isNear ? 'move cursor away to hide' : 'move cursor near arc reactor')}
@@ -183,7 +259,7 @@ const Contact = () => {
                             </button>
                         </div>
 
-                        {/* Floating Orbital Channels Blooming Around Robot Body */}
+                        {/* Orbital channels */}
                         {contactChannels.map((item, index) => {
                             const coords = getCoordinates(item.angle);
                             const floatOffset = (index % 2 === 0 ? 1 : -1) * 6;
@@ -215,31 +291,30 @@ const Contact = () => {
                                     } : {
                                         duration: 0.25
                                     }}
-                                    whileHover={{ scale: 1.25 }}
+                                    whileHover={{ scale: 1.2 }}
                                     whileTap={{ scale: 0.92 }}
                                     onMouseEnter={() => setActiveTooltip(item.id)}
                                     onMouseLeave={() => setActiveTooltip(null)}
-                                    className={`absolute z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br ${item.color} bg-navy-900/95 backdrop-blur-xl border border-teal-400/50 hover:border-teal-200 flex items-center justify-center shadow-2xl shadow-black/70 transition-all duration-300 group cursor-pointer ${
-                                        isNear ? 'pointer-events-auto' : 'pointer-events-none'
+                                    className={`absolute z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-ice-hi/95 backdrop-blur-xl border border-ink/70 hover:border-arc hover:bg-ink hover:text-ice-hi text-ink flex items-center justify-center transition-colors duration-200 group cursor-pointer ${
+                                        isNear ? 'pointer-events-auto shadow-[0_14px_30px_-14px_rgba(13,17,23,0.55)]' : 'pointer-events-none'
                                     }`}
-                                    style={{
-                                        boxShadow: isNear ? `0 0 20px ${item.glow}` : 'none'
-                                    }}
                                     title={`${item.name}: ${item.label}`}
                                     aria-label={`${item.name} channel`}
                                 >
-                                    <item.icon size={22} className="transition-transform group-hover:scale-115" />
+                                    <item.icon size={21} strokeWidth={1.75} />
 
-                                    {/* Holographic Tooltip Badge on Hover */}
-                                    <div className="absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1 rounded-md bg-navy-950/95 border border-teal-400/40 text-[11px] font-mono text-teal-300 opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none shadow-xl shadow-black/80 z-40">
-                                        <span className="font-bold text-teal-400 mr-1">{item.name}:</span>
-                                        <span className="text-slate-200">{item.label}</span>
+                                    {/* Tooltip */}
+                                    <div className={`absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-2.5 py-1 rounded-md bg-ink text-[11px] font-mono text-ice-hi transition-opacity duration-200 pointer-events-none z-40 ${
+                                        activeTooltip === item.id ? 'opacity-100' : 'opacity-0'
+                                    }`}>
+                                        <span className="text-arc-soft mr-1">{item.name}:</span>
+                                        {item.label}
                                     </div>
                                 </motion.a>
                             );
                         })}
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
     );
