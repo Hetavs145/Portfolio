@@ -5,7 +5,8 @@
  * A miss is a reply whose trailer said [[unanswered]] (see lib/citations.js).
  * Each one is sent, fire-and-forget, to whichever of these is configured:
  *
- *   TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID   a Telegram message (lib/notify.js)
+ *   NOTIFY_WEBHOOK_URL   your Hermes webhook route (signed; see lib/notify.js),
+ *                        and/or TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID directly
  *   GITHUB_ISSUES_TOKEN  fine-grained token with Issues: read & write on this repo.
  *   GITHUB_ISSUES_REPO   defaults to Hetavs145/Portfolio
  *                        Opens one issue per distinct question, labelled kb-miss.
