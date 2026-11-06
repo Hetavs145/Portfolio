@@ -5,9 +5,12 @@
  * (server/lib/sources/site.js), so the chatbot can never describe a different
  * set of projects than the page shows.
  *
- * Shape: { title, description, tech[], live, github, youtube?, featured }
- * `featured` is 'primary' (amber + Star), 'secondary' (teal + Zap), or null.
- * See src/components/ProjectCard.jsx for how those map to styling.
+ * Shape: { title, description, tech[], live, github, youtube?, featured, production? }
+ * `featured` is 'primary' (Flagship label), 'secondary' (Featured label), or null.
+ * `production: true` marks production-grade builds: their Work row expands to
+ * the full write-up, links and architecture diagram. Other rows are compact,
+ * non-expanding entries with their links inline.
+ * See src/components/ProjectRow.jsx for how these map to the UI.
  */
 
 export const projects = [
@@ -20,6 +23,7 @@ export const projects = [
         github: 'https://github.com/Hetavs145/VaquaH',
         youtube: 'https://www.youtube.com/@NeuroStucks',
         featured: 'primary',
+        production: true,
     },
     {
         title: 'TrafficMind',
@@ -29,6 +33,7 @@ export const projects = [
         live: null,
         github: 'https://github.com/Hetavs145/TrafficMind',
         featured: 'secondary',
+        production: true,
     },
     {
         title: 'Kontexo',
@@ -38,6 +43,7 @@ export const projects = [
         live: null,
         github: 'https://github.com/fjiolla/Kontexo',
         featured: 'secondary',
+        production: true,
     },
     {
         title: 'FlowPilot',
@@ -47,21 +53,23 @@ export const projects = [
         live: null,
         github: 'https://github.com/Hetavs145/ET-Gen-Hackathon',
         featured: 'secondary',
+        production: true,
     },
     {
         title: 'YouTube Upload Automation',
         description:
-            'n8n agentic workflow automating daily YouTube uploads end to end. 90% reduced manual time with LLM-based metadata auto-generation and 100% field compliance.',
-        tech: ['n8n', 'Google Drive API', 'Google Sheets API', 'LLM'],
+            'Self-hosted n8n workflow that publishes a YouTube video every day end to end, cutting manual upload time by 90%. It picks a category by weekday, generates an idea with an LLM via OpenRouter and rejects near-duplicates using embeddings, writes the script and metadata, renders stills with Pollinations, narration with Piper TTS and the final video with FFmpeg, then uploads through the YouTube Data API.',
+        tech: ['n8n', 'OpenRouter LLM', 'Embeddings', 'Piper TTS', 'FFmpeg', 'YouTube Data API', 'Docker'],
         live: null,
         github: 'https://github.com/Hetavs145/youtube-renderer',
         featured: null,
+        production: true,
     },
     {
         title: 'Treat-o-Meter',
         description:
-            'Web app that scores and tracks treats against daily intake targets, with a live meter UI and persistent history.',
-        tech: ['JavaScript', 'React', 'Vercel'],
+            'Reward-and-punishment tracker: timed tasks and habits earn or cost a points balance, with a 5-day streak tracker, a transaction history with PDF export, and Google sign-in with offline-first sync from localStorage to Firestore.',
+        tech: ['React 19', 'Vite', 'Firebase Auth', 'Firestore', 'jsPDF'],
         live: 'https://treat-o-meter.vercel.app',
         github: 'https://github.com/Hetavs145/Treat-o-Meter',
         featured: null,
@@ -69,9 +77,9 @@ export const projects = [
     {
         title: 'Sign2Text',
         description:
-            'Real-time ASL gesture-to-text recognition using MediaPipe hand landmarks and CNN-LSTM sequence model for 26 gestures with smoothing and windowing.',
-        tech: ['Python', 'MediaPipe', 'CNN-LSTM', 'TensorFlow'],
-        live: null,
+            'Real-time ASL fingerspelling to text. MediaPipe Hands locates the hand and a MobileNetV2 CNN (PyTorch transfer learning) classifies the crop into 29 classes — A–Z plus space, delete and nothing — committing a letter after a 1-second hold at 70%+ confidence, with optional speech output. A browser version runs the same model through ONNX Runtime Web.',
+        tech: ['Python', 'PyTorch', 'MobileNetV2', 'MediaPipe', 'OpenCV', 'ONNX Runtime Web'],
+        live: 'https://web-sigma-six-80.vercel.app',
         github: 'https://github.com/Hetavs145/Sign2Text',
         featured: null,
     },
@@ -80,7 +88,7 @@ export const projects = [
         description:
             'Real-Time Chat App with live messaging, presence indicators, and reconnection logic.',
         tech: ['React', 'Socket.IO', 'Node.js'],
-        live: null,
+        live: 'https://client-omega-six-11.vercel.app',
         github: 'https://github.com/Hetavs145/Hetchat',
         featured: null,
     },
@@ -89,7 +97,7 @@ export const projects = [
         description:
             'Smart Delivery Drone Path-Finder Simulation. Optimizes delivery routes using advanced algorithms.',
         tech: ['Python', 'Algorithms', 'Simulation'],
-        live: null,
+        live: 'https://smart-drone-path-finder.vercel.app',
         github: 'https://github.com/Hetavs145/Smart-Delivery-Drone-Path-Finder',
         featured: null,
     },
@@ -97,7 +105,7 @@ export const projects = [
         title: 'Spam Detector',
         description: 'Spam Email Detection System using Machine Learning.',
         tech: ['Python', 'Scikit-learn', 'ML'],
-        live: null,
+        live: 'https://ml-frontend-nu.vercel.app',
         github: 'https://github.com/Hetavs145/Spam-Email-Detector',
         featured: null,
     },
@@ -105,15 +113,15 @@ export const projects = [
         title: 'Phishing Detector',
         description: 'ML-based Phishing Website Detection System.',
         tech: ['Python', 'ML', 'Cybersecurity'],
-        live: null,
+        live: 'https://frontend-steel-eight-98.vercel.app',
         github: 'https://github.com/Hetavs145/Phishing-detector',
         featured: null,
     },
     {
         title: 'Kernel Scribe',
         description:
-            'Operating-system simulator with live views of process scheduling, memory allocation and IPC.',
-        tech: ['TypeScript', 'OS', 'Kernel'],
+            'Operating-system simulator built on a tick-driven microkernel: Round Robin, Priority and FCFS scheduling, first-fit memory allocation over 1024 MB and message-passing IPC, with live Matplotlib charts and tables in a Tkinter GUI.',
+        tech: ['Python', 'Tkinter', 'Matplotlib', 'OS'],
         live: null,
         github: 'https://github.com/Hetavs145/kernel-scribe-sim',
         featured: null,

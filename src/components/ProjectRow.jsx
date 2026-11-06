@@ -28,16 +28,73 @@ const LinkButton = ({ href, icon: Icon, children }) => (
     </a>
 );
 
+/** Shared column template for the Work table header and every row. */
+export const ROW_GRID = 'lg:grid-cols-[84px_250px_1fr_280px_104px]';
+
+const IconLink = ({ href, icon: Icon, label }) => (
+    <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={label}
+        title={label}
+        className="w-8 h-8 rounded-md border border-ink/30 grid place-items-center text-ink hover:bg-ink hover:text-ice-hi hover:border-ink transition-colors"
+    >
+        <Icon size={14} />
+    </a>
+);
+
 /**
- * One row of the Work table. Collapsed: id, title, one-line summary, stack and
- * links. Clicking expands it in place to the full description, every tech tag
- * and the project's architecture diagram.
+ * Compact, non-expanding row for smaller builds: full description inline and
+ * links as icons, nothing hidden behind a click.
+ */
+const EntryRow = ({ project, id }) => {
+    const { setCursor, resetCursor } = useCursor();
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            viewport={{ once: true, amount: 0.2 }}
+            className={`cell grid grid-cols-[1fr_auto] ${ROW_GRID} items-center border-r border-b border-ink/20 hover:bg-ice-hi/90 transition-colors`}
+            onMouseEnter={() => setCursor('project', project.title, project.tech)}
+            onMouseLeave={resetCursor}
+        >
+            <span className="hidden lg:block label px-6 py-5 text-ink-mute">{id}</span>
+            <span className="px-5 lg:px-6 pt-4 pb-1 lg:py-5 min-w-0 flex items-center gap-3">
+                <span className="lg:hidden label shrink-0 whitespace-nowrap text-ink-mute">{id}</span>
+                <span className="text-lg sm:text-xl font-semibold tracking-[-0.025em] leading-tight text-ink">{project.title}</span>
+            </span>
+            <span className="col-span-2 lg:col-span-1 row-start-2 lg:row-start-auto px-5 lg:px-6 pb-2 lg:py-5 text-[14px] leading-snug text-ink-2">
+                {project.description}
+            </span>
+            <span className="col-span-2 lg:col-span-1 row-start-3 lg:row-start-auto flex flex-wrap gap-1.5 px-5 lg:px-6 pb-4 lg:py-5">
+                {project.tech.slice(0, 4).map((t) => (
+                    <span key={t} className="tag">{t}</span>
+                ))}
+                {project.tech.length > 4 && <span className="tag">+{project.tech.length - 4}</span>}
+            </span>
+            <span className="row-start-1 col-start-2 lg:row-start-auto lg:col-start-auto pr-5 lg:pr-6 pt-4 lg:py-5 flex justify-end gap-1.5">
+                {project.github && <IconLink href={project.github} icon={Github} label={`${project.title} source on GitHub`} />}
+                {project.live && <IconLink href={project.live} icon={ExternalLink} label={`${project.title} live site`} />}
+                {project.youtube && <IconLink href={project.youtube} icon={Youtube} label={`${project.title} video`} />}
+            </span>
+        </motion.div>
+    );
+};
+
+/**
+ * One row of the Work table. Production builds expand in place to the full
+ * description, every tech tag, all links and the architecture diagram; other
+ * builds render as compact EntryRows.
  */
 const ProjectRow = ({ project, index, open, onToggle, diagram }) => {
     const { setCursor, resetCursor } = useCursor();
     const id = `P-${String(index + 1).padStart(2, '0')}`;
     const feature = FEATURE_LABEL[project.featured];
     const panelId = `project-panel-${index}`;
+
+    if (!project.production) return <EntryRow project={project} id={id} />;
 
     return (
         <motion.div
@@ -54,7 +111,7 @@ const ProjectRow = ({ project, index, open, onToggle, diagram }) => {
                 onClick={onToggle}
                 aria-expanded={open}
                 aria-controls={panelId}
-                className={`group w-full text-left grid grid-cols-[1fr_auto] lg:grid-cols-[84px_250px_1fr_280px_56px] items-center transition-colors duration-200 ${
+                className={`group w-full text-left grid grid-cols-[1fr_auto] ${ROW_GRID} items-center transition-colors duration-200 ${
                     open ? 'bg-ink text-ice-hi' : 'cell hover:bg-ice-hi/90'
                 }`}
             >
