@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Menu, X, Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, MessageCircle } from 'lucide-react';
 import ResumeDropdown from './ResumeDropdown';
 import { useRoute } from '../context/RouteContext';
 
+const navLinks = [
+    { name: 'Index', id: 'hero', href: '#hero' },
+    { name: 'About', id: 'about', href: '#about' },
+    { name: 'Internship', id: 'experience', href: '#experience' },
+    { name: 'Creds', id: 'achievements', href: '#achievements' },
+    { name: 'Work', id: 'work', href: '#work' },
+    { name: 'Contact', id: 'contact', href: '#contact' },
+];
+
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [active, setActive] = useState('hero');
+    const { currentPage, setCurrentPage } = useRoute();
 
     // Lock body scroll while the full-screen menu is open, or the page scrolls
     // behind the overlay.
@@ -17,173 +29,152 @@ const Navbar = () => {
             document.body.style.overflow = previous;
         };
     }, [isOpen]);
-    const [scrolled, setScrolled] = useState(false);
-    const { currentPage, setCurrentPage } = useRoute();
 
+    // Scroll state + which section is under the upper third of the viewport,
+    // so the segmented nav always shows where you are.
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+        const onScroll = () => {
+            setScrolled(window.scrollY > 40);
+            if (currentPage !== 'home') return;
+            const probe = window.innerHeight * 0.35;
+            let current = 'hero';
+            for (const link of navLinks) {
+                const el = document.getElementById(link.id);
+                if (el && el.getBoundingClientRect().top <= probe) current = link.id;
+            }
+            setActive(current);
         };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [currentPage]);
 
-    const navLinks = [
-        { name: 'About', href: '#about' },
-        { name: 'Experience', href: '#experience' },
-        { name: 'Credentials', href: '#achievements' },
-        { name: 'Work', href: '#work' },
-        { name: 'Contact', href: '#contact' },
-    ];
+    const goHome = () => {
+        setCurrentPage('home');
+        window.scrollTo(0, 0);
+    };
+
+    const toggleAgent = () => {
+        setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
+        window.scrollTo(0, 0);
+        setIsOpen(false);
+    };
+
+    const onAgent = currentPage === 'agent';
 
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 md:px-8 pt-3 md:pt-4 pointer-events-none">
-            <nav
-                className={`pointer-events-auto max-w-6xl mx-auto rounded-full transition-all duration-300 px-5 sm:px-6 py-2.5 sm:py-3 flex justify-between items-center ${
-                    scrolled
-                        ? 'backdrop-blur-xl bg-navy-950/90 border border-teal-400/30 shadow-2xl shadow-black/60'
-                        : 'backdrop-blur-xl bg-navy-900/75 border border-white/10 shadow-xl shadow-black/25'
-                }`}
-            >
-                <motion.button
-                    onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-teal-400 font-mono text-lg md:text-xl font-bold tracking-tight hover:text-teal-300 transition-colors"
+        <header className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 lg:px-10 pt-3 md:pt-5 pointer-events-none">
+            <nav className="pointer-events-auto mx-auto flex items-center justify-between gap-4">
+                {/* Brand */}
+                <button
+                    onClick={goHome}
+                    className={`flex items-center gap-3 rounded-lg pr-3 transition-colors ${scrolled ? 'bg-ice-panel/80 backdrop-blur-md' : ''}`}
+                    aria-label="Hetav Shah — home"
                 >
-                    Hetav
-                </motion.button>
+                    <span className="w-9 h-9 border-[1.5px] border-ink rounded-[3px] grid place-items-center font-mono text-xs font-medium text-ink bg-ice-hi/60">
+                        HS
+                    </span>
+                    <span className="label text-left leading-[1.55] hidden sm:block">
+                        <span className="block text-ink">Hetav Shah</span>
+                        <span className="block text-ink-mute">Unit 145 — Portfolio</span>
+                    </span>
+                </button>
 
-                {/* Desktop Menu */}
-                <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-                    <ol className="flex space-x-6 lg:space-x-8">
-                        <motion.li
-                            initial={{ y: -20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0 }}
-                        >
-                            <button
-                                onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); }}
-                                className="text-slate-light hover:text-teal-400 font-mono text-sm transition-colors"
-                            >
-                                Home
-                            </button>
-                        </motion.li>
-                        {navLinks.map((link, index) => (
-                            <motion.li
+                {/* Desktop segmented nav */}
+                <div
+                    className={`hidden lg:flex items-center gap-1 p-1.5 rounded-xl border border-ink/20 backdrop-blur-md transition-all duration-300 ${
+                        scrolled ? 'bg-ice-hi/90 shadow-[0_12px_30px_-18px_rgba(13,17,23,0.45)]' : 'bg-ice-panel/70'
+                    }`}
+                >
+                    {navLinks.map((link) => {
+                        const isActive = !onAgent && active === link.id;
+                        return (
+                            <a
                                 key={link.name}
-                                initial={{ y: -20, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: (index + 1) * 0.1 }}
+                                href={link.href}
+                                onClick={() => { if (onAgent) setCurrentPage('home'); }}
+                                className={`label px-3.5 py-2.5 rounded-md transition-colors ${
+                                    isActive ? 'bg-ink text-ice-hi' : 'text-ink hover:bg-ink/[0.06]'
+                                }`}
                             >
-                                <a
-                                    href={link.href}
-                                    onClick={() => { if (currentPage !== 'home') { setCurrentPage('home'); } }}
-                                    className="text-slate-light hover:text-teal-400 font-mono text-sm transition-colors"
-                                >
-                                    {link.name}
-                                </a>
-                            </motion.li>
-                        ))}
-                    </ol>
-                    <motion.button
-                        onClick={() => {
-                            setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
-                            window.scrollTo(0, 0);
-                        }}
-                        initial={{ y: -20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className={`px-4 py-2 rounded-full font-mono text-sm transition-all duration-300 flex items-center gap-2 ${
-                            currentPage === 'agent'
-                                ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25 font-bold'
-                                : 'border border-teal-400 text-teal-400 hover:bg-teal-400/10'
+                                {link.name}
+                            </a>
+                        );
+                    })}
+                    <button
+                        onClick={toggleAgent}
+                        className={`label px-3.5 py-2.5 rounded-md flex items-center gap-2 transition-colors ${
+                            onAgent ? 'bg-arc text-white' : 'text-arc-deep hover:bg-arc/10'
                         }`}
                     >
-                        <MessageCircle size={14} />
-                        {currentPage === 'agent' ? 'Back Home' : 'Ask Hetav'}
-                    </motion.button>
-                    <motion.div
-                        initial={{ y: -20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.6 }}
-                    >
-                        <ResumeDropdown variant="nav" />
-                    </motion.div>
+                        <MessageCircle size={13} strokeWidth={2} />
+                        {onAgent ? 'Back home' : 'Ask Hetav'}
+                    </button>
                 </div>
 
-                {/* Mobile: Ask Hetav icon + Hamburger */}
-                <div className="flex md:hidden items-center gap-2.5">
-                    <motion.button
-                        onClick={() => {
-                            setCurrentPage(currentPage === 'agent' ? 'home' : 'agent');
-                            window.scrollTo(0, 0);
-                            setIsOpen(false);
-                        }}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className={`p-2 rounded-full transition-all duration-300 ${
-                            currentPage === 'agent'
-                                ? 'bg-teal-400 text-navy-900 shadow-lg shadow-teal-400/25'
-                                : 'border border-teal-400 text-teal-400'
+                {/* Right: résumé + mobile controls */}
+                <div className="flex items-center gap-2">
+                    <div className="hidden lg:block">
+                        <ResumeDropdown variant="nav" />
+                    </div>
+                    <button
+                        onClick={toggleAgent}
+                        className={`lg:hidden h-10 px-3 rounded-lg border flex items-center gap-2 label transition-colors ${
+                            onAgent ? 'bg-arc border-arc text-white' : 'border-ink/25 bg-ice-panel/80 backdrop-blur-md text-arc-deep'
                         }`}
                         aria-label="Ask Hetav"
                     >
-                        <MessageCircle size={18} />
-                    </motion.button>
+                        <MessageCircle size={15} />
+                        <span className="hidden sm:inline">{onAgent ? 'Home' : 'Ask Hetav'}</span>
+                    </button>
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="text-teal-400 p-1.5 rounded-full hover:bg-white/5 transition-colors"
+                        className="lg:hidden h-10 w-10 grid place-items-center rounded-lg border border-ink/25 bg-ice-panel/80 backdrop-blur-md text-ink"
+                        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={isOpen}
                     >
-                        {isOpen ? <X size={24} /> : <Menu size={24} />}
+                        {isOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
                 </div>
             </nav>
 
-            {/* Mobile Menu Overlay */}
-            {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.98 }}
-                    transition={{ duration: 0.18, ease: 'easeOut' }}
-                    className="fixed inset-0 bg-navy-900/95 backdrop-blur-lg flex flex-col items-center justify-center z-40 md:hidden pointer-events-auto"
-                >
-                    <button
-                        onClick={() => setIsOpen(false)}
-                        className="absolute top-6 right-6 text-teal-400 p-2 rounded-full hover:bg-white/10"
-                        aria-label="Close menu"
+            {/* Mobile menu */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                        className="fixed inset-0 bg-ice/95 backdrop-blur-lg flex flex-col justify-center z-40 lg:hidden pointer-events-auto px-8"
                     >
-                        <X size={28} />
-                    </button>
-                    <ul className="space-y-6 text-center w-full px-8">
-                        <li>
-                            <button
-                                onClick={() => { setCurrentPage('home'); window.scrollTo(0, 0); setIsOpen(false); }}
-                                className="text-slate-light hover:text-teal-400 font-mono text-lg block w-full"
-                            >
-                                <span className="text-teal-400 block text-xs mb-1 font-mono">00.</span>
-                                Home
-                            </button>
-                        </li>
-                        {navLinks.map((link, index) => (
-                            <li key={link.name}>
-                                <a
-                                    href={link.href}
-                                    onClick={() => { setCurrentPage('home'); setIsOpen(false); }}
-                                    className="text-slate-light hover:text-teal-400 font-mono text-lg block"
-                                >
-                                    <span className="text-teal-400 block text-xs mb-1 font-mono">0{index + 1}.</span>
-                                    {link.name}
-                                </a>
-                            </li>
-                        ))}
-                        <li className="pt-4 flex justify-center">
-                            <ResumeDropdown variant="nav" onNavigate={() => setIsOpen(false)} />
-                        </li>
-                    </ul>
-                </motion.div>
-            )}
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="absolute top-3 right-3 sm:right-6 h-10 w-10 grid place-items-center rounded-lg border border-ink/25 text-ink"
+                            aria-label="Close menu"
+                        >
+                            <X size={20} />
+                        </button>
+                        <ul className="border-t-[1.5px] border-ink">
+                            {navLinks.map((link, index) => (
+                                <li key={link.name} className="border-b border-ink/15">
+                                    <a
+                                        href={link.href}
+                                        onClick={() => { setCurrentPage('home'); setIsOpen(false); }}
+                                        className="flex items-baseline justify-between py-4"
+                                    >
+                                        <span className="text-4xl font-semibold tracking-display text-ink">{link.name}</span>
+                                        <span className="label text-ink-mute">0{index}</span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="pt-8">
+                            <ResumeDropdown variant="cta" onNavigate={() => setIsOpen(false)} />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </header>
     );
 };

@@ -43,6 +43,9 @@ const Background3D = () => {
       100
     );
     camera.position.set(0, 0, 16);
+    // Compute the view matrix now: the render loop projects the head to screen
+    // space before the first renderer.render() would otherwise do it.
+    camera.updateMatrixWorld();
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -83,12 +86,16 @@ const Background3D = () => {
     }
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
+    // Additive blending disappears against the light page, so the starfield
+    // uses normal blending in a deeper arc-reactor cyan.
+    const PARTICLE_SIZE = 0.1;
+    const PARTICLE_OPACITY = 0.4;
     const particleMaterial = new THREE.PointsMaterial({
-      color: 0x38bdf8,
-      size: 0.12,
+      color: 0x0e8db5,
+      size: PARTICLE_SIZE,
       transparent: true,
-      opacity: 0.55,
-      blending: THREE.AdditiveBlending
+      opacity: PARTICLE_OPACITY,
+      depthWrite: false
     });
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particleSystem);
@@ -616,7 +623,22 @@ const Background3D = () => {
       targetX: 0,
       targetY: 0,
       screenX: window.innerWidth / 2,
-      screenY: window.innerHeight / 2
+      screenY: window.innerHeight / 2,
+      lastMoveAt: 0
+    };
+
+    // Head-follow: eyes track the cursor everywhere; once the cursor is far
+    // enough from the head, the head itself turns toward it on a soft spring
+    // (slight lag + overshoot), and eases most of the way back when the
+    // cursor rests. Strongest in the hero, mostly faded once the suit is on.
+    const headLook = { yaw: 0, pitch: 0, yawVel: 0, pitchVel: 0 };
+    const HEAD_MAX_YAW = 0.45;   // ~26 degrees
+    const HEAD_MAX_PITCH = 0.26; // ~15 degrees
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const headScreen = new THREE.Vector3();
+    const smoothstep = (a, b, x) => {
+      const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+      return t * t * (3 - 2 * t);
     };
 
     const scrollState = {
@@ -659,6 +681,7 @@ const Background3D = () => {
       mouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
       mouse.screenX = e.clientX;
       mouse.screenY = e.clientY;
+      mouse.lastMoveAt = performance.now();
     };
 
     const handleScroll = () => {
@@ -682,6 +705,7 @@ const Background3D = () => {
         mouse.targetY = -(touch.clientY / window.innerHeight) * 2 + 1;
         mouse.screenX = touch.clientX;
         mouse.screenY = touch.clientY;
+        mouse.lastMoveAt = performance.now();
 
         // Check if touch is on or near the Arc Reactor or robot body
         const arcWorld = new THREE.Vector3();
@@ -714,6 +738,7 @@ const Background3D = () => {
         mouse.targetY = -(touch.clientY / window.innerHeight) * 2 + 1;
         mouse.screenX = touch.clientX;
         mouse.screenY = touch.clientY;
+        mouse.lastMoveAt = performance.now();
       }
     };
 
@@ -766,11 +791,45 @@ const Background3D = () => {
       fCtx.fillStyle = '#ffffff';
       fCtx.fillRect(0, 0, 512, 512);
 
-      // Eye look calculation based on cursor position
-      const headScreenX = window.innerWidth / 2;
-      const headScreenY = window.innerHeight / 2;
+      // Eye look calculation from the head's real on-screen position, so the
+      // eyes and the head turn aim at the same point wherever the head sits.
+      headGroup.getWorldPosition(headScreen);
+      headScreen.project(camera);
+      const projectedOk = Number.isFinite(headScreen.x) && Number.isFinite(headScreen.y);
+      const headScreenX = projectedOk ? (headScreen.x * 0.5 + 0.5) * window.innerWidth : window.innerWidth / 2;
+      const headScreenY = projectedOk ? (-headScreen.y * 0.5 + 0.5) * window.innerHeight : window.innerHeight / 2;
       const dx = mouse.screenX - headScreenX;
       const dy = mouse.screenY - headScreenY;
+
+      // --- Head follow (eyes lead, head follows past a distance) ---
+      {
+        const dist = Math.hypot(dx, dy);
+        const nearR = Math.min(window.innerWidth, window.innerHeight) * 0.24;
+        // 0 inside nearR (eyes only), ramps to 1 over the next ~35% of the screen
+        const reach = smoothstep(nearR, nearR + Math.min(window.innerWidth, window.innerHeight) * 0.35, dist);
+        // Hero = full turn; once the suit is assembled keep a small turn so it
+        // never fights the turntable pose. No turning during flight.
+        const sceneFactor = flightState.active || reducedMotion
+          ? 0
+          : 1 - smoothstep(0, 0.5, scrollState.assemblyEased) * 0.75;
+        // Cursor at rest for a while: head drifts most of the way back,
+        // eyes keep looking.
+        const idleFor = (performance.now() - mouse.lastMoveAt) / 1000;
+        const restFactor = 1 - smoothstep(1.2, 3.0, idleFor) * 0.6;
+        const k = reach * sceneFactor * restFactor;
+
+        const targetYaw = Math.max(-1, Math.min(1, dx / (window.innerWidth * 0.45))) * HEAD_MAX_YAW * k;
+        const targetPitch = Math.max(-1, Math.min(1, dy / (window.innerHeight * 0.45))) * HEAD_MAX_PITCH * k;
+
+        // Under-damped spring: trails the eyes, then settles with a small overshoot.
+        headLook.yawVel = (headLook.yawVel + (targetYaw - headLook.yaw) * 0.018) * 0.86;
+        headLook.pitchVel = (headLook.pitchVel + (targetPitch - headLook.pitch) * 0.018) * 0.86;
+        headLook.yaw += headLook.yawVel;
+        headLook.pitch += headLook.pitchVel;
+
+        headGroup.rotation.y = headLook.yaw;
+        headGroup.rotation.x = headLook.pitch;
+      }
       const eyeAngle = Math.atan2(dy, dx);
       const eyeDist = Math.min(Math.sqrt(dx * dx + dy * dy), 700);
 
@@ -930,8 +989,8 @@ const Background3D = () => {
             flightState.targetY = 0;
             flightState.currentZ = 0;
             flightState.currentY = 0;
-            particleMaterial.size = 0.12;
-            particleMaterial.opacity = 0.55;
+            particleMaterial.size = PARTICLE_SIZE;
+            particleMaterial.opacity = PARTICLE_OPACITY;
           }
         }
 
@@ -959,8 +1018,8 @@ const Background3D = () => {
           }
         }
         particleGeometry.attributes.position.needsUpdate = true;
-        particleMaterial.size = 0.22;
-        particleMaterial.opacity = 0.90;
+        particleMaterial.size = 0.2;
+        particleMaterial.opacity = 0.7;
       } else {
         // Normal gentle star drift
         particleSystem.rotation.y = time * 0.02;
@@ -1086,7 +1145,7 @@ const Background3D = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-0 bg-navy-950 overflow-hidden pointer-events-none"
+      className="fixed inset-0 z-0 overflow-hidden pointer-events-none"
     >
       <canvas
         ref={canvasRef}

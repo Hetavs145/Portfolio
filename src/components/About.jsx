@@ -1,141 +1,140 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import { useCursor } from '../context/CursorContext';
 import { skills } from '../data/profile';
+import SectionHeader from './SectionHeader';
+
+/**
+ * The arc-reactor aperture around the profile photo: two counter-rotating
+ * engineering dials and telemetry badges. Same construction as before,
+ * re-inked for the light theme.
+ */
+const ArcAperture = () => (
+    <motion.div
+        className="relative group flex justify-center items-center cursor-pointer select-none py-14 sm:py-16"
+        whileHover={{ scale: 1.02 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    >
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            {/* Outer precision dial */}
+            <motion.svg
+                className="w-[min(124%,420px)] aspect-square max-w-none pointer-events-none"
+                viewBox="0 0 240 240"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 45, repeat: Infinity, ease: 'linear' }}
+            >
+                <circle cx="120" cy="120" r="114" fill="none" stroke="rgba(14,141,181,0.45)" strokeWidth="0.8" strokeDasharray="4 8" />
+                <circle cx="120" cy="120" r="108" fill="none" stroke="rgba(217,65,42,0.45)" strokeWidth="0.6" strokeDasharray="2 5" />
+                <circle cx="120" cy="120" r="102" fill="none" stroke="rgba(13,17,23,0.18)" strokeWidth="0.5" />
+
+                {/* Cardinal reticle brackets */}
+                <line x1="120" y1="4" x2="120" y2="15" stroke="#0D1117" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="120" y1="225" x2="120" y2="236" stroke="#0D1117" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="4" y1="120" x2="15" y2="120" stroke="#0D1117" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="225" y1="120" x2="236" y2="120" stroke="#0D1117" strokeWidth="1.5" strokeLinecap="round" />
+
+                {/* 45° telemetry ticks */}
+                <line x1="39" y1="39" x2="47" y2="47" stroke="rgba(14,141,181,0.7)" strokeWidth="1" strokeLinecap="round" />
+                <line x1="201" y1="39" x2="193" y2="47" stroke="rgba(14,141,181,0.7)" strokeWidth="1" strokeLinecap="round" />
+                <line x1="39" y1="201" x2="47" y2="193" stroke="rgba(14,141,181,0.7)" strokeWidth="1" strokeLinecap="round" />
+                <line x1="201" y1="201" x2="193" y2="193" stroke="rgba(14,141,181,0.7)" strokeWidth="1" strokeLinecap="round" />
+
+                {/* Azimuth degrees */}
+                <text x="120" y="24" fontSize="4.5" textAnchor="middle" fill="#0B6E8E" fontFamily="JetBrains Mono, monospace">000°</text>
+                <text x="218" y="122" fontSize="4.5" textAnchor="middle" fill="#66717F" fontFamily="JetBrains Mono, monospace">090°</text>
+                <text x="120" y="221" fontSize="4.5" textAnchor="middle" fill="#66717F" fontFamily="JetBrains Mono, monospace">180°</text>
+                <text x="22" y="122" fontSize="4.5" textAnchor="middle" fill="#66717F" fontFamily="JetBrains Mono, monospace">270°</text>
+            </motion.svg>
+
+            {/* Inner counter-rotating ring */}
+            <motion.svg
+                className="absolute w-[min(114%,386px)] aspect-square max-w-none pointer-events-none"
+                viewBox="0 0 200 200"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 65, repeat: Infinity, ease: 'linear' }}
+            >
+                <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(14,141,181,0.4)" strokeWidth="1" strokeDasharray="16 32" />
+                <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(13,17,23,0.14)" strokeWidth="0.5" strokeDasharray="1 4" />
+            </motion.svg>
+        </div>
+
+        {/* Telemetry badges */}
+        <span className="absolute top-4 right-4 label text-[9.5px] text-arc-deep border border-arc/30 px-1.5 py-0.5 rounded bg-ice-hi/90">
+            SYS // MARK-IV
+        </span>
+        <span className="absolute bottom-4 left-4 label text-[9.5px] text-ink-mute border border-ink/15 px-1.5 py-0.5 rounded bg-ice-hi/90">
+            FOCAL LOCK: 1.0
+        </span>
+
+        {/* Circle-cropped profile */}
+        <div className="relative z-10 w-60 h-60 sm:w-72 sm:h-72 rounded-full overflow-hidden border-2 border-ink/80 p-1 bg-ice-hi shadow-[0_30px_60px_-30px_rgba(13,17,23,0.45)] transition-colors duration-300 group-hover:border-arc">
+            <div className="w-full h-full rounded-full overflow-hidden relative">
+                <img
+                    src="/portfolio.jpeg"
+                    alt="Hetav Shah"
+                    width={600}
+                    height={600}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-[50%_63%] grayscale-[15%] group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
+                />
+            </div>
+        </div>
+    </motion.div>
+);
 
 const About = () => {
-    const [ref, inView] = useInView({
-        triggerOnce: true,
-        threshold: 0.2,
-    });
     const { setCursor, resetCursor } = useCursor();
 
     return (
-        <section id="about" className="py-20 relative z-10">
-            <div className="container mx-auto px-6 md:px-12 lg:px-24">
-                <div className="backdrop-blur-md bg-navy-900/80 border border-white/10 rounded-3xl p-8 sm:p-12 shadow-2xl relative">
-                    <motion.div
-                        ref={ref}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={inView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.5 }}
-                        className="grid md:grid-cols-2 gap-12 items-center"
-                    >
-                    <div>
-                        <div className="flex items-center mb-8">
-                            <h2 className="text-3xl font-bold text-slate-lighter">About Me</h2>
-                            <div className="h-px bg-navy-600 flex-grow ml-4"></div>
-                        </div>
+        <section id="about" className="relative z-10 pt-28 md:pt-36">
+            <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-[60px]">
+                <SectionHeader mod="01" title="Profile" meta="B.Tech CSE + MBA · Nirma" />
 
-                        <p className="text-slate mb-4">
-                            Full-stack developer and agentic AI engineer.
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    className="grid lg:grid-cols-2 border-l border-ink/20"
+                >
+                    <div className="cell border-r border-b border-ink/20 p-6 sm:p-9">
+                        <p className="text-xl sm:text-2xl leading-[1.45] tracking-[-0.015em] text-ink mb-5">
+                            Full-stack developer and agentic AI engineer. I build multi-agent LLM pipelines with
+                            LangGraph, production platforms with React &amp; Node.js, and real-time systems that
+                            think fast and respond faster.
                         </p>
-                        <p className="text-slate mb-4">
-                            I build multi-agent LLM pipelines with LangGraph, production platforms with React & Node.js, and real-time systems that think fast and respond faster. From a 6-agent traffic command system to a full HVAC e-commerce platform — I love shipping things that actually work.
+                        <p className="text-base sm:text-lg leading-relaxed text-ink-2 mb-4">
+                            From a 6-agent traffic command system to a full HVAC e-commerce platform — I love shipping
+                            things that actually work.
                         </p>
-                        <p className="text-slate mb-8">
+                        <p className="text-base sm:text-lg leading-relaxed text-ink-2">
                             Hackathon winner. Strong in cross-functional teams. Always building.
                         </p>
-                        <p className="text-slate mb-8">
-                            Here are a few technologies I've been working with recently:
-                        </p>
 
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono text-sm text-slate">
+                        <div className="label text-ink-mute mt-9 mb-1">Working with recently</div>
+                        <ul className="grid sm:grid-cols-2 sm:gap-x-6">
                             {skills.map((skill, index) => (
                                 <li
-                                    key={index}
-                                    className="flex items-center"
+                                    key={skill}
+                                    className="flex justify-between items-center gap-3 py-3 border-b border-dashed border-ink/20 text-[15px] text-ink"
                                     onMouseEnter={() => setCursor('skill', skill, ['Skill', 'Expertise'])}
                                     onMouseLeave={resetCursor}
                                 >
-                                    <span className="text-teal-400 mr-2">▹</span>
-                                    {skill}
+                                    <span>{skill}</span>
+                                    <span className="label text-ink-mute">{String(index + 1).padStart(2, '0')}</span>
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    <motion.div
-                        className="relative group flex justify-center items-center cursor-pointer select-none"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    >
-                        {/* Mechanical HUD Precision Aperture (Non-AI, Engineering Dial) */}
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            {/* Outer Precision Dial - Pure SVG Engineering HUD with zero raster background */}
-                            <motion.svg
-                                className="w-[124%] h-[124%] max-w-none pointer-events-none"
-                                viewBox="0 0 240 240"
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                            >
-                                {/* Outer Technical Calibration Tracks */}
-                                <circle cx="120" cy="120" r="114" fill="none" stroke="rgba(56, 189, 248, 0.25)" strokeWidth="0.8" strokeDasharray="4 8" />
-                                <circle cx="120" cy="120" r="108" fill="none" stroke="rgba(217, 119, 6, 0.35)" strokeWidth="0.6" strokeDasharray="2 5" />
-                                <circle cx="120" cy="120" r="102" fill="none" stroke="rgba(255, 255, 255, 0.12)" strokeWidth="0.5" />
-
-                                {/* Cardinal Precision Reticle Brackets */}
-                                <line x1="120" y1="4" x2="120" y2="15" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
-                                <line x1="120" y1="225" x2="120" y2="236" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
-                                <line x1="4" y1="120" x2="15" y2="120" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
-                                <line x1="225" y1="120" x2="236" y2="120" stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
-
-                                {/* 45-Degree Telemetry Ticks */}
-                                <line x1="39" y1="39" x2="47" y2="47" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
-                                <line x1="201" y1="39" x2="193" y2="47" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
-                                <line x1="39" y1="201" x2="47" y2="193" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
-                                <line x1="201" y1="201" x2="193" y2="193" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeLinecap="round" />
-
-                                {/* Engineering Azimuth Degrees */}
-                                <text x="120" y="24" fontSize="4.5" textAnchor="middle" fill="#38bdf8" fontFamily="monospace" opacity="0.8">000°</text>
-                                <text x="218" y="122" fontSize="4.5" textAnchor="middle" fill="#94a3b8" fontFamily="monospace" opacity="0.7">090°</text>
-                                <text x="120" y="221" fontSize="4.5" textAnchor="middle" fill="#94a3b8" fontFamily="monospace" opacity="0.7">180°</text>
-                                <text x="22" y="122" fontSize="4.5" textAnchor="middle" fill="#94a3b8" fontFamily="monospace" opacity="0.7">270°</text>
-                            </motion.svg>
-
-                            {/* Inner Counter-Rotating Precision Ring */}
-                            <motion.svg
-                                className="absolute w-[114%] h-[114%] max-w-none pointer-events-none"
-                                viewBox="0 0 200 200"
-                                animate={{ rotate: -360 }}
-                                transition={{ duration: 65, repeat: Infinity, ease: "linear" }}
-                            >
-                                <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(56, 189, 248, 0.2)" strokeWidth="1" strokeDasharray="16 32" />
-                                <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255, 255, 255, 0.08)" strokeWidth="0.5" strokeDasharray="1 4" />
-                            </motion.svg>
-
-                            {/* Telemetry Corner Badges */}
-                            <div className="absolute top-0 right-4 font-mono text-[9px] tracking-wider text-teal-400/60 uppercase border border-teal-400/20 px-1.5 py-0.5 rounded bg-navy-950/80 backdrop-blur-sm">
-                                SYS // MARK-IV
-                            </div>
-                            <div className="absolute bottom-2 left-4 font-mono text-[9px] tracking-wider text-slate/60 uppercase border border-white/5 px-1.5 py-0.5 rounded bg-navy-950/80 backdrop-blur-sm">
-                                FOCAL LOCK: 1.0
-                            </div>
-                        </div>
-
-                        {/* Proper Circle Cropped Profile Container */}
-                        <div className="relative z-10 w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full overflow-hidden border-2 border-teal-400/50 p-1 bg-navy-900/90 shadow-2xl transition-all duration-300 group-hover:border-teal-300">
-                            <div className="w-full h-full rounded-full overflow-hidden relative">
-                                <img
-                                    src="/portfolio.jpeg"
-                                    alt="Hetav Shah"
-                                    width={600}
-                                    height={600}
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="w-full h-full object-cover object-[50%_63%] grayscale-[15%] group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
-                                />
-
-                                {/* Subtle Technical Glaze */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-navy-900/40 via-transparent to-teal-400/10 opacity-40 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"></div>
-                            </div>
-                        </div>
-                    </motion.div>
+                    <div className="cell border-r border-b border-ink/20 relative overflow-hidden flex items-center justify-center min-h-[420px]">
+                        <span className="absolute left-4 top-4 label text-ink-mute">IMG_001 · Subject: Hetav</span>
+                        <ArcAperture />
+                    </div>
                 </motion.div>
             </div>
-        </div>
-    </section>
+        </section>
     );
 };
 

@@ -1,86 +1,66 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { Briefcase } from 'lucide-react';
+import SectionHeader from './SectionHeader';
 
-const ExperienceCard = ({ job, index, isSingle }) => {
-    const [ref, inView] = useInView({
-        triggerOnce: true,
-        threshold: 0.2,
-    });
+const jobs = [
+    {
+        role: 'Full-Stack Developer Intern — Team Lead',
+        company: 'NTS Global Nihon',
+        location: 'Remote',
+        period: '2025.06 → 2025.08',
+        description: [
+            'Engineered 3 Firebase backend modules — Authentication, Firestore rules, and session management — across 2 production environments.',
+            'Developed 5 Kaamigo chatbot modules using RAG-based approach with 50+ interaction flows, inference integration, and UI coordination.',
+            'Shipped real-time chat supporting 3 platforms with message persistence and cross-device sync; reviewed 20+ pull requests via Git workflows.',
+        ],
+    },
+];
 
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, x: isSingle ? 0 : (index % 2 === 0 ? -50 : 50), y: isSingle ? 20 : 0 }}
-            animate={inView ? { opacity: 1, x: 0, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className={`mb-12 flex flex-col md:flex-row items-center w-full 
-                ${isSingle ? 'justify-center' : (index % 2 === 0 ? 'md:flex-row-reverse' : '')}`}
-        >
-            {!isSingle && <div className="order-1 w-full md:w-5/12 hidden md:block"></div>}
+const Experience = () => (
+    <section id="experience" className="relative z-10 pt-28 md:pt-36">
+        <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-[60px]">
+            <SectionHeader
+                mod="02"
+                title="Internship"
+                meta={`${String(jobs.length).padStart(2, '0')} ${jobs.length === 1 ? 'entry' : 'entries'}`}
+            />
 
-            <div className={`z-20 flex items-center order-1 bg-navy-800 shadow-xl w-12 h-12 rounded-full border-2 border-teal-400 justify-center 
-                ${isSingle ? 'mb-4 md:mb-0 md:mr-6' : 'absolute left-8 md:static transform -translate-x-1/2 md:translate-x-0'}`}>
-                <Briefcase size={20} className="text-teal-400" />
+            <div className="border-l border-ink/20">
+                {jobs.map((job, index) => (
+                    <motion.article
+                        key={job.role}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        className="cell grid lg:grid-cols-[220px_1fr_1.1fr] border-r border-b border-ink/20"
+                    >
+                        <div className="p-6 sm:px-9 sm:py-8 label leading-[1.9]">
+                            <span className="block text-ink-mute">{job.period}</span>
+                            <span className="block text-ink">{job.location}</span>
+                        </div>
+                        <div className="px-6 pb-2 sm:px-9 lg:py-8 lg:border-l border-ink/20">
+                            <h3 className="text-[28px] sm:text-[32px] font-semibold tracking-[-0.03em] leading-[1.08] text-ink">
+                                {job.role}
+                            </h3>
+                            <div className="label text-arc-deep mt-3">{job.company}</div>
+                        </div>
+                        <ul className="p-6 sm:px-9 sm:py-8 lg:border-l border-ink/20">
+                            {job.description.map((d) => (
+                                <li
+                                    key={d}
+                                    className="relative pl-7 py-2.5 border-b border-dashed border-ink/15 last:border-b-0 text-[15.5px] leading-relaxed text-ink-2"
+                                >
+                                    <span className="absolute left-0 top-2.5 font-mono text-arc-deep" aria-hidden="true">→</span>
+                                    {d}
+                                </li>
+                            ))}
+                        </ul>
+                    </motion.article>
+                ))}
             </div>
-
-            <div className={`order-1 px-6 py-4 bg-navy-800/50 backdrop-blur-sm rounded-lg border border-teal-400/20 shadow-lg hover:border-teal-400/50 transition-colors
-                ${isSingle ? 'w-full md:w-8/12 text-center md:text-left' : 'w-[calc(100%-4rem)] md:w-5/12 ml-16 md:ml-0'}`}>
-                <h3 className="mb-1 font-bold text-slate-lighter text-xl">{job.role}</h3>
-                <h4 className="mb-2 font-mono text-teal-400 text-sm">{job.company}</h4>
-                <p className="mb-4 text-sm text-slate-light font-mono">{job.period}</p>
-                <ul className={`list-disc list-inside text-slate text-sm space-y-2 ${isSingle ? 'inline-block text-left' : ''}`}>
-                    {job.description.map((desc, i) => (
-                        <li key={i}>{desc}</li>
-                    ))}
-                </ul>
-            </div>
-        </motion.div>
-    );
-};
-
-const Experience = () => {
-    const jobs = [
-        {
-            role: "Full-Stack Developer Intern – Team Lead",
-            company: "NTS Global Nihon · Remote",
-            period: "Jun 2025 – Aug 2025",
-            description: [
-                "Engineered 3 Firebase backend modules — Authentication, Firestore rules, and session management — across 2 production environments.",
-                "Developed 5 Kaamigo chatbot modules using RAG-based approach with 50+ interaction flows, inference integration, and UI coordination.",
-                "Shipped real-time chat supporting 3 platforms with message persistence and cross-device sync; reviewed 20+ pull requests via Git workflows."
-            ]
-        }
-    ];
-
-    const isSingle = jobs.length === 1;
-
-    return (
-        <section id="experience" className="py-20 relative overflow-hidden">
-            <div className="container mx-auto px-6 md:px-12 lg:px-24">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    viewport={{ once: true }}
-                    className="mb-16 flex items-center"
-                >
-                    <h2 className="text-3xl font-bold text-slate-lighter">Where I've Worked</h2>
-                    <div className="h-px bg-navy-600 flex-grow ml-4"></div>
-                </motion.div>
-
-                <div className="relative overflow-hidden p-4 md:p-10 h-full">
-                    {!isSingle && (
-                        <div className="absolute border-opacity-20 border-teal-400 h-full border left-8 md:left-1/2 transform md:-translate-x-1/2"></div>
-                    )}
-                    {jobs.map((job, index) => (
-                        <ExperienceCard key={index} job={job} index={index} isSingle={isSingle} />
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
+        </div>
+    </section>
+);
 
 export default Experience;

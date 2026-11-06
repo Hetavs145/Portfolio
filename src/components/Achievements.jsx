@@ -1,77 +1,68 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
 import { Trophy, Award, GraduationCap, Users } from 'lucide-react';
 import { achievements } from '../data/achievements';
+import SectionHeader from './SectionHeader';
 
 /* The data module stores icon names rather than components, so that plain Node
    can import it when building the RAG index (lucide-react is ESM+JSX). */
 const ICONS = { Trophy, Award, GraduationCap, Users };
 
-const AchievementCard = ({ icon, title, subtitle, details, index, color = 'teal' }) => {
+/* Data keeps its original colour keys; they map onto the two accents here. */
+const ACCENT = {
+    amber: { text: 'text-hot', box: 'border-hot/40 bg-hot-soft/60' },
+    teal: { text: 'text-arc-deep', box: 'border-arc/35 bg-arc-soft/60' },
+    purple: { text: 'text-ink', box: 'border-ink/25 bg-ice-hi' },
+};
+
+const AchievementCell = ({ icon, title, subtitle, details, index, color = 'teal' }) => {
     const Icon = ICONS[icon] ?? Award;
-    const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
-
-    const colorMap = {
-        teal: { border: 'border-teal-400/30 hover:border-teal-400/70', bg: 'bg-teal-400/10', text: 'text-teal-400', glow: 'shadow-teal-400/20' },
-        amber: { border: 'border-amber-400/30 hover:border-amber-400/70', bg: 'bg-amber-400/10', text: 'text-amber-400', glow: 'shadow-amber-400/20' },
-        purple: { border: 'border-purple-400/30 hover:border-purple-400/70', bg: 'bg-purple-400/10', text: 'text-purple-400', glow: 'shadow-purple-400/20' },
-    };
-
-    const c = colorMap[color];
+    const a = ACCENT[color] ?? ACCENT.teal;
 
     return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: index * 0.15 }}
-            className={`bg-navy-800 rounded-lg p-6 border ${c.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${c.glow}`}
+        <motion.article
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: (index % 2) * 0.08 }}
+            viewport={{ once: true, amount: 0.25 }}
+            className="cell border-r border-b border-ink/20 p-6 sm:p-9"
         >
-            <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg ${c.bg} mb-4`}>
-                <Icon size={24} className={c.text} />
+            <div className="flex items-start justify-between gap-4">
+                <span className={`w-11 h-11 rounded-md border grid place-items-center ${a.box}`}>
+                    <Icon size={20} strokeWidth={1.75} className={a.text} />
+                </span>
+                <span className="label text-ink-mute">C-{String(index + 1).padStart(2, '0')}</span>
             </div>
-            <h3 className="text-lg font-bold text-slate-lighter mb-1">{title}</h3>
-            {subtitle && <p className={`text-sm font-mono ${c.text} mb-3`}>{subtitle}</p>}
+            <h3 className="mt-6 text-[26px] sm:text-[28px] font-semibold tracking-[-0.03em] leading-[1.1] text-ink">{title}</h3>
+            {subtitle && <p className={`label mt-2.5 leading-relaxed ${a.text}`}>{subtitle}</p>}
             {details && (
-                <ul className="text-slate text-sm space-y-2">
-                    {details.map((d, i) => (
-                        <li key={i} className="flex items-start">
-                            <span className={`${c.text} mr-2 mt-1 flex-shrink-0`}>▹</span>
-                            <span>{d}</span>
+                <ul className="mt-4">
+                    {details.map((d) => (
+                        <li
+                            key={d}
+                            className="relative pl-7 py-2 border-b border-dashed border-ink/15 last:border-b-0 text-[15px] leading-relaxed text-ink-2"
+                        >
+                            <span className="absolute left-0 top-2 font-mono text-ink-mute" aria-hidden="true">→</span>
+                            {d}
                         </li>
                     ))}
                 </ul>
             )}
-        </motion.div>
+        </motion.article>
     );
 };
 
-const Achievements = () => {
-
-    return (
-        <section id="achievements" className="py-20 relative">
-            <div className="container mx-auto px-6 md:px-12 lg:px-24">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    viewport={{ once: true }}
-                    className="flex items-center mb-12"
-                >
-                    <span className="text-teal-400 font-mono text-xl mr-4">02.</span>
-                    <h2 className="text-3xl font-bold text-slate-lighter">Achievements & Credentials</h2>
-                    <div className="h-px bg-navy-600 flex-grow ml-4"></div>
-                </motion.div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {achievements.map((item, index) => (
-                        <AchievementCard key={index} {...item} index={index} />
-                    ))}
-                </div>
+const Achievements = () => (
+    <section id="achievements" className="relative z-10 pt-28 md:pt-36">
+        <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-[60px]">
+            <SectionHeader mod="03" title="Credentials" meta="Awards · Education · Certs" />
+            <div className="grid md:grid-cols-2 border-l border-ink/20">
+                {achievements.map((item, index) => (
+                    <AchievementCell key={item.title} {...item} index={index} />
+                ))}
             </div>
-        </section>
-    );
-};
+        </div>
+    </section>
+);
 
 export default Achievements;

@@ -72,7 +72,7 @@ const ResumeAura = () => {
                 vy: Math.sin(angle) * speed,
                 life: 1,
                 size: Math.random() * 10 + 10,
-                color: `hsl(${Math.random() * 60 + 160}, 100%, 70%)`
+                color: `hsl(${Math.random() * 20 + 190}, 85%, ${Math.random() * 12 + 28}%)`
             };
         };
 
@@ -92,21 +92,21 @@ const ResumeAura = () => {
             // Outer Ring
             ctx.beginPath();
             ctx.arc(0, 0, 20, 0, Math.PI * 2);
-            ctx.strokeStyle = '#64ffda';
+            ctx.strokeStyle = '#0D1117';
             ctx.lineWidth = 2;
             ctx.stroke();
 
             // Inner Core (Pupil)
             ctx.beginPath();
             ctx.arc(0, 0, 8, 0, Math.PI * 2);
-            ctx.fillStyle = '#64ffda';
+            ctx.fillStyle = '#0E8DB5';
             ctx.fill();
 
             // Scanning Line
             ctx.beginPath();
             ctx.moveTo(0, -25);
             ctx.lineTo(0, 25);
-            ctx.strokeStyle = 'rgba(100, 255, 218, 0.5)';
+            ctx.strokeStyle = 'rgba(13, 17, 23, 0.35)';
             ctx.lineWidth = 1;
             ctx.stroke();
 
@@ -134,7 +134,7 @@ const ResumeAura = () => {
                 if (p.life <= 0) {
                     particles.current.splice(index, 1);
                 } else {
-                    ctx.font = `${p.size}px "Fira Code", monospace`;
+                    ctx.font = `${p.size}px "JetBrains Mono", monospace`;
                     ctx.fillStyle = p.color;
                     ctx.globalAlpha = p.life;
                     ctx.fillText(p.text, p.x, p.y);
