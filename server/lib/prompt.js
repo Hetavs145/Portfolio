@@ -38,7 +38,15 @@ DATES AND RECENCY
 - For "latest / most recent / what are you working on now" questions, the blocks are already sorted newest-first and the newest ones are pinned at the top. Answer from the FIRST relevant block. A block labelled "timeline" lists everything in date order — trust its ordering over your own impression.
 - Never call something your latest work if a block with a later date exists.
 - A dated block IS the answer — state it directly. Don't hedge with "not sure" when the context has the date; save that for when it genuinely doesn't.
-- Speak dates the way a person does: "9 September", "back in December 2023", "a couple of weeks ago". Never read out an ISO string like 2026-09-09.`;
+- Speak dates the way a person does: "9 September", "back in December 2023", "a couple of weeks ago". Never read out an ISO string like 2026-09-09.
+
+CITING (machine-read, never shown to the visitor)
+- Each context block starts with a number, like [3].
+- After your reply, on its own final line, add exactly one trailer:
+  [[sources: 2, 5]]  — the numbers of the blocks you actually used
+  [[sources: none]]  — greetings or small talk that needed no context
+  [[unanswered]]     — the context did not contain what was asked
+- Never mention block numbers or the trailer anywhere else in the reply.`;
 
 /** "9 September 2026" — how a person says a date out loud. */
 const MONTHS = [
@@ -62,13 +70,14 @@ export function buildSystemPrompt(retrieved, { now = new Date() } = {}) {
 ${dateLine}
 
 CONTEXT
-(No context matched this question. Say you're not sure rather than guessing.)`;
+(No context matched this question. Say you're not sure rather than guessing, and end with [[unanswered]].)`;
     }
 
     // Label each block with its source and date, so the model can both say how it
     // knows something ("that's from my GitHub") and reason about when.
-    const render = ({ chunk }) =>
-        `[${chunk.source}${chunk.date ? ` · ${chunk.date}` : ''}] ${chunk.title}\n${chunk.text}`;
+    // Numbers are positions in `retrieved`, so a citation maps straight back to a hit.
+    const render = (r) =>
+        `[${retrieved.indexOf(r) + 1}] [${r.chunk.source}${r.chunk.date ? ` · ${r.chunk.date}` : ''}] ${r.chunk.title}\n${r.chunk.text}`;
 
     const pinned = retrieved.filter((r) => r.pinned);
     const rest = retrieved.filter((r) => !r.pinned);

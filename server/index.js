@@ -8,7 +8,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import { answer } from './lib/retrieve.js';
+import { respondChat } from './lib/respond.js';
 import { loadIndex } from './lib/vectorstore.js';
 import {
     allowedOrigins,
@@ -108,21 +108,8 @@ app.post('/api/chat', rateLimit, async (req, res) => {
         return res.status(400).json({ error: `Messages must be under ${MAX_MESSAGE_CHARS} characters` });
     }
 
-    try {
-        const result = await answer(messages);
-        return res.json(result);
-    } catch (err) {
-        console.error('[chat]', err.message);
-        // A 429 here means EVERY model in the fallback chain was rate-limited. On
-        // free tiers that is almost always the providers' shared pools being busy
-        // rather than this key being out of quota, so say "busy", not "out of quota".
-        if (err.status === 429) {
-            return res.status(503).json({
-                error: "the free model pools are all busy right now — give it a minute and ask again",
-            });
-        }
-        return res.status(502).json({ error: 'The agent had trouble answering. Try again in a moment.' });
-    }
+    // JSON by default; Server-Sent Events when the client asks for a stream.
+    return respondChat(req, res, messages);
 });
 
 // CORS rejections arrive here as errors; return a clean 403 rather than a stack trace.

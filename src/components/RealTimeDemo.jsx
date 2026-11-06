@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionHeader from "./SectionHeader";
 import { PENDING_QUESTION_KEY } from "../data/agent";
+import { streamAgent } from "../lib/agentClient";
+import SourceChips from "./SourceChips";
 import {
     Send,
     Bot,
@@ -268,29 +270,32 @@ const RealTimeDemo = () => {
                 content: m.text,
             }));
 
+        // The reply streams into a placeholder bubble as it's written.
+        const botId = Date.now() + 1;
+        let streamed = "";
+        const showDraft = (text, extra = {}) =>
+            setMessages([...nextMessages, { id: botId, text, sender: "bot", ...extra }]);
+
         try {
-            const apiBase = import.meta.env.VITE_AGENT_API_URL || "";
-            const response = await fetch(`${apiBase}/api/chat`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ messages: conversationHistory }),
+            const data = await streamAgent("/api/chat", { messages: conversationHistory }, {
+                onToken: (t) => {
+                    streamed += t;
+                    setIsTyping(false); // first token replaces the typing dots
+                    showDraft(streamed, { streaming: true });
+                },
             });
-
-            if (!response.ok) throw new Error("API error");
-
-            const data = await response.json();
-            const botMessage = {
-                id: Date.now() + 1,
-                text: data.message,
-                sender: "bot",
-            };
+            const botMessage = { id: botId, text: data.message, sender: "bot", sources: data.sources || [] };
             const finalMessages = [...nextMessages, botMessage];
             setMessages(finalMessages);
             persistSession(sessionId, finalMessages);
-        } catch {
+        } catch (err) {
             const errorMessage = {
-                id: Date.now() + 1,
-                text: "hmm, seems like the agent isn't connected right now. try again later!",
+                id: botId,
+                text: streamed
+                    ? `${streamed}\n\n(the connection dropped before I finished, sorry)`
+                    : /busy/i.test(err?.message || "")
+                        ? err.message
+                        : "hmm, seems like the agent isn't connected right now. try again later!",
                 sender: "bot",
             };
             const finalMessages = [...nextMessages, errorMessage];
@@ -527,13 +532,17 @@ const RealTimeDemo = () => {
                                                     }`}
                                                 >
                                                     <div
-                                                        className={`max-w-[85%] sm:max-w-[80%] p-3 rounded-lg text-sm break-words leading-relaxed ${
+                                                        className={`max-w-[85%] sm:max-w-[80%] p-3 rounded-lg text-sm break-words leading-relaxed whitespace-pre-line ${
                                                             msg.sender === "user"
                                                                 ? "bg-ink text-ice-hi rounded-br-none"
                                                                 : "bg-ice-hi text-ink border border-ink/15 rounded-bl-none"
                                                         }`}
                                                     >
                                                         {msg.text}
+                                                        {msg.streaming && (
+                                                            <span className="inline-block w-1.5 h-3.5 ml-0.5 align-[-2px] bg-arc animate-pulse" aria-hidden="true" />
+                                                        )}
+                                                        {msg.sender === "bot" && <SourceChips sources={msg.sources} />}
                                                     </div>
                                                 </motion.div>
                                             ))}
