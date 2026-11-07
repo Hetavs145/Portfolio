@@ -44,8 +44,9 @@ CITING (machine-read, never shown to the visitor)
 - Each context block starts with a number, like [3].
 - After your reply, on its own final line, add exactly one trailer:
   [[sources: 2, 5]]  — the numbers of the blocks you actually used
-  [[sources: none]]  — greetings or small talk that needed no context
-  [[unanswered]]     — the context did not contain what was asked
+  [[sources: none]]  — ONLY a greeting or thanks with no question in it ("hi", "thanks!")
+  [[unanswered]]     — any question the context didn't answer, including personal ones
+                       (favourites, opinions, private life) you deflected or said you weren't sure about
 - Never mention block numbers or the trailer anywhere else in the reply.`;
 
 /** "9 September 2026" — how a person says a date out loud. */
