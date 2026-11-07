@@ -27,12 +27,26 @@ const TRAILER = /\[\[\s*(sources|unanswered)\b\s*:?\s*([^\]]*)\]\]/i;
  */
 export function parseTrailer(raw) {
     const m = TRAILER.exec(raw);
-    if (!m) return { text: raw.trim(), cited: null, unanswered: false };
+    if (!m) {
+        const text = raw.trim();
+        return declined(text) ? { text, cited: [], unanswered: true } : { text, cited: null, unanswered: false };
+    }
     const text = (raw.slice(0, m.index) + raw.slice(m.index + m[0].length)).trim();
     if (m[1].toLowerCase() === 'unanswered') return { text, cited: [], unanswered: true };
     const cited = [...m[2].matchAll(/\d+/g)].map((n) => Number(n[0]));
+    // Backstop for a mislabelled trailer: a reply that cites nothing and says it
+    // doesn't know is a miss, whatever the model tagged it as. Without this, a
+    // "not sure off the top of my head" tagged [[sources: none]] was never
+    // reported, so the question could never be answered and learned.
+    if (!cited.length && declined(text)) return { text, cited: [], unanswered: true };
     return { text, cited, unanswered: false };
 }
+
+/** Phrases a reply uses when it couldn't answer from the context. */
+const DECLINE =
+    /\b(not sure|no idea|don['’]?t (really )?(know|have|remember|recall)|can['’]?t (say|recall|remember)|haven['’]?t (shared|mentioned|written|talked)|not something i['’]?(ve)? (shared|written|mentioned|covered|talked)|(isn['’]?t|not) (in|covered in|part of) (my|the) (notes|info|context|knowledge))/i;
+
+const declined = (text) => DECLINE.test(text);
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const shortDate = (iso) => {
