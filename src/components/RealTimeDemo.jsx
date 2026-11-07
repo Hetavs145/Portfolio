@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionHeader from "./SectionHeader";
 import { PENDING_QUESTION_KEY } from "../data/agent";
+import { streamAgent } from "../lib/agentClient";
+import SourceChips from "./SourceChips";
+import RecruiterMode from "./RecruiterMode";
 import {
     Send,
     Bot,
@@ -102,6 +105,8 @@ const RealTimeDemo = () => {
     const [isTyping, setIsTyping] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    // "chat" or "recruiter" — recruiter mode is a separate panel on the same page.
+    const [mode, setMode] = useState("chat");
 
     const chatContainerRef = useRef(null);
     const inputRef = useRef(null);
@@ -268,29 +273,32 @@ const RealTimeDemo = () => {
                 content: m.text,
             }));
 
+        // The reply streams into a placeholder bubble as it's written.
+        const botId = Date.now() + 1;
+        let streamed = "";
+        const showDraft = (text, extra = {}) =>
+            setMessages([...nextMessages, { id: botId, text, sender: "bot", ...extra }]);
+
         try {
-            const apiBase = import.meta.env.VITE_AGENT_API_URL || "";
-            const response = await fetch(`${apiBase}/api/chat`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ messages: conversationHistory }),
+            const data = await streamAgent("/api/chat", { messages: conversationHistory }, {
+                onToken: (t) => {
+                    streamed += t;
+                    setIsTyping(false); // first token replaces the typing dots
+                    showDraft(streamed, { streaming: true });
+                },
             });
-
-            if (!response.ok) throw new Error("API error");
-
-            const data = await response.json();
-            const botMessage = {
-                id: Date.now() + 1,
-                text: data.message,
-                sender: "bot",
-            };
+            const botMessage = { id: botId, text: data.message, sender: "bot", sources: data.sources || [] };
             const finalMessages = [...nextMessages, botMessage];
             setMessages(finalMessages);
             persistSession(sessionId, finalMessages);
-        } catch {
+        } catch (err) {
             const errorMessage = {
-                id: Date.now() + 1,
-                text: "hmm, seems like the agent isn't connected right now. try again later!",
+                id: botId,
+                text: streamed
+                    ? `${streamed}\n\n(the connection dropped before I finished, sorry)`
+                    : /busy/i.test(err?.message || "")
+                        ? err.message
+                        : "hmm, seems like the agent isn't connected right now. try again later!",
                 sender: "bot",
             };
             const finalMessages = [...nextMessages, errorMessage];
@@ -312,6 +320,29 @@ const RealTimeDemo = () => {
                 </div>
 
                 <div className="max-w-xl mx-auto">
+                    <div role="tablist" aria-label="Agent mode" className="flex gap-1 p-1 mb-4 rounded-xl border border-ink/20 bg-ice-panel/70 backdrop-blur-md w-fit mx-auto">
+                        {[
+                            ["chat", "Chat"],
+                            ["recruiter", "Recruiter mode"],
+                        ].map(([key, label]) => (
+                            <button
+                                key={key}
+                                role="tab"
+                                aria-selected={mode === key}
+                                onClick={() => setMode(key)}
+                                className={`label px-4 py-2.5 rounded-md transition-colors ${
+                                    mode === key ? "bg-ink text-ice-hi" : "text-ink hover:bg-ink/[0.06]"
+                                }`}
+                            >
+                                {label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {mode === "recruiter" ? (
+                        <RecruiterMode />
+                    ) : (
+                    <>
                     <div data-lenis-prevent className="bg-ice-panel/90 backdrop-blur-md rounded-xl overflow-hidden border-[1.5px] border-ink shadow-[0_30px_60px_-35px_rgba(13,17,23,0.5)]">
                         {/* Chat Header */}
                         <div className="bg-ice-hi p-3 md:p-4 flex justify-between items-center border-b border-ink/15">
@@ -527,13 +558,17 @@ const RealTimeDemo = () => {
                                                     }`}
                                                 >
                                                     <div
-                                                        className={`max-w-[85%] sm:max-w-[80%] p-3 rounded-lg text-sm break-words leading-relaxed ${
+                                                        className={`max-w-[85%] sm:max-w-[80%] p-3 rounded-lg text-sm break-words leading-relaxed whitespace-pre-line ${
                                                             msg.sender === "user"
                                                                 ? "bg-ink text-ice-hi rounded-br-none"
                                                                 : "bg-ice-hi text-ink border border-ink/15 rounded-bl-none"
                                                         }`}
                                                     >
                                                         {msg.text}
+                                                        {msg.streaming && (
+                                                            <span className="inline-block w-1.5 h-3.5 ml-0.5 align-[-2px] bg-arc animate-pulse" aria-hidden="true" />
+                                                        )}
+                                                        {msg.sender === "bot" && <SourceChips sources={msg.sources} />}
                                                     </div>
                                                 </motion.div>
                                             ))}
@@ -619,6 +654,8 @@ const RealTimeDemo = () => {
                     <p className="text-center text-ink-mute text-xs font-mono mt-4">
                         A LangGraph-based intelligent RAG human-like replier agent
                     </p>
+                    </>
+                    )}
                 </div>
             </div>
         </section>

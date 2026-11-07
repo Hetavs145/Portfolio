@@ -8,7 +8,9 @@
     "parse:resumes": "node scripts/parse-resumes.js",
     "build:index": "node --env-file=../.env scripts/build-index.js",
     "refresh:linkedin": "node --env-file=../.env scripts/refresh-linkedin.js",
-    "verify:codec": "node --env-file=../.env scripts/verify-codec.js"
+    "verify:codec": "node --env-file=../.env scripts/verify-codec.js",
+    "eval": "node --env-file=../.env scripts/eval.js",
+    "notify:test": "node --env-file=../.env scripts/test-notify.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

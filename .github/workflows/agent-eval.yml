@@ -1,0 +1,38 @@
+name: Agent eval
+
+# Runs the regression question set on pull requests that touch the agent, so a
+# prompt or retrieval change that breaks a known answer is caught before merge.
+# Without the API secrets (e.g. PRs from forks) only the retrieval checks run.
+
+on:
+  pull_request:
+    paths:
+      - 'server/**'
+      - 'src/data/**'
+      - 'content/**'
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install server dependencies
+        run: npm ci --prefix server || npm install --prefix server
+      - name: Eval
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_EMBED_KEY: ${{ secrets.NVIDIA_EMBED_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
+        run: |
+          if [ -z "$OPENROUTER_API_KEY$NVIDIA_API_KEY" ]; then
+            node server/scripts/eval.js --retrieval-only
+          else
+            node server/scripts/eval.js
+          fi

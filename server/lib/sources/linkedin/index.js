@@ -3,6 +3,9 @@
  *
  * LINKEDIN_SOURCE picks the live adapter: 'rapidapi' (default) | 'dma' | 'export' | 'off'.
  *
+ * Fully automated: the refresh-kb GitHub Action calls the live adapter every
+ * night (posts) and weekly (profile) on the RapidAPI free tier — no manual step.
+ *
  * The cascade never hard-fails. If the live adapter errors or the monthly credit
  * budget is spent, we keep the last good server/data/linkedin.json and log a
  * warning. The bot then answers from yesterday's data instead of going blind.
@@ -16,6 +19,27 @@ import { reportSource } from '../../freshness.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const SNAPSHOT = path.join(HERE, '..', '..', '..', 'data', 'linkedin.json');
+
+/**
+ * When the live adapter last answered successfully. Kept out of linkedin.json
+ * (and out of git): stamping every successful run into the snapshot made the
+ * nightly job commit a one-line timestamp diff every day even when nothing on
+ * LinkedIn had changed. The snapshot's own `fetchedAt` now moves only when its
+ * content does; this file tells the build in the same CI job that the source was
+ * checked and is current.
+ */
+const CHECKED = path.join(HERE, '..', '..', '..', 'data', 'linkedin.checked.json');
+
+function readCheckedAt() {
+    try {
+        return JSON.parse(fs.readFileSync(CHECKED, 'utf8')).checkedAt ?? null;
+    } catch {
+        return null;
+    }
+}
+
+/** Snapshot content without its timestamps, for change detection. */
+const contentOf = (snap) => JSON.stringify({ ...snap, fetchedAt: undefined, source: undefined });
 
 export function readSnapshot() {
     if (!fs.existsSync(SNAPSHOT)) return null;
@@ -62,8 +86,15 @@ export async function refreshLinkedIn(opts = {}) {
             posts: mergePosts(previous?.posts, fresh.posts),
         };
 
-        writeSnapshot(merged);
-        return { data: merged, refreshed: true, reason: `via ${mode}` };
+        const changed = !previous || contentOf(previous) !== contentOf(merged);
+        if (changed) writeSnapshot(merged);
+        fs.writeFileSync(CHECKED, JSON.stringify({ checkedAt: new Date().toISOString(), mode }) + '\n');
+        return {
+            data: changed ? merged : previous,
+            refreshed: true,
+            changed,
+            reason: `via ${mode}${changed ? '' : ' (no changes on LinkedIn)'}`,
+        };
     } catch (err) {
         console.warn(`[linkedin] refresh failed (${mode}): ${err.message}`);
         if (previous) {
@@ -206,14 +237,30 @@ function listChunks(source, label, records, limit = 30) {
  */
 const MAX_SNAPSHOT_AGE_DAYS = 30;
 
+/** Newest ISO timestamp of those given (ignores empties). */
+const newest = (...stamps) => stamps.filter(Boolean).sort().at(-1) ?? null;
+
+/** The snapshot, with the check stamp from this CI run layered in. */
+function assembleLinkedIn() {
+    const live = readSnapshot();
+    if (!live) return null;
+    return {
+        ...live,
+        // Content date: when LinkedIn content last changed.
+        fetchedAt: live.fetchedAt ?? null,
+        // Check date: when the scraper last confirmed it current.
+        checkedAt: newest(readCheckedAt(), live.fetchedAt),
+    };
+}
+
 export function linkedinChunks() {
-    const snap = readSnapshot();
+    const snap = assembleLinkedIn();
     if (!snap) {
         reportSource('linkedin', { fresh: false, reason: 'no snapshot on disk' });
         return [];
     }
 
-    const asOf = (snap.fetchedAt || '').slice(0, 10);
+    const asOf = (snap.checkedAt || snap.fetchedAt || '').slice(0, 10);
     const ageDays = asOf
         ? Math.floor((Date.now() - Date.parse(asOf)) / 86400_000)
         : Number.POSITIVE_INFINITY;

@@ -11,7 +11,7 @@
  * kept working so the project can be deployed either way.
  */
 
-import { answer } from '../server/lib/retrieve.js';
+import { respondChat } from '../server/lib/respond.js';
 import { allowedOrigins, MAX_MESSAGE_CHARS, MAX_HISTORY_TURNS } from '../server/lib/config.js';
 
 export default async function handler(req, res) {
@@ -48,15 +48,5 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: `Messages must be under ${MAX_MESSAGE_CHARS} characters` });
     }
 
-    try {
-        return res.status(200).json(await answer(messages));
-    } catch (err) {
-        console.error('[chat]', err.message);
-        if (err.status === 429) {
-            return res.status(503).json({
-                error: 'the free model pools are all busy right now — give it a minute and ask again',
-            });
-        }
-        return res.status(502).json({ error: 'The agent had trouble answering. Try again in a moment.' });
-    }
+    return respondChat(req, res, messages);
 }

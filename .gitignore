@@ -118,3 +118,6 @@ dist
 
 # macOS
 .DS_Store
+
+# LinkedIn: per-run check stamp (CI-local, never committed)
+server/data/linkedin.checked.json

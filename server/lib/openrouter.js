@@ -143,7 +143,7 @@ export async function embedOne(text) {
     return vec;
 }
 
-function stripMarkdown(text) {
+export function stripMarkdown(text) {
     return text
         .replace(/<think>[\s\S]*?<\/think>/gi, "")
         .replace(/```[a-zA-Z0-9_-]*\n?([\s\S]*?)```/g, "$1")
@@ -201,22 +201,101 @@ async function completeWith(model, messages, key, maxTokens, temperature, { disa
     return stripMarkdown(content);
 }
 
-async function tryChatChain({ providerName, baseUrl, key, models, messages, maxTokens, temperature }) {
+/**
+ * Streaming variant of completeWith. Calls `onToken` with raw content deltas as
+ * they arrive and resolves with the full text. Reasoning deltas are ignored.
+ *
+ * Nothing is forwarded until the first content token, so a model that fails or
+ * only reasons is still free to fall through to the next one in the chain; once
+ * tokens have gone out, a mid-stream failure is final.
+ */
+async function streamWith(model, messages, key, maxTokens, temperature, { disableReasoning, baseUrl, providerName, onToken }) {
+    const actualModel = providerName === "NVIDIA" ? model.replace(/:free$/, "") : model;
+
+    const body = {
+        model: actualModel,
+        messages,
+        max_tokens: maxTokens,
+        temperature,
+        top_p: 0.9,
+        stream: true,
+    };
+    if (disableReasoning) body.reasoning = { enabled: false };
+
+    const res = await fetchWithTimeout(baseUrl + "/chat/completions", {
+        method: "POST",
+        headers: headers(key),
+        body: JSON.stringify(body),
+    }, REQUEST_TIMEOUT_MS * 2);
+
+    if (!res.ok) {
+        const text = await res.text();
+        if (res.status === 400 && disableReasoning && REASONING_REQUIRED.test(text)) {
+            const err = new Error(actualModel + " requires reasoning");
+            err.needsReasoning = true;
+            throw err;
+        }
+        throw apiError(res.status, text, providerName);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let pending = "";
+    let full = "";
+
+    for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        pending += decoder.decode(value, { stream: true });
+        const lines = pending.split("\n");
+        pending = lines.pop();
+        for (const line of lines) {
+            const trimmed = line.trim();
+            // Blank lines separate events; ":" lines are keep-alive comments.
+            if (!trimmed.startsWith("data:")) continue;
+            const data = trimmed.slice(5).trim();
+            if (data === "[DONE]") continue;
+            let json;
+            try {
+                json = JSON.parse(data);
+            } catch {
+                continue;
+            }
+            if (json.error) throw apiError(json.error.code || 502, json.error.message || "stream error", providerName);
+            const delta = json.choices?.[0]?.delta?.content;
+            if (delta) {
+                full += delta;
+                onToken(delta);
+            }
+        }
+    }
+
+    if (!full.trim()) {
+        const err = new Error(providerName + " stream (" + actualModel + "): empty completion");
+        err.emptyCompletion = true;
+        err.status = 502;
+        throw err;
+    }
+    return full;
+}
+
+async function tryChatChain({ providerName, baseUrl, key, models, messages, maxTokens, temperature, onToken }) {
     let lastErr;
+    // Once any token has reached the caller, falling back to another model would
+    // splice two different answers together — so after that, errors are final.
+    let emitted = false;
+    const forward = onToken ? (t) => { emitted = true; onToken(t); } : null;
+
     for (const model of models) {
         for (const attempt of [
             { disableReasoning: true, tokens: maxTokens },
             { disableReasoning: false, tokens: maxTokens * 4 },
         ]) {
             try {
-                const text = await completeWith(
-                    model,
-                    messages,
-                    key,
-                    attempt.tokens,
-                    temperature,
-                    { disableReasoning: attempt.disableReasoning, baseUrl, providerName },
-                );
+                const opts = { disableReasoning: attempt.disableReasoning, baseUrl, providerName };
+                const text = forward
+                    ? await streamWith(model, messages, key, attempt.tokens, temperature, { ...opts, onToken: forward })
+                    : await completeWith(model, messages, key, attempt.tokens, temperature, opts);
                 return {
                     text,
                     model: providerName === "NVIDIA" ? model.replace(/:free$/, "") : model,
@@ -224,6 +303,10 @@ async function tryChatChain({ providerName, baseUrl, key, models, messages, maxT
                 };
             } catch (err) {
                 lastErr = err;
+                if (emitted) {
+                    err.partial = true;
+                    throw err;
+                }
                 if (attempt.disableReasoning && (err.needsReasoning || err.emptyCompletion)) {
                     console.warn(`[${providerName.toLowerCase()}] ${model}: retrying with reasoning enabled`);
                     continue;
@@ -239,7 +322,12 @@ async function tryChatChain({ providerName, baseUrl, key, models, messages, maxT
     throw lastErr;
 }
 
-export async function chat(messages, { maxTokens = MAX_TOKENS, temperature = TEMPERATURE } = {}) {
+/**
+ * Chat completion with provider and model fallback.
+ * Pass `onToken` to stream: raw deltas are forwarded as they arrive and the
+ * resolved `text` is the unprocessed full completion (callers strip it).
+ */
+export async function chat(messages, { maxTokens = MAX_TOKENS, temperature = TEMPERATURE, onToken } = {}) {
     const nvKey = nvidiaChatKey();
     const orKey = openrouterChatKey();
 
@@ -260,10 +348,11 @@ export async function chat(messages, { maxTokens = MAX_TOKENS, temperature = TEM
                 messages,
                 maxTokens,
                 temperature,
+                onToken,
             });
         } catch (err) {
             lastErr = err;
-            if (!orKey) throw err;
+            if (!orKey || err.partial) throw err;
             console.warn(
                 `[chat] NVIDIA NIM models unavailable or rate-limited (${err.status || err.message}). Falling back to backup OpenRouter key...`
             );
@@ -281,6 +370,7 @@ export async function chat(messages, { maxTokens = MAX_TOKENS, temperature = TEM
                 messages,
                 maxTokens,
                 temperature,
+                onToken,
             });
         } catch (err) {
             lastErr = err;

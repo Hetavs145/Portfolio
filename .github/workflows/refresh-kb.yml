@@ -12,6 +12,11 @@ name: Refresh knowledge base
 #   OPENROUTER_EMBED_KEY, RAPIDAPI_KEY_FALLBACK, LINKEDIN_DMA_TOKEN
 
 on:
+  # An answer added to content/faq.md reaches the bot minutes after it's pushed.
+  push:
+    branches: [main]
+    paths:
+      - 'content/faq.md'
   schedule:
     # 03:00 UTC daily
     - cron: '0 3 * * *'
@@ -57,6 +62,9 @@ jobs:
           fi
 
       - name: Refresh LinkedIn
+        # Skipped on push: those runs only add FAQ answers, and spending a
+        # scraper credit on them adds nothing.
+        if: github.event_name != 'push'
         # Never fails the run: the adapter cascade keeps the last good snapshot,
         # and a scraper outage must not block the rest of the rebuild.
         continue-on-error: true
@@ -103,7 +111,21 @@ jobs:
           OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
         # --strict fails the run if any source fell back to cached or stale data,
         # so a degraded night is a red X rather than a quiet shipment of old text.
-        run: node server/scripts/build-index.js --strict
+        # Push-triggered runs skip the LinkedIn refresh, so they can't vouch for
+        # its freshness — strictness belongs to the scheduled run.
+        run: node server/scripts/build-index.js ${{ github.event_name == 'push' && '' || '--strict' }}
+
+      # Regression gate: fixed questions with expected facts and known
+      # hallucination traps (server/eval/questions.json). A failure stops the
+      # job here, so a bad index is never committed or deployed.
+      - name: Eval the rebuilt agent
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_EMBED_KEY: ${{ secrets.NVIDIA_EMBED_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
+          EVAL_MIN_PASS_RATE: ${{ vars.EVAL_MIN_PASS_RATE || '0.8' }}
+        run: node server/scripts/eval.js
 
       - name: Verify project links still resolve
         continue-on-error: true

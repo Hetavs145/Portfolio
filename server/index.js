@@ -8,7 +8,9 @@
 import express from 'express';
 import cors from 'cors';
 
-import { answer } from './lib/retrieve.js';
+import { respondChat, respondFit } from './lib/respond.js';
+import { MIN_JD_CHARS, MAX_JD_CHARS } from './lib/fit.js';
+import { validateLead, deliverLead } from './lib/leads.js';
 import { loadIndex } from './lib/vectorstore.js';
 import {
     allowedOrigins,
@@ -44,35 +46,40 @@ app.use(express.json({ limit: '64kb' }));
  * by an API key, and before this existed anyone could drain it. A restart clears
  * the counters, which is acceptable for a portfolio site.
  */
-const buckets = new Map();
+function limiter(perMinute, perDay) {
+    const buckets = new Map();
+    return function rateLimit(req, res, next) {
+        const ip = req.ip || 'unknown';
+        const now = Date.now();
+        const bucket = buckets.get(ip) ?? { minute: [], day: [] };
 
-function rateLimit(req, res, next) {
-    const ip = req.ip || 'unknown';
-    const now = Date.now();
-    const bucket = buckets.get(ip) ?? { minute: [], day: [] };
+        bucket.minute = bucket.minute.filter((t) => now - t < 60_000);
+        bucket.day = bucket.day.filter((t) => now - t < 86_400_000);
 
-    bucket.minute = bucket.minute.filter((t) => now - t < 60_000);
-    bucket.day = bucket.day.filter((t) => now - t < 86_400_000);
-
-    if (bucket.minute.length >= RATE_PER_MINUTE) {
-        return res.status(429).json({ error: 'Slow down a moment — too many messages.' });
-    }
-    if (bucket.day.length >= RATE_PER_DAY) {
-        return res.status(429).json({ error: 'Daily message limit reached. Try again tomorrow.' });
-    }
-
-    bucket.minute.push(now);
-    bucket.day.push(now);
-    buckets.set(ip, bucket);
-
-    // Bound memory on a long-lived instance.
-    if (buckets.size > 5000) {
-        for (const [k, v] of buckets) {
-            if (v.day.length === 0) buckets.delete(k);
+        if (bucket.minute.length >= perMinute) {
+            return res.status(429).json({ error: 'Slow down a moment — too many messages.' });
         }
-    }
-    next();
+        if (bucket.day.length >= perDay) {
+            return res.status(429).json({ error: 'Daily limit reached. Try again tomorrow.' });
+        }
+
+        bucket.minute.push(now);
+        bucket.day.push(now);
+        buckets.set(ip, bucket);
+
+        // Bound memory on a long-lived instance.
+        if (buckets.size > 5000) {
+            for (const [k, v] of buckets) {
+                if (v.day.length === 0) buckets.delete(k);
+            }
+        }
+        next();
+    };
 }
+
+const rateLimit = limiter(RATE_PER_MINUTE, RATE_PER_DAY);
+const fitLimit = limiter(3, 15);   // each fit check is one larger model call
+const leadLimit = limiter(2, 5);   // a person leaves their email once, not fifty times
 
 /* -------------------------------------------------------------- routes --- */
 
@@ -108,21 +115,36 @@ app.post('/api/chat', rateLimit, async (req, res) => {
         return res.status(400).json({ error: `Messages must be under ${MAX_MESSAGE_CHARS} characters` });
     }
 
-    try {
-        const result = await answer(messages);
-        return res.json(result);
-    } catch (err) {
-        console.error('[chat]', err.message);
-        // A 429 here means EVERY model in the fallback chain was rate-limited. On
-        // free tiers that is almost always the providers' shared pools being busy
-        // rather than this key being out of quota, so say "busy", not "out of quota".
-        if (err.status === 429) {
-            return res.status(503).json({
-                error: "the free model pools are all busy right now — give it a minute and ask again",
-            });
-        }
-        return res.status(502).json({ error: 'The agent had trouble answering. Try again in a moment.' });
+    // JSON by default; Server-Sent Events when the client asks for a stream.
+    return respondChat(req, res, messages);
+});
+
+// Recruiter mode: job description -> honest fit summary (JSON or SSE).
+app.post('/api/fit', fitLimit, (req, res) => {
+    if (!process.env.NVIDIA_API_KEY && !process.env.OPENROUTER_API_KEY) {
+        return res.status(500).json({ error: 'NVIDIA_API_KEY or OPENROUTER_API_KEY not configured' });
     }
+    const jd = typeof req.body?.jd === 'string' ? req.body.jd.trim() : '';
+    if (jd.length < MIN_JD_CHARS) {
+        return res.status(400).json({ error: 'Paste the full job description (a few lines at least).' });
+    }
+    if (jd.length > MAX_JD_CHARS) {
+        return res.status(400).json({ error: `Job description must be under ${MAX_JD_CHARS} characters.` });
+    }
+    return respondFit(req, res, jd);
+});
+
+// Recruiter mode: "leave your email" -> Telegram message to Hetav.
+app.post('/api/lead', leadLimit, async (req, res) => {
+    const check = validateLead(req.body);
+    if (!check.ok) return res.status(400).json({ error: check.error });
+    const delivered = await deliverLead(check.lead);
+    if (!delivered) {
+        return res.status(503).json({
+            error: "Couldn't send that right now — please email hetavs145@gmail.com directly.",
+        });
+    }
+    return res.json({ ok: true });
 });
 
 // CORS rejections arrive here as errors; return a clean 403 rather than a stack trace.
