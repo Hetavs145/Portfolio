@@ -19,6 +19,7 @@ import {
 import { buildSystemPrompt, sanitizeHistory } from './prompt.js';
 import { parseIntent, recencyPins } from './recency.js';
 import { hasContactIntent, contactChunks } from './actions.js';
+import { hasHighlightIntent, highlightChunks, hasSelfIntent, selfChunks } from './intents.js';
 import { TOP_K, MAX_HISTORY_TURNS, MAX_MESSAGE_CHARS, RECENCY_PINS } from './config.js';
 
 /** Small LRU so repeated questions cost zero quota. */
@@ -130,11 +131,16 @@ export async function retrieve(query, k = TOP_K) {
     const pins = intent.temporal ? recencyPins(intent, allChunks(), RECENCY_PINS) : [];
     // "How do I reach you?" shares few words with the block holding the email
     // and LinkedIn, so similarity alone misses it. Pin it for contact questions.
-    if (hasContactIntent(query)) {
-        for (const chunk of contactChunks(allChunks())) {
+    const pin = (chunks) => {
+        for (const chunk of chunks) {
             if (!pins.some((p) => p.chunk.id === chunk.id)) pins.push({ chunk, score: 1, pinned: true });
         }
-    }
+    };
+    if (hasContactIntent(query)) pin(contactChunks(allChunks()));
+    // "Best project?" and "your portfolio?" share few words with the blocks
+    // that answer them; see lib/intents.js.
+    if (hasHighlightIntent(query)) pin(highlightChunks(allChunks()));
+    if (hasSelfIntent(query)) pin(selfChunks(allChunks()));
 
     // Always leave room for similarity: a temporal question usually also has a
     // topic ("what did you post about RAG recently?").

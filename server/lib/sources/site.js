@@ -31,6 +31,34 @@ export function siteChunks() {
         );
     }
 
+    // "What's your best project?" had no block that answered it, so the model
+    // hedged ("haven't picked a best one") and then invented projects. The Work
+    // section already ranks them (Flagship / Featured / production), so state
+    // that ranking as a fact. Derived from projects.js, never hardcoded.
+    const flagship = projects.find((p) => p.featured === 'primary');
+    const featured = projects.filter((p) => p.featured === 'secondary');
+    const production = projects.filter((p) => p.production && !p.featured);
+    if (flagship) {
+        const brief = (p) => `${p.title} (${(p.description.match(/^.*?[.!?](\s|$)/)?.[0] ?? p.description).trim().replace(/[.!?]$/, '')})`;
+        chunks.push(
+            makeChunk(
+                'site',
+                'Best projects — flagship and strongest work',
+                `Asked for his best, favourite, proudest or most impressive project, Hetav names ${flagship.title} first: ` +
+                    `it is his flagship, a live production platform he designed, built and deployed end to end. ` +
+                    `${brief(flagship)}. ` +
+                    `His other featured work: ${featured.map(brief).join('; ')}. ` +
+                    projects
+                        .map((p) => [p.title, /\bwon (1st place at [^.]+)/i.exec(p.description)?.[1]])
+                        .filter(([, won]) => won)
+                        .map(([title, won]) => `${title} is the one that ${'won ' + won}. `)
+                        .join('') +
+                    `Other production systems: ${production.map((p) => p.title).join(', ')}. ` +
+                    `These are all real projects on his portfolio; there are no others to mention.`,
+            ),
+        );
+    }
+
     // Competition results, stated so plainly that they cannot be recombined.
     //
     // Retrieval does its job here — asked about the ET-Gen hackathon it returns
