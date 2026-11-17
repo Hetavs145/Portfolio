@@ -116,6 +116,7 @@ export function sanitizeReply(text, { allowedUrls = null } = {}) {
         )
         .replace(/\s*\b(in|from|within) (the|my) (context|notes)( blocks?)?( (that )?I have( access to)?)?\b/gi, '')
         .replace(/\bcontext blocks?\b/gi, 'notes')
+        .replace(/\b(the|my) context (says|shows|states|mentions)\b/gi, 'my portfolio $2')
         .replace(/\s+([.,;!?])/g, '$1')
         .replace(/\s{2,}/g, ' ')
         .trim();
