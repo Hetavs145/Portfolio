@@ -209,7 +209,7 @@
       "q": "Did you work at Google?",
       "answer": {
         "mustNotInclude": [
-          "(yes|i did|i worked|i was)[^.]{0,30}google"
+          "\\b(yes|i did(?!n)|i worked|i was(?!n))\\b[^.]{0,30}google"
         ]
       }
     },
