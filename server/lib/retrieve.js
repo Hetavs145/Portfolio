@@ -18,6 +18,7 @@ import {
 } from './vectorstore.js';
 import { buildSystemPrompt, sanitizeHistory } from './prompt.js';
 import { parseIntent, recencyPins } from './recency.js';
+import { hasContactIntent, contactChunks } from './actions.js';
 import { TOP_K, MAX_HISTORY_TURNS, MAX_MESSAGE_CHARS, RECENCY_PINS } from './config.js';
 
 /** Small LRU so repeated questions cost zero quota. */
@@ -127,6 +128,13 @@ async function similar(query, k) {
 export async function retrieve(query, k = TOP_K) {
     const intent = parseIntent(query);
     const pins = intent.temporal ? recencyPins(intent, allChunks(), RECENCY_PINS) : [];
+    // "How do I reach you?" shares few words with the block holding the email
+    // and LinkedIn, so similarity alone misses it. Pin it for contact questions.
+    if (hasContactIntent(query)) {
+        for (const chunk of contactChunks(allChunks())) {
+            if (!pins.some((p) => p.chunk.id === chunk.id)) pins.push({ chunk, score: 1, pinned: true });
+        }
+    }
 
     // Always leave room for similarity: a temporal question usually also has a
     // topic ("what did you post about RAG recently?").
@@ -209,7 +217,7 @@ export async function answer(messages, { onToken } = {}) {
     const result = {
         message: stripMarkdown(text),
         // Chips for the visitor: the blocks the model says it used.
-        sources: unanswered ? [] : citedSources(hits, cited),
+        sources: unanswered ? [] : citedSources(hits, cited, { answer: text, question: latest.content }),
         unanswered,
         // Everything retrieved, for debugging and the eval harness.
         retrieved: hits.map(({ chunk, score }) => ({

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Linkedin, Github, FileText, FolderGit2, Globe, StickyNote } from 'lucide-react';
+import { Linkedin, Github, FileText, FolderGit2, Globe, StickyNote, Mail, Phone } from 'lucide-react';
 import { useRoute } from '../context/RouteContext';
 
 const ICON = {
@@ -9,6 +9,8 @@ const ICON = {
     project: FolderGit2,
     site: Globe,
     faq: StickyNote,
+    email: Mail,
+    phone: Phone,
 };
 
 /**

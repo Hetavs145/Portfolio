@@ -1,11 +1,12 @@
 {
-  "_doc": "Regression set for the portfolio agent, run by server/scripts/eval.js after every index build. `retrieval.anyTitle`: at least one retrieved chunk title must match one of these (case-insensitive regex) — deterministic, always enforced. `answer` checks run against a real model reply: `mustInclude` (every regex must match), `mustNotInclude` (none may match), `unanswered` (expected value of the [[unanswered]] signal), `hasSources`. Cases marked `critical` must pass for the build to ship; the rest count toward the overall pass rate.",
+  "_doc": "Regression set for the portfolio agent, run by server/scripts/eval.js after every index build. `retrieval.anyTitle`: at least one retrieved chunk title must match one of these (case-insensitive regex) — deterministic, always enforced. `answer` checks run against a real model reply: `mustInclude` (every regex must match), `mustNotInclude` (none may match), `unanswered` (expected value of the [[unanswered]] signal), `hasSources`. Cases marked `critical` must pass for the build to ship; the rest count toward the overall pass rate. `sourceTypes`: chip types that must be present (e.g. email, linkedin). Globally, every project chip must be a project the reply actually names (`global.projectChipsMustBeNamed`).",
   "global": {
     "mustNotInclude": [
       "\\[\\[",
       "let me (check|look)",
       "checking now"
-    ]
+    ],
+    "projectChipsMustBeNamed": true
   },
   "cases": [
     {
@@ -209,6 +210,37 @@
       "answer": {
         "mustNotInclude": [
           "(yes|i did|i worked|i was)[^.]{0,30}google"
+        ]
+      }
+    },
+    {
+      "id": "contact-direct",
+      "critical": true,
+      "q": "Where do I connect if I want to reach you directly?",
+      "retrieval": {
+        "anyTitle": [
+          "Contact"
+        ]
+      },
+      "answer": {
+        "mustInclude": [
+          "hetavs145@gmail\\.com|linkedin"
+        ],
+        "sourceTypes": [
+          "email",
+          "linkedin"
+        ]
+      }
+    },
+    {
+      "id": "hire-website",
+      "q": "Can you make a website for my firm?",
+      "answer": {
+        "mustInclude": [
+          "hetavs145@gmail\\.com|linkedin|email"
+        ],
+        "sourceTypes": [
+          "email"
         ]
       }
     }

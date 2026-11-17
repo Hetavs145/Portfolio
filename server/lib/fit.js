@@ -72,7 +72,7 @@ export async function fitSummary(jd, { onToken } = {}) {
     const { text: body, cited } = parseTrailer(raw);
     return {
         message: stripMarkdown(body),
-        sources: citedSources(hits, cited, { fallback: 4 }),
+        sources: citedSources(hits, cited, { answer: body }),
         mode,
         model,
     };

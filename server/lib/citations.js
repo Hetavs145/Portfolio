@@ -13,6 +13,7 @@
  */
 
 import { projects } from '../../src/data/projects.js';
+import { hasContactIntent, contactActions } from './actions.js';
 
 const LINKEDIN_PROFILE =
     process.env.LINKEDIN_PROFILE_URL || 'https://www.linkedin.com/in/hetav-shah-26601722b/';
@@ -88,25 +89,112 @@ export function sourceRef(chunk) {
     }
 }
 
-/**
- * Source chips for an answer: the cited blocks, de-duplicated, in citation
- * order. When the model omitted the trailer, fall back to the top retrieved
- * blocks so an answer is never shown without provenance.
- */
-export function citedSources(hits, cited, { fallback = 3 } = {}) {
-    const picked =
-        cited == null
-            ? hits.slice(0, fallback)
-            : cited.map((n) => hits[n - 1]).filter(Boolean);
+/* ------------------------------------------------------------- relevance --- */
 
-    const seen = new Set();
+/**
+ * Words too common to show that a block and a reply are about the same thing.
+ * Names are included because every block mentions Hetav.
+ */
+const STOP = new Set(
+    ('this that with from have your about which what they them then also just like really more some been were ' +
+        'will would could should into over only very here there their when where while does done make made want ' +
+        'sure yes know need help chat talk thing things stuff good great happy love glad hetav hetavs shah portfolio ' +
+        'website site page link links project projects work working build built using used other first last most ' +
+        'time year years month months back still well much many each every both same such than them https http www')
+        .split(' '),
+);
+
+/** Distinctive words: 4+ letters, folded, light plural stripping, minus STOP. */
+function terms(text) {
+    const out = new Set();
+    for (const raw of String(text ?? '').normalize('NFKC').toLowerCase().match(/[a-z0-9][a-z0-9+#.-]{3,}/g) ?? []) {
+        const w = raw.replace(/[.-]+$/, '').replace(/(?<=[a-z]{3})s$/, '');
+        if (w.length >= 4 && !STOP.has(w)) out.add(w);
+    }
+    return out;
+}
+
+const overlap = (a, b) => {
+    let n = 0;
+    for (const w of a) if (b.has(w)) n++;
+    return n;
+};
+
+/** How a reply refers to each project. Default alias: the full title. */
+const ALIASES = {
+    'VaquaH Cooling Service': ['vaquah'],
+    'YouTube Upload Automation': ['youtube upload', 'youtube automation', 'upload automation', 'youtube-renderer'],
+    'Drone Path-Finder': ['drone path', 'path-finder', 'pathfinder', 'path finder'],
+    'Spam Detector': ['spam detect', 'spam email'],
+    'Phishing Detector': ['phishing'],
+    'Harzino Blog': ['harzino'],
+    'Treat-o-Meter': ['treat-o-meter', 'treat o meter', 'treatometer'],
+};
+const aliasesOf = (p) => [p.title.toLowerCase(), ...(ALIASES[p.title] ?? [])];
+const mentions = (text, p) => {
+    const t = String(text ?? '').toLowerCase();
+    return aliasesOf(p).some((a) => t.includes(a));
+};
+
+/** GitHub repo names too generic to count as a mention on their own. */
+const GENERIC_REPOS = /^(portfolio|small-projects)$/i;
+
+/** Is this retrieved block genuinely what the reply talks about? */
+function isRelevant(chunk, reply, replyTerms) {
+    if (chunk.source === 'site') {
+        const project = projects.find((p) => chunk.title.endsWith(p.title));
+        if (project) return mentions(reply, project);
+    }
+    if (chunk.source === 'github' && (chunk.kind === 'repo' || chunk.kind === 'commit')) {
+        const repo = afterDash(chunk.title);
+        if (!GENERIC_REPOS.test(repo) && reply.toLowerCase().includes(repo.toLowerCase())) return true;
+    }
+    // Everything else must share real content with the reply, not just a topic.
+    return overlap(replyTerms, terms(`${chunk.title} ${chunk.text}`)) >= 2;
+}
+
+/**
+ * Chips under a reply, most useful first:
+ *
+ *   1. Contact buttons (Email / LinkedIn / Call) when the question is about
+ *      getting in touch or hiring — see lib/actions.js.
+ *   2. Every project the reply names, linked to its live site or repo, whether
+ *      or not the model cited it.
+ *   3. Blocks the model cited, kept only if they're relevant to what it said.
+ *
+ * Models sometimes forget the trailer or cite blocks they never used; showing
+ * those produced chips like "Sign2Text" under "Sure, let's connect." A chip that
+ * isn't about the reply is now dropped rather than shown.
+ */
+export function citedSources(hits, cited, { answer = '', question = '', limit = 4 } = {}) {
+    const reply = String(answer ?? '');
+    const replyTerms = terms(reply);
     const out = [];
-    for (const hit of picked) {
-        const ref = sourceRef(hit.chunk);
-        const key = `${ref.label}|${ref.url}`;
-        if (seen.has(key)) continue;
+    const seen = new Set();
+    // One chip per destination: FlowPilot and its ET-Gen-Hackathon repo are the
+    // same link, so the second would only add noise.
+    const push = (ref) => {
+        const key = ref.url || ref.label;
+        if (seen.has(key) || out.length >= limit) return;
         seen.add(key);
-        out.push({ ...ref, id: hit.chunk.id, date: hit.chunk.date ?? null });
+        out.push(ref);
+    };
+
+    const contactIntent = hasContactIntent(question);
+    if (contactIntent) contactActions().forEach(push);
+
+    for (const p of projects) {
+        if (mentions(reply, p)) {
+            push({ type: 'project', label: p.title, url: p.live || p.github || '#work', id: `project:${p.title}`, date: null });
+        }
+    }
+
+    const candidates = cited == null ? hits.slice(0, 4) : cited.map((n) => hits[n - 1]).filter(Boolean);
+    for (const hit of candidates) {
+        // The contact buttons already cover the contact blocks.
+        if (contactIntent && /contact/i.test(hit.chunk.title)) continue;
+        if (!isRelevant(hit.chunk, reply, replyTerms)) continue;
+        push({ ...sourceRef(hit.chunk), id: hit.chunk.id, date: hit.chunk.date ?? null });
     }
     return out;
 }

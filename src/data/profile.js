@@ -78,3 +78,15 @@ export const resumes = [
         description: 'SPOC-approved institute format — not my own resume',
     },
 ];
+
+/**
+ * Public contact channels. The agent's "contact" buttons (server/lib/actions.js)
+ * read these, so a changed email or handle is a single edit.
+ */
+export const contact = {
+    email: 'hetavs145@gmail.com',
+    phone: '+918200135258',
+    phoneDisplay: '+91 82001 35258',
+    linkedin: 'https://www.linkedin.com/in/hetav-shah-26601722b/',
+    github: 'https://github.com/Hetavs145',
+};
