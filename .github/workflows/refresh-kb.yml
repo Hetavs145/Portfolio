@@ -21,6 +21,7 @@ on:
       - 'Hetav_Shah_Resume.tex'
       - 'src/data/projects.js'
       - 'src/data/profile.js'
+      - 'server/lib/sources/**'
   schedule:
     # 03:00 UTC daily
     - cron: '0 3 * * *'

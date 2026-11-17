@@ -36,3 +36,19 @@ jobs:
           else
             node server/scripts/eval.js
           fi
+      # Report only: prints the agent's reply to every exploratory question in
+      # server/eval/probes.json for a human to read. Never fails the check.
+      - name: Probe answers (report only)
+        if: always()
+        continue-on-error: true
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_EMBED_KEY: ${{ secrets.NVIDIA_EMBED_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENROUTER_EMBED_KEY: ${{ secrets.OPENROUTER_EMBED_KEY }}
+        run: |
+          if [ -z "$OPENROUTER_API_KEY$NVIDIA_API_KEY" ]; then
+            echo "No API keys (fork PR?): skipping probes."
+          else
+            node server/scripts/eval.js --probe
+          fi

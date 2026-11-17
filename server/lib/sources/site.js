@@ -18,18 +18,76 @@ export function siteChunks() {
     for (const p of projects) {
         const links = [
             p.live ? `Live: ${p.live}` : null,
-            p.github ? `Source: ${p.github}` : null,
+            // Without this, "can I see Aven's repo?" got "I don't have the link in
+            // the context" instead of the truth: the code isn't public.
+            p.github ? `Source: ${p.github}` : 'Source code: private, not publicly available',
             p.youtube ? `Video: ${p.youtube}` : null,
         ].filter(Boolean);
 
+        // "Tell me about Kontexo" came back "…and won 1st place at Aetrix 2026".
+        // A project that won nothing says so, in its own block.
+        const won = /\bwon (1st|first|2nd|second|3rd|third)\b/i.test(p.description);
+        // "Kontexo … the flagship project in Hetav's portfolio": the site's ★ labels
+        // weren't in the block, so the model promoted a Featured row to flagship.
+        const flagshipTitle = projects.find((x) => x.featured === 'primary')?.title;
+        const label =
+            p.featured === 'primary'
+                ? `${p.title} is Hetav's flagship project.`
+                : p.featured === 'secondary'
+                  ? `On the portfolio ${p.title} is marked Featured (the flagship is ${flagshipTitle}).`
+                  : '';
         chunks.push(
             ...splitLong(
                 'site',
                 `Portfolio project — ${p.title}`,
-                `${p.title}. ${p.description} Tech: ${p.tech.join(', ')}. ${links.join('. ')}`,
+                `${p.title}. ${label ? `${label} ` : ''}${p.description} Tech: ${p.tech.join(', ')}. ${links.join('. ')}.` +
+                    (won ? '' : ` ${p.title} has no competition win or award recorded.`),
             ),
         );
     }
+
+    // "What's your best project?" had no block that answered it, so the model
+    // hedged ("haven't picked a best one") and then invented projects. The Work
+    // section already ranks them (Flagship / Featured / production), so state
+    // that ranking as a fact. Derived from projects.js, never hardcoded.
+    const flagship = projects.find((p) => p.featured === 'primary');
+    const featured = projects.filter((p) => p.featured === 'secondary');
+    const production = projects.filter((p) => p.production && !p.featured);
+    if (flagship) {
+        const brief = (p) => `${p.title} (${(p.description.match(/^.*?[.!?](\s|$)/)?.[0] ?? p.description).trim().replace(/[.!?]$/, '')})`;
+        chunks.push(
+            makeChunk(
+                'site',
+                'Best projects — flagship and strongest work',
+                `Asked for his best, favourite, proudest or most impressive project, Hetav names ${flagship.title} first: ` +
+                    `it is his flagship, a live production platform he designed, built and deployed end to end. ` +
+                    `${brief(flagship)}. ` +
+                    `His other featured work: ${featured.map(brief).join('; ')}. ` +
+                    projects
+                        .map((p) => [p.title, /\bwon (1st place at [^.]+)/i.exec(p.description)?.[1]])
+                        .filter(([, won]) => won)
+                        .map(([title, won]) => `${title} is the one that ${'won ' + won}. `)
+                        .join('') +
+                    `Other production systems: ${production.map((p) => p.title).join(', ')}. ` +
+                    `These are all real projects on his portfolio; there are no others to mention.`,
+            ),
+        );
+    }
+
+    // "How many projects have you built?" got "4": the LinkedIn Projects section
+    // lists only a few. The portfolio is the complete list, so count it.
+    const smaller = projects.filter((p) => !p.production);
+    chunks.push(
+        makeChunk(
+            'site',
+            'Projects — how many and which',
+            `Hetav's portfolio lists ${projects.length} projects in total: ` +
+                `${projects.filter((p) => p.production).length} production systems ` +
+                `(${projects.filter((p) => p.production).map((p) => p.title).join(', ')}) and ` +
+                `${smaller.length} smaller builds (${smaller.map((p) => p.title).join(', ')}). ` +
+                `This is the complete list; his LinkedIn Projects section shows only a few of them.`,
+        ),
+    );
 
     // Competition results, stated so plainly that they cannot be recombined.
     //

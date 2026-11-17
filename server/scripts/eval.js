@@ -5,6 +5,7 @@
  *   node server/scripts/eval.js                    # retrieval + answers
  *   node server/scripts/eval.js --retrieval-only   # no chat-model calls
  *   node server/scripts/eval.js --only=hackathon-win,trafficmind
+ *   node server/scripts/eval.js --probe            # print replies to server/eval/probes.json
  *
  * Two layers, defined in server/eval/questions.json:
  *
@@ -32,6 +33,7 @@ const MIN_PASS_RATE = Number(process.env.EVAL_MIN_PASS_RATE || 0.8);
 
 const args = process.argv.slice(2);
 const retrievalOnly = args.includes('--retrieval-only');
+const probeMode = args.includes('--probe');
 const only = args.find((a) => a.startsWith('--only='))?.split('=')[1]?.split(',');
 
 const re = (pattern) => new RegExp(pattern, 'i');
@@ -59,6 +61,7 @@ function checkAnswer(c, result) {
     if (spec.hasSources && !(result.sources?.length > 0)) problems.push('no sources cited');
     const types = new Set((result.sources ?? []).map((s) => s.type));
     for (const t of spec.sourceTypes ?? []) if (!types.has(t)) problems.push(`no ${t} chip`);
+    for (const t of spec.noSourceTypes ?? []) if (types.has(t)) problems.push(`unexpected ${t} chip`);
     // A project chip under a reply that never mentions that project is the
     // "Sign2Text under 'Sure, let's connect.'" bug.
     if (SPEC.global?.projectChipsMustBeNamed) {
@@ -85,7 +88,47 @@ async function ask(q) {
     return null;
 }
 
+/**
+ * Probe mode: run each exploratory conversation and print everything, assert
+ * nothing. For reading how the agent reasons, not for gating a build.
+ */
+async function probe() {
+    const { probes } = JSON.parse(fs.readFileSync(path.join(HERE, '..', 'eval', 'probes.json'), 'utf8'));
+    const picked = probes.filter((p) => !only || only.includes(p.id));
+    console.log(`Probe: ${picked.length} conversation(s)\n`);
+    for (const p of picked) {
+        console.log(`━━ ${p.id}`);
+        const history = [];
+        for (const q of p.turns) {
+            history.push({ role: 'user', content: q });
+            let result = null;
+            for (let attempt = 0; attempt < 2 && !result; attempt++) {
+                try {
+                    result = await answer(history);
+                } catch (err) {
+                    if (!busy(err) || attempt === 1) {
+                        console.log(`  Q: ${q}\n  !! ${err.message.slice(0, 120)}`);
+                        break;
+                    }
+                    await new Promise((r) => setTimeout(r, 8000));
+                }
+            }
+            if (!result) break;
+            history.push({ role: 'assistant', content: result.message });
+            console.log(`  Q: ${q}`);
+            console.log(`  A: ${result.message.replace(/\s+/g, ' ')}`);
+            console.log(
+                `     chips: ${result.sources.map((s) => s.label).join(' · ') || '—'}` +
+                    `${result.unanswered ? ' · UNANSWERED' : ''} · ${result.mode}` +
+                    ` · top: ${result.retrieved.slice(0, 3).map((r) => r.title).join(' | ')}`,
+            );
+        }
+        console.log('');
+    }
+}
+
 async function main() {
+    if (probeMode) return probe();
     const index = loadIndex({ quiet: true });
     if (!index) throw new Error('No index on disk — build it first');
     console.log(`Eval: ${cases.length} case(s) against ${index.chunks.length} chunks (${index.vectorsUsable ? 'vector' : 'lexical'} retrieval)\n`);

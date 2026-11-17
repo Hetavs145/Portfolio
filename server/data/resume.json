@@ -8,7 +8,7 @@
     "linkedin": "https://www.linkedin.com/in/hetav-shah-26601722b",
     "portfolio": "https://portfolio.vaquah.in"
   },
-  "summary": "MBA (Finance major, Digital Transformation and Analytics minor) with a B.Tech in Computer Science, building AI systems that automate business and finance workflows end to end. I design the whole system first, build it AI-first and deploy it myself (Docker, GitHub Actions, Vercel, Render, Supabase, Linux VPS): a 6-agent LangGraph co-pilot that took 1st place at Aetrix 2026, an agent-run CRM with an approvals queue and audit trail covering leads, proposals and invoices, and a live commerce platform with Razorpay payments. Led the intern team at NTS Global Nihon. I pair production engineering with an MBA's business and analytics lens to turn manual workflows into governed, self-serve systems. Finance is a growing strength I am building alongside the MBA.",
+  "summary": "MBA (Finance major, Digital Transformation and Analytics minor) with a B.Tech in Computer Science, building AI systems that automate business and finance workflows end to end. I design the whole system first, build it AI-first and deploy it myself (Docker, GitHub Actions, Vercel, Render, Supabase, Linux VPS). Shipped: TrafficMind, a 6-agent LangGraph traffic-incident co-pilot that took 1st place at Aetrix 2026; Aven, an agent-run CRM with an approvals queue and audit trail; and VaquaH, a live commerce platform with Razorpay payments. Led the intern team at NTS Global Nihon. I pair production engineering with an MBA's business and analytics lens to turn manual workflows into governed, self-serve systems. Finance is a growing strength I am building alongside the MBA.",
   "skills": {
     "Agentic AI": [
       "LangGraph",

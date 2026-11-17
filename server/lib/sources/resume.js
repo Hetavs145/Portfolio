@@ -114,8 +114,9 @@ export function resumeChunks() {
                 `The IMNU resume is the SPOC-approved resume in the format mandated by the ` +
                     `Institute of Management, Nirma University placement cell. It is not Hetav's own ` +
                     `resume and not the one he would send by choice — its structure and wording follow ` +
-                    `the institute template. His actual resume is the current one, which is the ` +
-                    `better read for engineering roles.`,
+                    `the institute template. It is used only for campus placements and is not ` +
+                    `published on his portfolio site; anyone who needs it can ask him by email. His actual ` +
+                    `resume is the current one on the site, the right read for any role.`,
             ),
         );
 

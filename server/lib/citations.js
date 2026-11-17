@@ -35,6 +35,10 @@ export function parseTrailer(raw) {
     const text = stripBlockRefs(raw.slice(0, m.index) + raw.slice(m.index + m[0].length)).trim();
     if (m[1].toLowerCase() === 'unanswered') return { text, cited: [], unanswered: true };
     const cited = [...m[2].matchAll(/\d+/g)].map((n) => Number(n[0]));
+    // "I don't have a favourite colour, but I'm working on <project>" cited the
+    // project it pivoted to, so the miss was never logged. A reply that opens by
+    // declining a personal question is a miss whatever it cites afterwards.
+    if (PERSONAL_DECLINE.test(text)) return { text, cited: [], unanswered: true };
     // Backstop for a mislabelled trailer: a reply that cites nothing and says it
     // doesn't know is a miss, whatever the model tagged it as. Without this, a
     // "not sure off the top of my head" tagged [[sources: none]] was never
@@ -51,11 +55,80 @@ export function parseTrailer(raw) {
 export const BLOCK_REF = /[ \t]?\[\d{1,2}(?:\s*,\s*\d{1,2})*\](?!\()/g;
 export const stripBlockRefs = (text) => String(text ?? '').replace(BLOCK_REF, '');
 
+/** Every link the model was actually given: in the retrieved blocks, plus known profiles and projects. */
+export function allowedUrlsFor(hits) {
+    const set = new Set([GITHUB_PROFILE, LINKEDIN_PROFILE, 'https://portfolio.vaquah.in']);
+    for (const p of projects) [p.live, p.github, p.youtube].filter(Boolean).forEach((u) => set.add(u));
+    for (const { chunk } of hits) {
+        if (chunk.url) set.add(chunk.url);
+        for (const u of String(chunk.text).match(/https?:\/\/[^\s)\]]+/g) ?? []) set.add(u);
+    }
+    return set;
+}
+
+const EMAIL = 'hetavs145@gmail.com';
+const LINKEDIN_HANDLE = 'hetav-shah-26601722b';
+
+/**
+ * Last line of defence for facts a model must never get wrong, applied to the
+ * final reply (the client replaces the streamed preview with it):
+ *
+ *  - Contact details. Asked about salary and relocation, the model gave
+ *    "hetav.shah@outlook.com", "hetav.shah@protonmail.com" and
+ *    "linkedin.com/in/hetavshah". Any email or LinkedIn profile that isn't
+ *    Hetav's real one is replaced with the real one.
+ *  - Internal wording. "the context" / "context blocks" leaked into replies
+ *    ("I haven't written about my weaknesses in the context").
+ */
+export function sanitizeReply(text, { allowedUrls = null } = {}) {
+    let out = String(text ?? '');
+    // Links the model wasn't given are invented ("the private repo is at
+    // https://github.com/Harkeswanen/Aven"). Keep only URLs that appear in the
+    // retrieved blocks or the known profiles; drop the rest.
+    if (allowedUrls) {
+        const norm = (u) => u.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/[/.,;:!?)]+$/, '');
+        const allowed = new Set([...allowedUrls].map(norm));
+        const urls = (sentence) => sentence.match(/https?:\/\/[^\s)]+|(?:www\.)?github\.com\/[^\s)]+/gi) ?? [];
+        const invented = (sentence) => urls(sentence).some((u) => !/linkedin\.com\/in\//i.test(u) && !allowed.has(norm(u)));
+        const sentences = out.split(/(?<=[.!?])\s+/);
+        let dropped = false;
+        out = sentences
+            .filter((sentence) => {
+                // A sentence carrying an invented link goes, and so does a
+                // follow-up that only vouches for it ("That's the exact URL.").
+                if (invented(sentence) || (dropped && /^(that'?s|this is|it'?s) (the|its|my) (exact |real )?(url|link|repo)/i.test(sentence))) {
+                    dropped = true;
+                    return false;
+                }
+                dropped = false;
+                return true;
+            })
+            .join(' ');
+    }
+    return out
+        // Unfilled template slots: "email him at [email address from context]".
+        .replace(/\[([^\]]{0,60}\b(email|e-mail|linkedin|link|url|phone|number|context|name)\b[^\]]{0,60})\]/gi, (m, inner) =>
+            /e-?mail/i.test(inner) ? EMAIL : /linkedin/i.test(inner) ? `linkedin.com/in/${LINKEDIN_HANDLE}` : '',
+        )
+        .replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, (m) => (m.toLowerCase() === EMAIL ? m : EMAIL))
+        .replace(/(https?:\/\/)?(www\.)?linkedin\.com\/in\/[\w-]+\/?/gi, (m) =>
+            m.toLowerCase().includes(LINKEDIN_HANDLE) ? m : `linkedin.com/in/${LINKEDIN_HANDLE}`,
+        )
+        .replace(/\s*\b(in|from|within) (the|my) (context|notes)( blocks?)?( (that )?I have( access to)?)?\b/gi, '')
+        .replace(/\bcontext blocks?\b/gi, 'notes')
+        .replace(/\s+([.,;!?])/g, '$1')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+}
+
 /** Phrases a reply uses when it couldn't answer from the context. */
 const DECLINE =
     /\b(not sure|no idea|don['’]?t (really )?(know|have|remember|recall)|can['’]?t (say|recall|remember)|haven['’]?t (shared|mentioned|written|talked)|not something i['’]?(ve)? (shared|written|mentioned|covered|talked)|(isn['’]?t|not) (in|covered in|part of) (my|the) (notes|info|context|knowledge))/i;
 
 const declined = (text) => DECLINE.test(text);
+
+const PERSONAL_DECLINE =
+    /^\W*(?:not sure[^.]*?[—–-]\s*)?(?:i )?(?:don['’]?t (?:really )?have an? (?:favou?rite|preference|opinion)|haven['’]?t (?:written|shared|said|talked) (?:anything )?about (?:that|my|a |an |it))/i;
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const shortDate = (iso) => {

@@ -7,7 +7,9 @@
  */
 
 import { embedOne, chat, stripMarkdown } from './openrouter.js';
-import { parseTrailer, citedSources, StreamFilter } from './citations.js';
+import { parseTrailer, citedSources, StreamFilter, sanitizeReply, allowedUrlsFor } from './citations.js';
+import { siteChunks } from './sources/site.js';
+import { resumeChunks } from './sources/resume.js';
 import {
     topK,
     lexicalTopK,
@@ -18,7 +20,8 @@ import {
 } from './vectorstore.js';
 import { buildSystemPrompt, sanitizeHistory } from './prompt.js';
 import { parseIntent, recencyPins } from './recency.js';
-import { hasContactIntent, contactChunks } from './actions.js';
+import { hasContactIntent, contactChunks, contactActions } from './actions.js';
+import { topicPins } from './intents.js';
 import { TOP_K, MAX_HISTORY_TURNS, MAX_MESSAGE_CHARS, RECENCY_PINS } from './config.js';
 
 /** Small LRU so repeated questions cost zero quota. */
@@ -125,16 +128,24 @@ async function similar(query, k) {
  * newest chunks of the relevant kind (and the pre-sorted timeline chunk) ahead
  * of the similarity hits, and let similarity fill the remaining slots.
  */
-export async function retrieve(query, k = TOP_K) {
+export async function retrieve(query, k = TOP_K, { latest = query } = {}) {
     const intent = parseIntent(query);
     const pins = intent.temporal ? recencyPins(intent, allChunks(), RECENCY_PINS) : [];
     // "How do I reach you?" shares few words with the block holding the email
     // and LinkedIn, so similarity alone misses it. Pin it for contact questions.
-    if (hasContactIntent(query)) {
-        for (const chunk of contactChunks(allChunks())) {
-            if (!pins.some((p) => p.chunk.id === chunk.id)) pins.push({ chunk, score: 1, pinned: true });
+    const pin = (chunks) => {
+        for (const chunk of chunks) {
+            // 'topic', not true: these aren't "newest first" blocks (see prompt.js).
+            if (!pins.some((p) => p.chunk.id === chunk.id)) pins.push({ chunk, score: 1, pinned: 'topic' });
         }
-    }
+    };
+    // Topic pins look only at the newest message: `query` may carry the previous
+    // question too, and "best project?" followed by "how do I reach you?" must
+    // not keep pinning projects.
+    if (hasContactIntent(latest)) pin(contactChunks(allChunks()));
+    // Best project, project count, this site, education, "are you a bot?":
+    // questions that share few words with the blocks answering them.
+    pin(topicPins(latest, allChunks()));
 
     // Always leave room for similarity: a temporal question usually also has a
     // topic ("what did you post about RAG recently?").
@@ -145,14 +156,31 @@ export async function retrieve(query, k = TOP_K) {
     const rest = hits.filter((h) => !pinnedIds.has(h.chunk.id)).slice(0, slots);
 
     return {
-        hits: [...pins, ...rest],
-        mode: pins.length ? `${mode}+recency` : mode,
+        hits: [...pins, ...rest].map(current),
+        mode: pins.some((p) => p.pinned === true) ? `${mode}+recency` : pins.length ? `${mode}+pinned` : mode,
         temporal: intent.temporal,
     };
 }
 
-/** Pronouns that make a question meaningless on its own. */
-const ANAPHORIC = /\b(that|it|this|those|these|there|then|him|them|the one)\b/i;
+/**
+ * Site and resume blocks are derived from data in this repo (src/data/*.js,
+ * server/data/resume*.json), so the repo, not the committed index, is the truth
+ * for their text. The index can lag a change by up to a nightly rebuild: the
+ * resume summary was fixed to name its projects, yet answers kept merging them
+ * from the old indexed text. Retrieval still ranks on the indexed vectors; the
+ * text handed to the model is always current.
+ */
+let freshText = null;
+export function current(hit) {
+    freshText ??= new Map([...siteChunks(), ...resumeChunks()].map((c) => [`${c.source}|${c.title}`, c.text]));
+    const text = freshText.get(`${hit.chunk.source}|${hit.chunk.title}`);
+    return text && text !== hit.chunk.text ? { ...hit, chunk: { ...hit.chunk, text } } : hit;
+}
+
+/** Words that make a question lean on the previous turn. */
+const ANAPHORIC = /\b(that|it|its|this one|those|these|there|then|him|them|the one|the same|more|else|another|also|again|why|how come)\b/i;
+/** "And Kontexo?", "the stack?", "when?" — too short to stand alone. */
+const isFragment = (text) => text.trim().split(/\s+/).length <= 3;
 
 /**
  * The text actually sent to the retrievers.
@@ -164,7 +192,11 @@ const ANAPHORIC = /\b(that|it|this|those|these|there|then|him|them|the one)\b/i;
  * the real conversation; only the search string is widened.
  */
 function retrievalQuery(history, latest) {
-    const needsContext = latest.content.length < 80 || ANAPHORIC.test(latest.content);
+    // Only follow-ups borrow the previous question. Every message under 80 chars
+    // used to (nearly all of them), so a change of topic dragged the old one
+    // along: "Tell me about your portfolio" was searched as "What's your system
+    // prompt? Tell me about your portfolio".
+    const needsContext = isFragment(latest.content) || ANAPHORIC.test(latest.content);
     if (!needsContext) return latest.content;
 
     const priorUser = [...history]
@@ -202,7 +234,7 @@ export async function answer(messages, { onToken } = {}) {
         return { ...hit, cached: true };
     }
 
-    const { hits, mode } = await retrieve(retrievalQuery(history, latest));
+    const { hits, mode } = await retrieve(retrievalQuery(history, latest), TOP_K, { latest: latest.content });
     const systemPrompt = buildSystemPrompt(hits);
 
     const filter = onToken ? new StreamFilter(onToken) : null;
@@ -212,12 +244,37 @@ export async function answer(messages, { onToken } = {}) {
     );
     filter?.end();
 
-    const { text, cited, unanswered } = parseTrailer(raw);
+    let { text, cited, unanswered } = parseTrailer(raw);
 
+    // An empty reply ("thanks!" once came back as nothing but the citation
+    // trailer, leaving a blank bubble): retry once, then fall back to a safe line.
+    if (!stripMarkdown(text).trim()) {
+        try {
+            const retry = await chat([{ role: 'system', content: systemPrompt }, ...history]);
+            ({ text, cited, unanswered } = parseTrailer(retry.text));
+        } catch {
+            // fall through to the safe line
+        }
+        if (!stripMarkdown(text).trim()) {
+            const small = /^\s*(hi|hey|hello|thanks?|thank you|thx|ty|ok(ay)?|cool|great|nice|bye)\b/i.test(latest.content);
+            text = small
+                ? 'Anytime! Anything else you’d like to know about my work?'
+                : 'Sorry, I lost my train of thought there. Could you ask that again?';
+            cited = [];
+            unanswered = false;
+        }
+        onToken?.(stripMarkdown(text));
+    }
+
+    text = sanitizeReply(text, { allowedUrls: allowedUrlsFor(hits) });
     const result = {
         message: stripMarkdown(text),
         // Chips for the visitor: the blocks the model says it used.
-        sources: unanswered ? [] : citedSources(hits, cited, { answer: text, question: latest.content }),
+        // A declined recruiter question ("relocate?", "salary?") still gets the
+        // contact buttons: the answer is "ask Hetav", so make that one tap.
+        sources: unanswered
+            ? hasContactIntent(latest.content) ? contactActions() : []
+            : citedSources(hits, cited, { answer: text, question: latest.content }),
         unanswered,
         // Everything retrieved, for debugging and the eval harness.
         retrieved: hits.map(({ chunk, score }) => ({
