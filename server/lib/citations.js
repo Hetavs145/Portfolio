@@ -138,7 +138,7 @@ const ALIASES = {
     'Phishing Detector': ['phishing'],
     'Harzino Blog': ['harzino'],
     'Treat-o-Meter': ['treat-o-meter', 'treat o meter', 'treatometer'],
-    'Portfolio RAG Agent': ['portfolio agent', 'portfolio chatbot', 'portfolio rag', 'rag-backed personal site', 'rag agent', 'this site'],
+    'Portfolio RAG Agent': ['portfolio agent', 'portfolio chatbot', 'portfolio rag', 'rag-backed personal site'],
     'Cartoon Shorts Engine': ['cartoon shorts', 'cartoon engine', 'story studio'],
 };
 const aliasesOf = (p) => [p.title.toLowerCase(), ...(ALIASES[p.title] ?? [])];

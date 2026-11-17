@@ -15,12 +15,16 @@ import { contact } from '../../src/data/profile.js';
 const CONTACT_INTENT = new RegExp(
     [
         'contact', 'connect', 'reach (you|out|him)', 'get in touch', 'in touch with',
-        'e-?mail', 'mail you', 'phone', 'call (you|him)', 'whats ?app', 'number',
-        'linked ?in', 'hire', 'hiring', 'freelanc', 'work with (you|him)', 'collaborat',
+        // Not bare "linkedin", "number" or "rate": "what did you post on LinkedIn?",
+        // "the number of agents" and "accuracy rate" aren't asking to get in touch.
+        'e-?mail', 'mail you', 'phone', 'call (you|him)', 'whats ?app',
+        '(phone|mobile|contact|whats ?app) (number|no\\.?)', 'your number',
+        'linked ?in (profile|url|link|id|handle|account|page)', '(your|his) linked ?in(?! post| activity)',
+        'find (you|him) on', 'hire', 'hiring', 'freelanc', 'work with (you|him)', 'collaborat',
         'available for', 'open to (work|opportunit|roles|internship)',
         '(make|build|develop|design|create) (a |an |me a |us a )?(website|site|web ?app|app|landing page|portfolio|dashboard|bot|chatbot)',
         'for (my|our) (firm|company|startup|business|client|team|brand|shop|store)',
-        'quote', 'pricing', 'rates?\\b', 'how (do|can) i (talk|speak|meet)',
+        'quote', 'pricing', '(your|hourly|daily|day|project) rates?\\b', 'how (do|can) i (talk|speak|meet)',
     ].join('|'),
     'i',
 );

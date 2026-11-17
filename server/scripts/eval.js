@@ -61,6 +61,7 @@ function checkAnswer(c, result) {
     if (spec.hasSources && !(result.sources?.length > 0)) problems.push('no sources cited');
     const types = new Set((result.sources ?? []).map((s) => s.type));
     for (const t of spec.sourceTypes ?? []) if (!types.has(t)) problems.push(`no ${t} chip`);
+    for (const t of spec.noSourceTypes ?? []) if (types.has(t)) problems.push(`unexpected ${t} chip`);
     // A project chip under a reply that never mentions that project is the
     // "Sign2Text under 'Sure, let's connect.'" bug.
     if (SPEC.global?.projectChipsMustBeNamed) {

@@ -1,39 +1,72 @@
 /**
  * Question shapes that similarity search answers badly, and the blocks to pin
- * for them (alongside contact intent in lib/actions.js).
+ * for them (alongside contact intent in lib/actions.js). Each was found by a
+ * wrong answer from the live bot or from `eval.js --probe`.
  *
  *   Highlight  "What's your best project?" — no block shares those words, so the
- *              model hedged and then invented projects. Pin the best-projects
- *              block (lib/sources/site.js), or until the index has it, the
- *              Flagship and Featured project blocks.
- *   Self       "Tell me about your portfolio" — "portfolio" appears in every
- *              project block's title, so retrieval drifted to VaquaH. Pin the
- *              block about this site and its agent.
+ *              model hedged, invented projects, or crowned the wrong one.
+ *   Count      "How many projects have you built?" — answered "4" from LinkedIn.
+ *   Self       "Tell me about your portfolio" — "portfolio" is in every project
+ *              block's title, so retrieval drifted to VaquaH.
+ *   Education  "Have you graduated?" — answered "PDEU, finishing 2026" (PDEU is
+ *              where he won a hackathon; he studies at Nirma until 2028).
+ *   Identity   "Am I talking to a bot?" — needs the real contact details to hand.
+ *
+ * The derived blocks (best projects, project count) come from
+ * lib/sources/site.js. If the committed index predates them, they are built on
+ * the spot from the same data, so a pin never depends on a re-embed.
  */
 
-import { projects } from '../../src/data/projects.js';
+import { siteChunks } from './sources/site.js';
+import { contactChunks } from './actions.js';
 
 const HIGHLIGHT =
-    /\b(best|favou?rite|proudest|top|strongest|flagship|biggest|greatest|most (impressive|proud|complex|challenging|interesting))\b[^?.!]{0,40}\b(projects?|works?|builds?|things? you('ve| have)? (built|made))\b|\bproud(est)? of\b/i;
+    /\b(best|favou?rite|proudest|top|strongest|flagship|biggest|greatest|most (impressive|proud|complex|challenging|interesting))\b[^?.!]{0,40}\b(projects?|works?|builds?|things? you('ve| have)? (built|made))\b|\bproud(est)? of\b|\bbest project\b|\bproject kaunsa\b/i;
+
+const COUNT = /\bhow many (projects|apps|things|systems|products|builds)\b|\bnumber of projects\b|\b(list|all) (of )?(your|his) projects\b/i;
 
 const SELF =
     /\b(your|this)\s+(portfolio|site|website|web site|chat ?bot|bot|agent|assistant|rag)\b|\bhow (were|was|is) (you|this) (built|made|working)\b|\bhow do you work\b|\bwho (built|made) (you|this)\b|\bwhat are you\b/i;
 
+const EDUCATION =
+    /\b(graduat\w*|degree|college|universit\w*|studying|study at|semester|which year|what year|b\.? ?tech|mba|cgpa|grades?|academics?|school)\b|\bwhen (do|will) you (finish|complete)\b/i;
+
+const IDENTITY =
+    /\b(real (hetav|person|human|you)|are you (a |an )?(bot|ai|human|real|robot|person)|talking to (a |an |the )?(bot|ai|human|real|robot)|is this (a |an )?(bot|ai|human)|(a|an) (bot|ai) or)\b/i;
+
 export const hasHighlightIntent = (q) => HIGHLIGHT.test(String(q ?? ''));
+export const hasCountIntent = (q) => COUNT.test(String(q ?? ''));
 export const hasSelfIntent = (q) => SELF.test(String(q ?? ''));
+export const hasEducationIntent = (q) => EDUCATION.test(String(q ?? ''));
+export const hasIdentityIntent = (q) => IDENTITY.test(String(q ?? ''));
 
-const projectChunk = (all, title) => all.find((c) => c.source === 'site' && c.title === `Portfolio project — ${title}`);
-
-export function highlightChunks(all) {
-    const best = all.filter((c) => c.source === 'site' && /^Best projects/.test(c.title));
-    if (best.length) return best;
-    return projects
-        .filter((p) => p.featured === 'primary' || p.featured === 'secondary')
-        .map((p) => projectChunk(all, p.title))
-        .filter(Boolean);
+/** A derived site block from the index, or built from the data if the index predates it. */
+function derived(all, titleRe) {
+    const indexed = all.filter((c) => c.source === 'site' && titleRe.test(c.title));
+    return indexed.length ? indexed : siteChunks().filter((c) => titleRe.test(c.title));
 }
 
+export const highlightChunks = (all) => derived(all, /^Best projects/);
+export const countChunks = (all) => derived(all, /^Projects — how many/);
+
 export function selfChunks(all) {
-    const self = projects.find((p) => p.title === 'Portfolio RAG Agent');
-    return [self && projectChunk(all, self.title)].filter(Boolean);
+    return all.filter((c) => c.source === 'site' && c.title === 'Portfolio project — Portfolio RAG Agent');
+}
+
+export function educationChunks(all) {
+    const want = [/^Portfolio section — Education/, /^Education —/, /^MBA specialisation/];
+    return want.flatMap((re) => all.filter((c) => re.test(c.title)).slice(0, 1));
+}
+
+export const identityChunks = (all) => contactChunks(all);
+
+/** Every topic pin for a message, in priority order. */
+export function topicPins(latest, all) {
+    return [
+        ...(hasHighlightIntent(latest) ? highlightChunks(all) : []),
+        ...(hasCountIntent(latest) ? countChunks(all) : []),
+        ...(hasSelfIntent(latest) ? selfChunks(all) : []),
+        ...(hasEducationIntent(latest) ? educationChunks(all) : []),
+        ...(hasIdentityIntent(latest) ? identityChunks(all) : []),
+    ];
 }

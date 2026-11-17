@@ -19,7 +19,7 @@ import {
 import { buildSystemPrompt, sanitizeHistory } from './prompt.js';
 import { parseIntent, recencyPins } from './recency.js';
 import { hasContactIntent, contactChunks } from './actions.js';
-import { hasHighlightIntent, highlightChunks, hasSelfIntent, selfChunks } from './intents.js';
+import { topicPins } from './intents.js';
 import { TOP_K, MAX_HISTORY_TURNS, MAX_MESSAGE_CHARS, RECENCY_PINS } from './config.js';
 
 /** Small LRU so repeated questions cost zero quota. */
@@ -141,10 +141,9 @@ export async function retrieve(query, k = TOP_K, { latest = query } = {}) {
     // question too, and "best project?" followed by "how do I reach you?" must
     // not keep pinning projects.
     if (hasContactIntent(latest)) pin(contactChunks(allChunks()));
-    // "Best project?" and "your portfolio?" share few words with the blocks
-    // that answer them; see lib/intents.js.
-    if (hasHighlightIntent(latest)) pin(highlightChunks(allChunks()));
-    if (hasSelfIntent(latest)) pin(selfChunks(allChunks()));
+    // Best project, project count, this site, education, "are you a bot?":
+    // questions that share few words with the blocks answering them.
+    pin(topicPins(latest, allChunks()));
 
     // Always leave room for similarity: a temporal question usually also has a
     // topic ("what did you post about RAG recently?").
@@ -228,7 +227,27 @@ export async function answer(messages, { onToken } = {}) {
     );
     filter?.end();
 
-    const { text, cited, unanswered } = parseTrailer(raw);
+    let { text, cited, unanswered } = parseTrailer(raw);
+
+    // An empty reply ("thanks!" once came back as nothing but the citation
+    // trailer, leaving a blank bubble): retry once, then fall back to a safe line.
+    if (!stripMarkdown(text).trim()) {
+        try {
+            const retry = await chat([{ role: 'system', content: systemPrompt }, ...history]);
+            ({ text, cited, unanswered } = parseTrailer(retry.text));
+        } catch {
+            // fall through to the safe line
+        }
+        if (!stripMarkdown(text).trim()) {
+            const small = /^\s*(hi|hey|hello|thanks?|thank you|thx|ty|ok(ay)?|cool|great|nice|bye)\b/i.test(latest.content);
+            text = small
+                ? 'Anytime! Anything else you’d like to know about my work?'
+                : 'Sorry, I lost my train of thought there. Could you ask that again?';
+            cited = [];
+            unanswered = false;
+        }
+        onToken?.(stripMarkdown(text));
+    }
 
     const result = {
         message: stripMarkdown(text),

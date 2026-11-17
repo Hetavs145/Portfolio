@@ -18,7 +18,9 @@ export function siteChunks() {
     for (const p of projects) {
         const links = [
             p.live ? `Live: ${p.live}` : null,
-            p.github ? `Source: ${p.github}` : null,
+            // Without this, "can I see Aven's repo?" got "I don't have the link in
+            // the context" instead of the truth: the code isn't public.
+            p.github ? `Source: ${p.github}` : 'Source code: private, not publicly available',
             p.youtube ? `Video: ${p.youtube}` : null,
         ].filter(Boolean);
 
@@ -58,6 +60,21 @@ export function siteChunks() {
             ),
         );
     }
+
+    // "How many projects have you built?" got "4": the LinkedIn Projects section
+    // lists only a few. The portfolio is the complete list, so count it.
+    const smaller = projects.filter((p) => !p.production);
+    chunks.push(
+        makeChunk(
+            'site',
+            'Projects — how many and which',
+            `Hetav's portfolio lists ${projects.length} projects in total: ` +
+                `${projects.filter((p) => p.production).length} production systems ` +
+                `(${projects.filter((p) => p.production).map((p) => p.title).join(', ')}) and ` +
+                `${smaller.length} smaller builds (${smaller.map((p) => p.title).join(', ')}). ` +
+                `This is the complete list; his LinkedIn Projects section shows only a few of them.`,
+        ),
+    );
 
     // Competition results, stated so plainly that they cannot be recombined.
     //
