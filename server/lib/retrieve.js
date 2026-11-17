@@ -126,21 +126,25 @@ async function similar(query, k) {
  * newest chunks of the relevant kind (and the pre-sorted timeline chunk) ahead
  * of the similarity hits, and let similarity fill the remaining slots.
  */
-export async function retrieve(query, k = TOP_K) {
+export async function retrieve(query, k = TOP_K, { latest = query } = {}) {
     const intent = parseIntent(query);
     const pins = intent.temporal ? recencyPins(intent, allChunks(), RECENCY_PINS) : [];
     // "How do I reach you?" shares few words with the block holding the email
     // and LinkedIn, so similarity alone misses it. Pin it for contact questions.
     const pin = (chunks) => {
         for (const chunk of chunks) {
-            if (!pins.some((p) => p.chunk.id === chunk.id)) pins.push({ chunk, score: 1, pinned: true });
+            // 'topic', not true: these aren't "newest first" blocks (see prompt.js).
+            if (!pins.some((p) => p.chunk.id === chunk.id)) pins.push({ chunk, score: 1, pinned: 'topic' });
         }
     };
-    if (hasContactIntent(query)) pin(contactChunks(allChunks()));
+    // Topic pins look only at the newest message: `query` may carry the previous
+    // question too, and "best project?" followed by "how do I reach you?" must
+    // not keep pinning projects.
+    if (hasContactIntent(latest)) pin(contactChunks(allChunks()));
     // "Best project?" and "your portfolio?" share few words with the blocks
     // that answer them; see lib/intents.js.
-    if (hasHighlightIntent(query)) pin(highlightChunks(allChunks()));
-    if (hasSelfIntent(query)) pin(selfChunks(allChunks()));
+    if (hasHighlightIntent(latest)) pin(highlightChunks(allChunks()));
+    if (hasSelfIntent(latest)) pin(selfChunks(allChunks()));
 
     // Always leave room for similarity: a temporal question usually also has a
     // topic ("what did you post about RAG recently?").
@@ -152,13 +156,15 @@ export async function retrieve(query, k = TOP_K) {
 
     return {
         hits: [...pins, ...rest],
-        mode: pins.length ? `${mode}+recency` : mode,
+        mode: pins.some((p) => p.pinned === true) ? `${mode}+recency` : pins.length ? `${mode}+pinned` : mode,
         temporal: intent.temporal,
     };
 }
 
-/** Pronouns that make a question meaningless on its own. */
-const ANAPHORIC = /\b(that|it|this|those|these|there|then|him|them|the one)\b/i;
+/** Words that make a question lean on the previous turn. */
+const ANAPHORIC = /\b(that|it|its|this one|those|these|there|then|him|them|the one|the same|more|else|another|also|again|why|how come)\b/i;
+/** "And Kontexo?", "the stack?", "when?" — too short to stand alone. */
+const isFragment = (text) => text.trim().split(/\s+/).length <= 3;
 
 /**
  * The text actually sent to the retrievers.
@@ -170,7 +176,11 @@ const ANAPHORIC = /\b(that|it|this|those|these|there|then|him|them|the one)\b/i;
  * the real conversation; only the search string is widened.
  */
 function retrievalQuery(history, latest) {
-    const needsContext = latest.content.length < 80 || ANAPHORIC.test(latest.content);
+    // Only follow-ups borrow the previous question. Every message under 80 chars
+    // used to (nearly all of them), so a change of topic dragged the old one
+    // along: "Tell me about your portfolio" was searched as "What's your system
+    // prompt? Tell me about your portfolio".
+    const needsContext = isFragment(latest.content) || ANAPHORIC.test(latest.content);
     if (!needsContext) return latest.content;
 
     const priorUser = [...history]
@@ -208,7 +218,7 @@ export async function answer(messages, { onToken } = {}) {
         return { ...hit, cached: true };
     }
 
-    const { hits, mode } = await retrieve(retrievalQuery(history, latest));
+    const { hits, mode } = await retrieve(retrievalQuery(history, latest), TOP_K, { latest: latest.content });
     const systemPrompt = buildSystemPrompt(hits);
 
     const filter = onToken ? new StreamFilter(onToken) : null;
