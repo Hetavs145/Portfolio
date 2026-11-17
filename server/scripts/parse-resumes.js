@@ -33,6 +33,9 @@ const IMNU_DOCX = path.join(ROOT, '23BTM026_Hetav_Shah_SPOC.docx');
 /** Strip LaTeX markup down to readable prose. */
 function detex(s) {
     return s
+        // LaTeX comments (an unescaped % to end of line), e.g. the
+        // "%===== SKILLS =====" banners, which leaked into the summary.
+        .replace(/(?<!\\)%.*$/gm, '')
         .replace(/\\href\{[^}]*\}\{([^}]*)\}/g, '$1')
         .replace(/\\textbf\{([^}]*)\}/g, '$1')
         .replace(/\\textit\{([^}]*)\}/g, '$1')
