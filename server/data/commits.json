@@ -2,23 +2,23 @@
   "Hetavs145/Portfolio": [
     {
       "date": "2026-11-17",
-      "message": "Merge pull request #21"
+      "message": "Merge pull request #25"
     },
     {
       "date": "2026-11-17",
-      "message": "Prompt: yes/no answers must carry their reason"
+      "message": "Fourth probe round: computed education status, Featured labels, placeholders"
     },
     {
       "date": "2026-11-17",
-      "message": "Chat: describe the agent accurately (hybrid RAG, not LangGraph)"
+      "message": "Third probe round: invented links, academic year, skills, declines"
     },
     {
       "date": "2026-11-17",
-      "message": "Remove the IMNU resume from the site; resume button opens it directly"
+      "message": "Second probe round: guard contact details, fresh derived text, dates, commitments"
     },
     {
       "date": "2026-11-17",
-      "message": "SEO and AEO: crawlable content, structured data, sitemap, llms.txt"
+      "message": "Fix reasoning errors found by the probe run"
     }
   ],
   "Hetavs145/Sai-AC-Services-Micro-WebApp": [
