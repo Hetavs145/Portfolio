@@ -29,10 +29,10 @@ const TRAILER = /\[\[\s*(sources|unanswered)\b\s*:?\s*([^\]]*)\]\]/i;
 export function parseTrailer(raw) {
     const m = TRAILER.exec(raw);
     if (!m) {
-        const text = raw.trim();
+        const text = stripBlockRefs(raw).trim();
         return declined(text) ? { text, cited: [], unanswered: true } : { text, cited: null, unanswered: false };
     }
-    const text = (raw.slice(0, m.index) + raw.slice(m.index + m[0].length)).trim();
+    const text = stripBlockRefs(raw.slice(0, m.index) + raw.slice(m.index + m[0].length)).trim();
     if (m[1].toLowerCase() === 'unanswered') return { text, cited: [], unanswered: true };
     const cited = [...m[2].matchAll(/\d+/g)].map((n) => Number(n[0]));
     // Backstop for a mislabelled trailer: a reply that cites nothing and says it
@@ -42,6 +42,14 @@ export function parseTrailer(raw) {
     if (!cited.length && declined(text)) return { text, cited: [], unanswered: true };
     return { text, cited, unanswered: false };
 }
+
+/**
+ * Context block numbers ("[10]", "[3, 7]") are for the trailer only, but
+ * models sometimes cite inline — "[10] NTS Global intern…" showed up in a
+ * fit summary. Remove them from the visible text.
+ */
+export const BLOCK_REF = /[ \t]?\[\d{1,2}(?:\s*,\s*\d{1,2})*\](?!\()/g;
+export const stripBlockRefs = (text) => String(text ?? '').replace(BLOCK_REF, '');
 
 /** Phrases a reply uses when it couldn't answer from the context. */
 const DECLINE =
@@ -129,11 +137,18 @@ const ALIASES = {
     'Phishing Detector': ['phishing'],
     'Harzino Blog': ['harzino'],
     'Treat-o-Meter': ['treat-o-meter', 'treat o meter', 'treatometer'],
+    'Portfolio RAG Agent': ['portfolio agent', 'portfolio chatbot', 'portfolio rag', 'rag-backed personal site'],
+    'Cartoon Shorts Engine': ['cartoon shorts', 'cartoon engine', 'story studio'],
 };
 const aliasesOf = (p) => [p.title.toLowerCase(), ...(ALIASES[p.title] ?? [])];
+const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// Whole words only: "Aven" must not match "haven't".
+const aliasRe = new Map();
 const mentions = (text, p) => {
-    const t = String(text ?? '').toLowerCase();
-    return aliasesOf(p).some((a) => t.includes(a));
+    if (!aliasRe.has(p.title)) {
+        aliasRe.set(p.title, new RegExp(`(?<![a-z0-9])(${aliasesOf(p).map(escape).join('|')})(?![a-z0-9])`, 'i'));
+    }
+    return aliasRe.get(p.title).test(String(text ?? ''));
 };
 
 /** GitHub repo names too generic to count as a mention on their own. */
@@ -207,7 +222,17 @@ export function citedSources(hits, cited, { answer = '', question = '', limit = 
  */
 export class StreamFilter {
     constructor(emit) {
-        this.emit = emit;
+        // After a dropped "[10]" the space before it was already sent, so swallow
+        // one leading space of whatever comes next.
+        this.emit = (t) => {
+            if (this.skipSpace) {
+                this.skipSpace = false;
+                if (t.startsWith(' ')) t = t.slice(1);
+                if (!t) return;
+            }
+            emit(t);
+        };
+        this.skipSpace = false;
         this.buf = '';
         this.inThink = false;
         this.done = false;
@@ -263,7 +288,15 @@ export class StreamFilter {
                 this.buf = '';
                 return;
             }
-            const maybe = markers.some((m) => m.startsWith(lower));
+            // Inline block refs like "[10]" or "[3, 7]": drop them whole.
+            const ref = /^\[\d{1,2}(?:\s*,\s*\d{1,2})*\]/.exec(this.buf);
+            if (ref && this.buf[ref[0].length] !== '(') {
+                this.buf = this.buf.slice(ref[0].length);
+                this.skipSpace = true;
+                continue;
+            }
+            const partialRef = /^\[\d{1,2}(?:\s*,\s*\d{0,2})*$/.test(this.buf) || (ref && this.buf.length === ref[0].length);
+            const maybe = partialRef || markers.some((m) => m.startsWith(lower));
             if (maybe && !final) return; // wait for more text
             // Not a marker after all: release one character and keep scanning.
             this.emit(this.buf[0]);

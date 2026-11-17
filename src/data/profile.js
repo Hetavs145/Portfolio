@@ -17,8 +17,11 @@ export const skills = [
     'TensorFlow / PyTorch',
     'Three.js / WebSocket',
     'Power BI / Analytics',
-    'Firebase',
-    'Docker',
+    'Firebase / Supabase',
+    'Docker / Nginx',
+    'GitHub Actions (CI/CD)',
+    'Vercel / Render / Linux VPS',
+    'Web scraping (Playwright)',
     'Git',
 ];
 
@@ -66,7 +69,7 @@ export const cursorKeywords = [
 export const resumes = [
     {
         label: 'Current Resume',
-        href: '/Hetav_Shah_Resume.pdf?v=20260911',
+        href: '/Hetav_Shah_Resume.pdf?v=20261117',
         description: 'Current resume — projects, stack, experience',
     },
     {

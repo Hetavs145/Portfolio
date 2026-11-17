@@ -8,17 +8,28 @@
     "linkedin": "https://www.linkedin.com/in/hetav-shah-26601722b",
     "portfolio": "https://portfolio.vaquah.in"
   },
-  "summary": "Engineer turned MBA candidate, drawn to where technology meets the business decision. I build end to end because I like seeing things used: a traffic co-pilot built over 36 hours that took 1st place, an e-commerce platform running in production, a portfolio site that keeps its own knowledge base current. Along the way I led an intern team, and I run administration and outreach for my institute's entrepreneurship cell. I am now learning finance properly, and I work best on real problems with honest feedback. %======================== SKILLS ========================",
+  "summary": "MBA (Finance major, Digital Transformation and Analytics minor) with a B.Tech in Computer Science, building AI systems that automate business and finance workflows end to end. I design the whole system first, build it AI-first and deploy it myself (Docker, GitHub Actions, Vercel, Render, Supabase, Linux VPS): a 6-agent LangGraph co-pilot that took 1st place at Aetrix 2026, an agent-run CRM with an approvals queue and audit trail covering leads, proposals and invoices, and a live commerce platform with Razorpay payments. Led the intern team at NTS Global Nihon. I pair production engineering with an MBA's business and analytics lens to turn manual workflows into governed, self-serve systems. Finance is a growing strength I am building alongside the MBA. %======================== SKILLS ========================",
   "skills": {
-    "Languages": [
-      "JavaScript",
-      "TypeScript",
-      "Python",
-      "C++",
-      "Java",
-      "SQL"
+    "Agentic AI": [
+      "LangGraph",
+      "LangChain",
+      "MCP",
+      "RAG",
+      "multi-agent orchestration",
+      "Groq",
+      "Google Gemini",
+      "Whisper STT"
     ],
-    "Web": [
+    "Automation": [
+      "n8n",
+      "GitHub Actions",
+      "REST APIs",
+      "Celery",
+      "Redis",
+      "web scraping (Playwright)",
+      "YouTube Data API"
+    ],
+    "Full-Stack": [
       "React",
       "Next.js",
       "Three.js",
@@ -27,36 +38,38 @@
       "Express.js",
       "FastAPI",
       "Firebase",
-      "Socket.io",
-      "REST APIs",
-      "WebSocket"
+      "Supabase",
+      "Socket.io"
     ],
-    "AI and ML": [
-      "LangGraph",
-      "LangChain",
-      "MCP",
-      "n8n",
-      "RAG",
-      "Groq",
-      "Google Gemini",
-      "Whisper STT",
+    "Cloud and DevOps": [
+      "Docker",
+      "Docker Compose",
+      "Nginx",
+      "CI/CD and cron jobs",
+      "Vercel",
+      "Render",
+      "Supabase Edge Functions",
+      "Linux VPS"
+    ],
+    "ML and Tools": [
       "scikit-learn",
-      "TensorFlow",
       "PyTorch",
+      "TensorFlow",
       "MediaPipe",
       "OpenCV",
-      "DBSCAN"
-    ],
-    "Tools and Analytics": [
+      "DBSCAN",
+      "OSMnx",
       "Git",
-      "GitHub",
-      "Docker",
-      "Postman",
-      "Power BI",
-      "Pydantic",
-      "Zustand",
-      "NetworkX",
-      "OSMnx"
+      "Postman"
+    ],
+    "Way of Working": [
+      "AI-assisted development: architecture",
+      "directing LLMs",
+      "code review",
+      "debugging (JS",
+      "TypeScript",
+      "Python",
+      "SQL)"
     ]
   },
   "experience": [
@@ -68,7 +81,7 @@
       "bullets": [
         "Engineered Firebase auth, Firestore security rules and session management across 2 production environments.",
         "Automated routine customer queries with 5 RAG-based Kaamigo chatbot modules covering 50+ interaction flows.",
-        "Shipped real-time chat across 3 platforms with cross-device sync; led the intern team and merged 11 pull requests through structured Git review workflows."
+        "Led the intern team and merged 11 pull requests through structured Git reviews; shipped real-time chat across 3 platforms."
       ]
     }
   ],
@@ -79,47 +92,49 @@
       "subtitle": "LangGraph, FastAPI, Next.js, Groq, Gemini",
       "subtitleMeta": "",
       "bullets": [
-        "Architected an autonomous 6-agent LangGraph pipeline (Signal, Routing, Alert, Density, Narrative, Supervisor) with parallel fan-out and supervisor fan-in orchestration.",
-        "Automates slow incident triage: streams a 250-segment road network via OSMnx on 5s WebSockets with RAG-grounded SOP retrieval across 12 documents, at 0.34s on Groq Llama 3.3 70B."
+        "Architected a 6-agent LangGraph pipeline (Signal, Routing, Alert, Density, Narrative, Supervisor) with parallel fan-out and fan-in.",
+        "Automates incident triage: streams a 250-segment road network on 5s WebSockets with RAG over 12 SOPs, at 0.34s on Groq."
       ]
     },
     {
-      "title": "Kontexo: Agentic MCP Gateway",
-      "meta": "2026",
-      "subtitle": "LangGraph, JSON-RPC 2.0, Celery, Redis, ChromaDB",
+      "title": "Aven: Agentic AI CRM and Outreach Autopilot",
+      "meta": "Jul 2026 -- Present",
+      "subtitle": "React, TypeScript, Supabase, Deno Edge Functions, MCP, Hermes Agent, Claude Code, Gemini, Linux VPS",
       "subtitleMeta": "",
       "bullets": [
-        "Engineered a JSON-RPC 2.0 MCP server exposing 19 tools across GitHub, Slack, Sheets and Trello, driven by a 10-node LangGraph state machine.",
-        "Automates manual tool-by-tool coordination: one plain-English prompt drives a multi-step workflow, gated by human approval."
-      ]
-    },
-    {
-      "title": "VaquaH: HVAC and Cooling Services Platform",
-      "meta": "Oct 2025 -- Present",
-      "subtitle": "React, Node.js, Express, Firebase, Razorpay",
-      "subtitleMeta": "",
-      "bullets": [
-        "Launched a production e-commerce platform with 50+ products, smart search, coupon system, tiered shipping, Razorpay checkout and COD partial-advance logic.",
-        "Automates phone-led ordering and scheduling into self-service via 8 service modules and a RAG chatbot with voice and gesture control."
-      ]
-    },
-    {
-      "title": "HetChat: Real-Time Messaging Platform",
-      "meta": "2025",
-      "subtitle": null,
-      "subtitleMeta": null,
-      "bullets": [
-        "Built a chat platform on React, Node.js and Socket.io with Firebase Auth, Firestore persistence, typing indicators and presence tracking."
+        "Built a prerendered site and Supabase CRM (leads, deals, proposals, invoices, projects) with 2FA, row-level security, audit log.",
+        "An always-on agent on a self-managed Linux VPS drafts outreach from free lead scrapers (1,400+ prospects sourced); anything that commits the business waits in a human approvals queue."
       ]
     },
     {
       "title": "Portfolio: RAG-Backed Personal Site",
       "meta": "2026",
-      "subtitle": "React, Vite, Three.js, Node.js, Express, NVIDIA NIM, Render",
+      "subtitle": "React, Vite, Three.js, Node.js, Express, NVIDIA NIM, GitHub Actions, Vercel, Render",
       "subtitleMeta": "",
       "bullets": [
-        "Built an interactive site with a procedural Three.js 3D scene and a vector RAG agent searching 116 indexed knowledge chunks drawn from GitHub repos, LinkedIn posts and resumes.",
-        "Automates its own upkeep: a nightly GitHub Actions job re-scrapes and re-embeds the knowledge base, with multi-model fallback, 12-turn memory and per-IP rate limiting for uptime."
+        "RAG agent answers from 155 indexed chunks of my GitHub, LinkedIn and resumes, with cited, streamed replies and a recruiter mode that matches a job description to my profile.",
+        "A nightly GitHub Actions job scrapes and re-embeds the knowledge base behind a regression eval; deploys on Vercel, Render."
+      ]
+    },
+    {
+      "title": "Cartoon Shorts Engine: Automated Bilingual Story Studio for 6 Channels",
+      "meta": "Nov 2026",
+      "subtitle": "Python, three.js, FFmpeg, Kokoro TTS, Microsoft neural voices, Composio, scheduled cloud agents",
+      "subtitleMeta": "",
+      "bullets": [
+        "Fully automated in the cloud: a daily scheduled run per niche picks an idea (Google Trends for the trending niche), writes English and Hinglish scripts, and animates a new cast in a three.js cartoon world.",
+        "Voices each language with its own engine (narrator plus character voices), renders and mixes with FFmpeg, burns in captions, and publishes a Short and Reel to 6 YouTube and Instagram channels via Composio."
+      ]
+    },
+    {
+      "title": "VaquaH: Platform for my Family's HVAC and Cooling Business",
+      "meta": "Oct 2025 -- Present",
+      "subtitle": "React, Node.js, Express, Firebase, Razorpay, Docker, Nginx, Vercel",
+      "subtitleMeta": "",
+      "bullets": [
+        "Launched a production e-commerce platform: 50+ products, smart search, coupons, tiered shipping, Razorpay and COD checkout.",
+        "Moves phone-led ordering and scheduling to self-service via 8 service modules and a RAG chatbot with voice control.",
+        "Dockerised behind an Nginx proxy, with a LangGraph agent auto-scaling backend replicas; frontend live on Vercel at vaquah.in."
       ]
     }
   ],
@@ -141,6 +156,13 @@
       "bullets": [
         "Responsible for Administration, Public Relations and Event Management."
       ]
+    },
+    {
+      "title": "Captain, School Kho Kho Team (about 3 years); led the city team at the state-level Khel Mahakumbh in Std 8",
+      "meta": "",
+      "subtitle": null,
+      "subtitleMeta": null,
+      "bullets": []
     }
   ],
   "education": [
@@ -149,14 +171,16 @@
       "meta": "2023 -- 2028",
       "subtitle": null,
       "subtitleMeta": null,
-      "bullets": []
+      "bullets": [
+        "MBA: Finance (Major), Digital Transformation and Analytics (Minor)"
+      ]
     }
   ],
   "certifications": [
-    "Power BI for Beginners",
     "Introduction to LangGraph",
     "n8n: No Code AI Agent Builder (Simplilearn)",
     "Cloud Foundations (AWS Academy)",
-    "C for Everyone Part 2 (UC Santa Cruz, Coursera)"
+    "Power BI for Beginners",
+    "C for Everyone Part 2 (Coursera)"
   ]
 }

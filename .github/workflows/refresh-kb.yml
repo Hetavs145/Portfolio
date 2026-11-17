@@ -12,11 +12,15 @@ name: Refresh knowledge base
 #   OPENROUTER_EMBED_KEY, RAPIDAPI_KEY_FALLBACK, LINKEDIN_DMA_TOKEN
 
 on:
-  # An answer added to content/faq.md reaches the bot minutes after it's pushed.
+  # An answer added to content/faq.md, a resume edit or a project change reaches
+  # the bot minutes after it's pushed, not at the next nightly run.
   push:
     branches: [main]
     paths:
       - 'content/faq.md'
+      - 'Hetav_Shah_Resume.tex'
+      - 'src/data/projects.js'
+      - 'src/data/profile.js'
   schedule:
     # 03:00 UTC daily
     - cron: '0 3 * * *'

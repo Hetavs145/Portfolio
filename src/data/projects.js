@@ -17,8 +17,8 @@ export const projects = [
     {
         title: 'VaquaH Cooling Service',
         description:
-            'Full-stack HVAC/Cooling services platform — e-commerce with 50+ products, smart search, coupon system, tiered shipping, wishlist, Razorpay & COD checkout. Includes service booking, AMC plans, appointment tracking, user dashboard, RAG-powered AI chatbot, hands-free voice assistant ("Say VaquaH"), and gesture navigation with virtual cursor, pinch-to-click, and swipe via MediaPipe.',
-        tech: ['React (Vite)', 'Tailwind CSS', 'Node.js', 'Express', 'Firebase', 'Razorpay', 'Google Generative AI', 'MediaPipe', 'Framer Motion'],
+            'Full-stack HVAC/Cooling services platform — e-commerce with 50+ products, smart search, coupon system, tiered shipping, wishlist, Razorpay & COD checkout. Includes service booking, AMC plans, appointment tracking, user dashboard, RAG-powered AI chatbot, hands-free voice assistant ("Say VaquaH"), and gesture navigation with virtual cursor, pinch-to-click, and swipe via MediaPipe. Deployed by Hetav: frontend on Vercel at vaquah.in, the Express API Dockerised (Docker Compose) behind an Nginx reverse proxy that load-balances backend replicas, with a LangGraph agent that scales the replicas.',
+        tech: ['React (Vite)', 'Tailwind CSS', 'Node.js', 'Express', 'Firebase', 'Razorpay', 'Google Generative AI', 'MediaPipe', 'Framer Motion', 'Docker', 'Nginx', 'Vercel'],
         live: 'https://vaquah.in',
         github: 'https://github.com/Hetavs145/VaquaH',
         youtube: 'https://www.youtube.com/@NeuroStucks',
@@ -33,6 +33,16 @@ export const projects = [
         live: null,
         github: 'https://github.com/Hetavs145/TrafficMind',
         featured: 'secondary',
+        production: true,
+    },
+    {
+        title: 'Aven',
+        description:
+            'Agentic AI CRM and outreach autopilot, live at aven.harkeswanen.in. A prerendered site and Supabase CRM covering leads, deals, proposals, invoices and projects, with 2FA, row-level security and an audit log. An always-on agent on a self-managed Linux VPS drafts outreach from free lead scrapers (1,400+ prospects sourced); anything that commits the business waits in a human approvals queue.',
+        tech: ['React', 'TypeScript', 'Supabase', 'Deno Edge Functions', 'MCP', 'Hermes Agent', 'Claude Code', 'Gemini', 'Linux VPS'],
+        live: 'https://aven.harkeswanen.in',
+        github: null,
+        featured: null,
         production: true,
     },
     {
@@ -53,6 +63,26 @@ export const projects = [
         live: null,
         github: 'https://github.com/Hetavs145/ET-Gen-Hackathon',
         featured: 'secondary',
+        production: true,
+    },
+    {
+        title: 'Cartoon Shorts Engine',
+        description:
+            'Automated bilingual story studio for 6 channels, fully automated in the cloud. A daily scheduled run per niche picks an idea (Google Trends for the trending niche), writes English and Hinglish scripts and animates a new cast in a three.js cartoon world. Each language is voiced by its own engine (narrator plus character voices), then rendered and mixed with FFmpeg, captioned, and published as a Short and Reel to 6 YouTube and Instagram channels via Composio.',
+        tech: ['Python', 'three.js', 'FFmpeg', 'Kokoro TTS', 'Microsoft neural voices', 'Composio', 'Scheduled cloud agents'],
+        live: null,
+        github: null,
+        featured: null,
+        production: true,
+    },
+    {
+        title: 'Portfolio RAG Agent',
+        description:
+            'RAG agent behind this site, refreshed nightly by CI. It answers from indexed chunks of Hetav\'s GitHub, LinkedIn and resumes with cited, streamed replies, plus a recruiter mode that matches a job description to his profile. A nightly GitHub Actions job scrapes LinkedIn and the site (Playwright), re-embeds the knowledge base, runs a regression eval and redeploys. Frontend on Vercel, Express API on Render.',
+        tech: ['React', 'Vite', 'Three.js', 'Node.js', 'Express', 'NVIDIA NIM', 'Hybrid RAG', 'GitHub Actions', 'Playwright', 'Vercel', 'Render'],
+        live: 'https://portfolio.vaquah.in',
+        github: 'https://github.com/Hetavs145/Portfolio',
+        featured: null,
         production: true,
     },
     {

@@ -20,21 +20,29 @@ import { derived } from './architectures.derived.js';
 
 export const architectures = {
     'VaquaH Cooling Service': {
-        source: 'VaquaH / SYSTEM_ARCHITECTURE.md',
+        source: 'VaquaH / SYSTEM_ARCHITECTURE.md, docker-compose.yml, nginx/',
         layers: [
             {
                 label: 'CLIENT',
                 nodes: [
-                    { name: 'React 18 + Vite', note: 'Tailwind · shadcn/ui · React Query' },
+                    { name: 'React 18 + Vite', note: 'Tailwind · shadcn/ui · on Vercel' },
                     { name: 'Voice assistant', note: 'Web Speech API + TTS playback' },
                     { name: 'Firebase SDK', note: 'Google + email sign-in' },
                 ],
                 edge: 'https / rest',
             },
             {
+                label: 'EDGE',
+                nodes: [
+                    { name: 'Nginx', note: 'reverse proxy · load balancing' },
+                    { name: 'Scaler agent', note: 'FastAPI + LangGraph · scales replicas' },
+                ],
+                edge: 'docker compose network',
+            },
+            {
                 label: 'API',
                 nodes: [
-                    { name: 'Express.js API', note: 'chat · voice · payments · admin', accent: true },
+                    { name: 'Express.js API', note: 'Docker · replicas · chat · voice · payments', accent: true },
                 ],
                 edge: 'services',
             },
@@ -177,5 +185,107 @@ export const architectures = {
         ],
     },
 
+    'Portfolio RAG Agent': {
+        source: 'Portfolio / server/, .github/workflows/refresh-kb.yml',
+        layers: [
+            {
+                label: 'CLIENT',
+                nodes: [
+                    { name: 'React + Vite', note: 'Three.js suit · on Vercel' },
+                    { name: 'Chat + recruiter mode', note: 'SSE streaming · source chips' },
+                ],
+                edge: '/api/chat · /api/fit',
+            },
+            {
+                label: 'API',
+                nodes: [{ name: 'Express API', note: 'on Render · cited answers · Telegram alerts', accent: true }],
+                edge: 'hybrid retrieval',
+            },
+            {
+                label: 'RETRIEVAL',
+                nodes: [
+                    { name: 'Dense search', note: 'NVIDIA NIM embeddings' },
+                    { name: 'Lexical search', note: 'fused with RRF' },
+                    { name: 'LLM', note: 'NVIDIA NIM · OpenRouter fallback' },
+                ],
+                parallel: true,
+                edge: 'committed index.json',
+            },
+            {
+                label: 'NIGHTLY CI',
+                chain: ['GitHub Actions cron', 'Scrape LinkedIn + site', 'Re-embed', 'Eval gate', 'Commit + redeploy'],
+            },
+        ],
+    },
+    // Aven and Cartoon Shorts Engine live in private repositories, so these two
+    // are drawn only from the components named on Hetav's resume.
+    Aven: {
+        source: 'Aven (private repo) · components from the resume',
+        layers: [
+            {
+                label: 'CLIENT',
+                nodes: [
+                    { name: 'Prerendered site', note: 'React · TypeScript' },
+                    { name: 'CRM app', note: 'leads · deals · proposals · invoices' },
+                ],
+                edge: 'auth · 2FA',
+            },
+            {
+                label: 'BACKEND',
+                nodes: [
+                    { name: 'Supabase', note: 'Postgres · row-level security · audit log', accent: true },
+                    { name: 'Edge Functions', note: 'Deno' },
+                ],
+                edge: 'MCP',
+            },
+            {
+                label: 'AGENT',
+                nodes: [
+                    { name: 'Always-on agent', note: 'self-managed Linux VPS' },
+                    { name: 'Lead scrapers', note: '1,400+ prospects sourced' },
+                ],
+                edge: 'drafts',
+            },
+            {
+                label: 'GOVERNANCE',
+                nodes: [{ name: 'Approvals queue', note: 'a human signs off anything that commits the business' }],
+            },
+        ],
+    },
+    'Cartoon Shorts Engine': {
+        source: 'Cartoon Shorts Engine (private repo) · components from the resume',
+        layers: [
+            {
+                label: 'SCHEDULE',
+                nodes: [
+                    { name: 'Daily cloud run', note: 'one per niche' },
+                    { name: 'Idea', note: 'Google Trends for the trending niche' },
+                ],
+                edge: 'idea',
+            },
+            {
+                label: 'STORY',
+                nodes: [
+                    { name: 'English script' },
+                    { name: 'Hinglish script' },
+                ],
+                parallel: true,
+                edge: 'scripts + cast',
+            },
+            {
+                label: 'RENDER',
+                nodes: [
+                    { name: 'three.js world', note: 'a new cast each episode' },
+                    { name: 'Voices', note: 'Kokoro TTS · Microsoft neural' },
+                    { name: 'FFmpeg', note: 'mix · burned-in captions' },
+                ],
+                edge: 'Short + Reel',
+            },
+            {
+                label: 'PUBLISH',
+                nodes: [{ name: 'Composio', note: '6 YouTube + Instagram channels', accent: true }],
+            },
+        ],
+    },
     ...derived,
 };
