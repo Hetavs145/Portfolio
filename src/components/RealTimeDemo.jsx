@@ -652,7 +652,7 @@ const RealTimeDemo = () => {
 
                     {/* Agent description */}
                     <p className="text-center text-ink-mute text-xs font-mono mt-4">
-                        A LangGraph-based intelligent RAG human-like replier agent
+                        Hybrid RAG agent over my resume, GitHub and LinkedIn · cited answers, refreshed nightly
                     </p>
                     </>
                     )}
