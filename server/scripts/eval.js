@@ -57,6 +57,17 @@ function checkAnswer(c, result) {
         problems.push(`unanswered=${Boolean(result.unanswered)}, expected ${spec.unanswered}`);
     }
     if (spec.hasSources && !(result.sources?.length > 0)) problems.push('no sources cited');
+    const types = new Set((result.sources ?? []).map((s) => s.type));
+    for (const t of spec.sourceTypes ?? []) if (!types.has(t)) problems.push(`no ${t} chip`);
+    // A project chip under a reply that never mentions that project is the
+    // "Sign2Text under 'Sure, let's connect.'" bug.
+    if (SPEC.global?.projectChipsMustBeNamed) {
+        for (const s of result.sources ?? []) {
+            if (s.type === 'project' && !msg.toLowerCase().includes(s.label.toLowerCase().split(' ')[0])) {
+                problems.push(`unrelated project chip: ${s.label}`);
+            }
+        }
+    }
     return problems;
 }
 

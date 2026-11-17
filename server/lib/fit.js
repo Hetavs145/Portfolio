@@ -29,6 +29,8 @@ RULES
 - Use ONLY the numbered context blocks below as evidence about Hetav. Never invent a skill, employer, date, metric or project.
 - Be honest. A credible "partial match" or "gap" is worth more to a recruiter than inflated claims. If the JD asks for something the context doesn't show, list it as a gap — don't stretch an unrelated project to cover it.
 - Write in third person ("Hetav has…"), plain text, no markdown headings or asterisks.
+- Never put block numbers like [3] in the visible text; name the project, role or credential instead.
+- Deployment counts as evidence: shipping and hosting his own systems (Docker, Nginx, GitHub Actions CI/CD, Vercel, Render, Supabase, a Linux VPS) is cloud and DevOps experience when the context shows it.
 
 FORMAT (keep it scannable, under ~220 words)
 Overall: one sentence with a verdict — Strong fit, Good fit, Partial fit, or Weak fit — and why.
@@ -72,7 +74,7 @@ export async function fitSummary(jd, { onToken } = {}) {
     const { text: body, cited } = parseTrailer(raw);
     return {
         message: stripMarkdown(body),
-        sources: citedSources(hits, cited, { fallback: 4 }),
+        sources: citedSources(hits, cited, { answer: body }),
         mode,
         model,
     };

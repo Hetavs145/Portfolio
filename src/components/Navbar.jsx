@@ -71,13 +71,8 @@ const Navbar = () => {
                     className={`flex items-center gap-3 rounded-lg pr-3 transition-colors ${scrolled ? 'bg-ice-panel/80 backdrop-blur-md' : ''}`}
                     aria-label="Hetav Shah — home"
                 >
-                    <span className="w-9 h-9 border-[1.5px] border-ink rounded-[3px] grid place-items-center font-mono text-xs font-medium text-ink bg-ice-hi/60">
-                        HS
-                    </span>
-                    <span className="label text-left leading-[1.55] hidden sm:block">
-                        <span className="block text-ink">Hetav Shah</span>
-                        <span className="block text-ink-mute">Unit 145 — Portfolio</span>
-                    </span>
+                    <img src="/favicon.svg" alt="" width="36" height="36" className="w-9 h-9 shrink-0" draggable="false" />
+                    <span className="label text-left text-ink hidden sm:block">Hetav Shah</span>
                 </button>
 
                 {/* Desktop segmented nav */}

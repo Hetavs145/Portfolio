@@ -33,6 +33,9 @@ const IMNU_DOCX = path.join(ROOT, '23BTM026_Hetav_Shah_SPOC.docx');
 /** Strip LaTeX markup down to readable prose. */
 function detex(s) {
     return s
+        // LaTeX comments (an unescaped % to end of line), e.g. the
+        // "%===== SKILLS =====" banners, which leaked into the summary.
+        .replace(/(?<!\\)%.*$/gm, '')
         .replace(/\\href\{[^}]*\}\{([^}]*)\}/g, '$1')
         .replace(/\\textbf\{([^}]*)\}/g, '$1')
         .replace(/\\textit\{([^}]*)\}/g, '$1')
@@ -123,6 +126,11 @@ function parseTex(src) {
         {},
     );
 
+    const combined = sections['education and certifications'] || '';
+    const [combinedEducation, combinedCerts = ''] = combined.split(/%\s*certifications\b.*\n/i);
+    const educationBlock = sections.education || combinedEducation;
+    const certificationsBlock = sections.certifications || combinedCerts;
+
     return {
         name: 'Hetav Shah',
         contact: {
@@ -138,8 +146,11 @@ function parseTex(src) {
         experience: parseEntries(sections.experience),
         projects: parseEntries(sections.projects),
         achievements: parseEntries(sections['achievements and positions']),
-        education: parseEntries(sections.education),
-        certifications: detex(sections.certifications || '')
+        // The resume may keep these as separate sections or as one combined
+        // "Education and Certifications" section, where a `% certifications`
+        // comment marks the start of the certifications line.
+        education: parseEntries(educationBlock),
+        certifications: detex(certificationsBlock)
             .split('·')
             .map((s) => s.trim())
             .filter(Boolean),

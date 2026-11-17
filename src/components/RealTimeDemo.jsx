@@ -9,7 +9,7 @@ import {
     Send,
     Bot,
     Loader2,
-    RotateCcw,
+    RotateCw,
     History,
     Plus,
     Trash2,
@@ -347,7 +347,7 @@ const RealTimeDemo = () => {
                         {/* Chat Header */}
                         <div className="bg-ice-hi p-3 md:p-4 flex justify-between items-center border-b border-ink/15">
                             <div className="flex items-center space-x-2 md:space-x-3">
-                                <span className="w-8 h-8 border-[1.5px] border-ink rounded-[3px] grid place-items-center font-mono text-[10px] font-medium text-ink">HS</span>
+                                <img src="/favicon.svg" alt="" width="32" height="32" className="w-8 h-8 shrink-0" draggable="false" />
                                 <div>
                                     <h3 className="text-ink font-bold text-sm md:text-base leading-tight">
                                         Hetav's Agent
@@ -368,9 +368,9 @@ const RealTimeDemo = () => {
                                     className="flex items-center gap-1 text-xs font-mono text-ink-2 hover:text-arc-deep hover:bg-ink/[0.05] px-2 sm:px-2.5 py-1.5 rounded transition-all active:scale-95 border border-transparent hover:border-ink/15"
                                     aria-label="Refresh chat"
                                 >
-                                    <RotateCcw
+                                    <RotateCw
                                         size={14}
-                                        className={`transition-transform duration-500 ${refreshing ? "-rotate-180 text-arc-deep" : ""}`}
+                                        className={`transition-transform duration-500 ${refreshing ? "rotate-180 text-arc-deep" : ""}`}
                                     />
                                     <span className="hidden sm:inline">Refresh</span>
                                 </button>
@@ -387,7 +387,7 @@ const RealTimeDemo = () => {
                                     }`}
                                     aria-label="Chat history"
                                 >
-                                    <History size={14} />
+                                    <History size={14} className="-scale-x-100" />
                                     <span className="hidden sm:inline">History</span>
                                     {sessions.length > 0 && (
                                         <span
@@ -419,7 +419,7 @@ const RealTimeDemo = () => {
                                         {/* History Header */}
                                         <div className="p-3 sm:p-3.5 border-b border-ink/15 flex items-center justify-between bg-ice-hi">
                                             <div className="flex items-center gap-2">
-                                                <History size={15} className="text-arc-deep" />
+                                                <History size={15} className="text-arc-deep -scale-x-100" />
                                                 <span className="text-xs sm:text-sm font-semibold text-ink font-mono">
                                                     Past Conversations
                                                 </span>
@@ -652,7 +652,7 @@ const RealTimeDemo = () => {
 
                     {/* Agent description */}
                     <p className="text-center text-ink-mute text-xs font-mono mt-4">
-                        A LangGraph-based intelligent RAG human-like replier agent
+                        Hybrid RAG agent over my resume, GitHub and LinkedIn · cited answers, refreshed nightly
                     </p>
                     </>
                     )}

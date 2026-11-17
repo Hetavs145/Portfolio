@@ -16,14 +16,14 @@
 \titleformat{\section}
   {\normalsize\bfseries\uppercase}
   {}{0em}{}[\vspace{-0.7em}\rule{\textwidth}{0.6pt}]
-\titlespacing{\section}{0pt}{5pt}{3pt}
+\titlespacing{\section}{0pt}{4pt}{2.5pt}
 
 \newcommand{\entry}[2]{%
   \textbf{#1}\hfill{\small #2}\par\vspace{1pt}}
 \newcommand{\sub}[2]{%
   {\small\itshape #1}\hfill{\small\itshape #2}\par\vspace{2pt}}
 
-\setlist[itemize]{leftmargin=1.1em, topsep=0.8pt, itemsep=0.4pt, parsep=0pt, label=\textbullet}
+\setlist[itemize]{leftmargin=1.1em, topsep=0.8pt, itemsep=0.2pt, parsep=0pt, label=\textbullet}
 
 \begin{document}
 
@@ -43,15 +43,17 @@
 
 %======================== SUMMARY ========================
 \section{Summary}
-Engineer turned MBA candidate, drawn to where technology meets the business decision. I build end to end because I like seeing things used: a traffic co-pilot built over 36 hours that took 1st place, an e-commerce platform running in production, a portfolio site that keeps its own knowledge base current. Along the way I led an intern team, and I run administration and outreach for my institute's entrepreneurship cell. I am now learning finance properly, and I work best on real problems with honest feedback.
+MBA (Finance major, Digital Transformation and Analytics minor) with a B.Tech in Computer Science, building AI systems that automate business and finance workflows end to end. I design the whole system first, build it AI-first and deploy it myself (Docker, GitHub Actions, Vercel, Render, Supabase, Linux VPS): a 6-agent LangGraph co-pilot that took 1st place at Aetrix 2026, an agent-run CRM with an approvals queue and audit trail covering leads, proposals and invoices, and a live commerce platform with Razorpay payments. Led the intern team at NTS Global Nihon. I pair production engineering with an MBA's business and analytics lens to turn manual workflows into governed, self-serve systems. Finance is a growing strength I am building alongside the MBA.
 
 %======================== SKILLS ========================
 \section{Skills}
-\begin{tabular}{@{}p{0.23\textwidth}p{0.75\textwidth}@{}}
-\textbf{Languages} & JavaScript, TypeScript, Python, C++, Java, SQL \\[1.5pt]
-\textbf{Web} & React, Next.js, Three.js, Tailwind CSS, Node.js, Express.js, FastAPI, Firebase, Socket.io, REST APIs, WebSocket \\[1.5pt]
-\textbf{AI and ML} & LangGraph, LangChain, MCP, n8n, RAG, Groq, Google Gemini, Whisper STT, scikit-learn, TensorFlow, PyTorch, MediaPipe, OpenCV, DBSCAN \\[1.5pt]
-\textbf{Tools and Analytics} & Git, GitHub, Docker, Postman, Power BI, Pydantic, Zustand, NetworkX, OSMnx \\
+\begin{tabular}{@{}p{0.155\textwidth}p{0.825\textwidth}@{}}
+\textbf{Agentic AI} & LangGraph, LangChain, MCP, RAG, multi-agent orchestration, Groq, Google Gemini, Whisper STT \\[1.5pt]
+\textbf{Automation} & n8n, GitHub Actions, REST APIs, Celery, Redis, web scraping (Playwright), YouTube Data API \\[1.5pt]
+\textbf{Full-Stack} & React, Next.js, Three.js, Tailwind CSS, Node.js, Express.js, FastAPI, Firebase, Supabase, Socket.io \\[1.5pt]
+\textbf{Cloud and DevOps} & Docker, Docker Compose, Nginx, CI/CD and cron jobs, Vercel, Render, Supabase Edge Functions, Linux VPS \\[1.5pt]
+\textbf{ML and Tools} & scikit-learn, PyTorch, TensorFlow, MediaPipe, OpenCV, DBSCAN, OSMnx, Git, Postman \\[1.5pt]
+\textbf{Way of Working} & AI-assisted development: architecture, directing LLMs, code review, debugging (JS, TypeScript, Python, SQL) \\
 \end{tabular}
 
 %======================== EXPERIENCE ========================
@@ -61,7 +63,7 @@ Engineer turned MBA candidate, drawn to where technology meets the business deci
 \begin{itemize}
   \item Engineered Firebase auth, Firestore security rules and session management across 2 production environments.
   \item Automated routine customer queries with 5 RAG-based Kaamigo chatbot modules covering 50+ interaction flows.
-  \item Shipped real-time chat across 3 platforms with cross-device sync; led the intern team and merged 11 pull requests through structured Git review workflows.
+  \item Led the intern team and merged 11 pull requests through structured Git reviews; shipped real-time chat across 3 platforms.
 \end{itemize}
 
 %======================== PROJECTS ========================
@@ -70,34 +72,37 @@ Engineer turned MBA candidate, drawn to where technology meets the business deci
 \entry{TrafficMind: AI Co-Pilot for Traffic Incident Command}{Mar 2026}
 \sub{LangGraph, FastAPI, Next.js, Groq, Gemini}{}
 \begin{itemize}
-  \item Architected an autonomous 6-agent LangGraph pipeline (Signal, Routing, Alert, Density, Narrative, Supervisor) with parallel fan-out and supervisor fan-in orchestration.
-  \item Automates slow incident triage: streams a 250-segment road network via OSMnx on 5s WebSockets with RAG-grounded SOP retrieval across 12 documents, at 0.34s on Groq Llama 3.3 70B.
+  \item Architected a 6-agent LangGraph pipeline (Signal, Routing, Alert, Density, Narrative, Supervisor) with parallel fan-out and fan-in.
+  \item Automates incident triage: streams a 250-segment road network on 5s WebSockets with RAG over 12 SOPs, at 0.34s on Groq.
 \end{itemize}
 
-\entry{Kontexo: Agentic MCP Gateway}{2026}
-\sub{LangGraph, JSON-RPC 2.0, Celery, Redis, ChromaDB}{}
+\entry{Aven: Agentic AI CRM and Outreach Autopilot}{Jul 2026 -- Present}
+\sub{React, TypeScript, Supabase, Deno Edge Functions, MCP, Hermes Agent, Claude Code, Gemini, Linux VPS}{}
 \begin{itemize}
-  \item Engineered a JSON-RPC 2.0 MCP server exposing 19 tools across GitHub, Slack, Sheets and Trello, driven by a 10-node LangGraph state machine.
-  \item Automates manual tool-by-tool coordination: one plain-English prompt drives a multi-step workflow, gated by human approval.
-\end{itemize}
-
-\entry{VaquaH: HVAC and Cooling Services Platform}{Oct 2025 -- Present}
-\sub{React, Node.js, Express, Firebase, Razorpay}{}
-\begin{itemize}
-  \item Launched a production e-commerce platform with 50+ products, smart search, coupon system, tiered shipping, Razorpay checkout and COD partial-advance logic.
-  \item Automates phone-led ordering and scheduling into self-service via 8 service modules and a RAG chatbot with voice and gesture control.
-\end{itemize}
-
-\entry{HetChat: Real-Time Messaging Platform}{2025}
-\begin{itemize}
-  \item Built a chat platform on React, Node.js and Socket.io with Firebase Auth, Firestore persistence, typing indicators and presence tracking.
+  \item Built a prerendered site and Supabase CRM (leads, deals, proposals, invoices, projects) with 2FA, row-level security, audit log.
+  \item An always-on agent on a self-managed Linux VPS drafts outreach from free lead scrapers (1,400+ prospects sourced); anything that commits the business waits in a human approvals queue.
 \end{itemize}
 
 \entry{Portfolio: RAG-Backed Personal Site}{2026}
-\sub{React, Vite, Three.js, Node.js, Express, NVIDIA NIM, Render}{}
+\sub{React, Vite, Three.js, Node.js, Express, NVIDIA NIM, GitHub Actions, Vercel, Render}{}
 \begin{itemize}
-  \item Built an interactive site with a procedural Three.js 3D scene and a vector RAG agent searching 116 indexed knowledge chunks drawn from GitHub repos, LinkedIn posts and resumes.
-  \item Automates its own upkeep: a nightly GitHub Actions job re-scrapes and re-embeds the knowledge base, with multi-model fallback, 12-turn memory and per-IP rate limiting for uptime.
+  \item RAG agent answers from 155 indexed chunks of my GitHub, LinkedIn and resumes, with cited, streamed replies and a recruiter mode that matches a job description to my profile.
+  \item A nightly GitHub Actions job scrapes and re-embeds the knowledge base behind a regression eval; deploys on Vercel, Render.
+\end{itemize}
+
+\entry{Cartoon Shorts Engine: Automated Bilingual Story Studio for 6 Channels}{Nov 2026}
+\sub{Python, three.js, FFmpeg, Kokoro TTS, Microsoft neural voices, Composio, scheduled cloud agents}{}
+\begin{itemize}
+  \item Fully automated in the cloud: a daily scheduled run per niche picks an idea (Google Trends for the trending niche), writes English and Hinglish scripts, and animates a new cast in a three.js cartoon world.
+  \item Voices each language with its own engine (narrator plus character voices), renders and mixes with FFmpeg, burns in captions, and publishes a Short and Reel to 6 YouTube and Instagram channels via Composio.
+\end{itemize}
+
+\entry{VaquaH: Platform for my Family's HVAC and Cooling Business}{Oct 2025 -- Present}
+\sub{React, Node.js, Express, Firebase, Razorpay, Docker, Nginx, Vercel}{}
+\begin{itemize}
+  \item Launched a production e-commerce platform: 50+ products, smart search, coupons, tiered shipping, Razorpay and COD checkout.
+  \item Moves phone-led ordering and scheduling to self-service via 8 service modules and a RAG chatbot with voice control.
+  \item Dockerised behind an Nginx proxy, with a LangGraph agent auto-scaling backend replicas; frontend live on Vercel at vaquah.in.
 \end{itemize}
 
 %======================== ACHIEVEMENTS ========================
@@ -105,14 +110,14 @@ Engineer turned MBA candidate, drawn to where technology meets the business deci
 \entry{Hackathon Winner, 1st Place: Aetrix 2026, PDEU}{Mar 21--22, 2026}
 {\small Won 1st with TrafficMind in Smart Transportation as Team 2AM Coders, over 36 hours, judged across all 3 evaluation phases.}\par\vspace{3pt}
 \entry{Student Coordinator, Swayam: The Entrepreneurship Club, IMNU}{2026--2028}
-{\small Responsible for Administration, Public Relations and Event Management.}
+{\small Responsible for Administration, Public Relations and Event Management.}\par\vspace{3pt}
+\entry{Captain, School Kho Kho Team {\normalfont\small (about 3 years); led the city team at the state-level Khel Mahakumbh in Std 8}}{}
 
-%======================== EDUCATION ========================
-\section{Education}
+%======================== EDUCATION AND CERTIFICATIONS ========================
+\section{Education and Certifications}
 \entry{Nirma University, Ahmedabad \normalfont{\itshape Integrated B.Tech (CSE) and MBA}}{2023 -- 2028}
-
-%======================== CERTIFICATIONS ========================
-\section{Certifications}
-{\small Power BI for Beginners \textperiodcentered\ Introduction to LangGraph \textperiodcentered\ n8n: No Code AI Agent Builder (Simplilearn) \textperiodcentered\ Cloud Foundations (AWS Academy) \textperiodcentered\ C for Everyone Part 2 (UC Santa Cruz, Coursera)}
+{\small MBA: Finance (Major), Digital Transformation and Analytics (Minor)}\par\vspace{3pt}
+% certifications
+{\small Introduction to LangGraph \textperiodcentered\ n8n: No Code AI Agent Builder (Simplilearn) \textperiodcentered\ Cloud Foundations (AWS Academy) \textperiodcentered\ Power BI for Beginners \textperiodcentered\ C for Everyone Part 2 (Coursera)}
 
 \end{document}

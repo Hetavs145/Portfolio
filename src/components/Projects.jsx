@@ -15,9 +15,8 @@ const GroupLabel = ({ children, count }) => (
 );
 
 const Projects = () => {
-    // One production row open at a time; the flagship starts open so the
-    // expand affordance is obvious on first visit.
-    const [openTitle, setOpenTitle] = useState(production[0]?.title ?? null);
+    // One production row open at a time; all start closed and open only on +.
+    const [openTitle, setOpenTitle] = useState(null);
 
     const renderRow = (project) => {
         const index = projects.indexOf(project);

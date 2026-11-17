@@ -17,8 +17,11 @@ export const skills = [
     'TensorFlow / PyTorch',
     'Three.js / WebSocket',
     'Power BI / Analytics',
-    'Firebase',
-    'Docker',
+    'Firebase / Supabase',
+    'Docker / Nginx',
+    'GitHub Actions (CI/CD)',
+    'Vercel / Render / Linux VPS',
+    'Web scraping (Playwright)',
     'Git',
 ];
 
@@ -60,21 +63,27 @@ export const cursorKeywords = [
 ];
 
 /**
- * Resume downloads. The "Get Resume" dropdown in the Hero and both Navbar
- * entries render from this one array, so a filename change is a single edit.
+ * Resume downloads. The Hero and Navbar resume buttons render from this one
+ * array, so a filename change is a single edit. With one entry they are plain
+ * links; add a second and they become a dropdown again. The institute-format
+ * IMNU resume is deliberately not listed: it isn't Hetav's own resume.
  */
 export const resumes = [
     {
         label: 'Current Resume',
-        href: '/Hetav_Shah_Resume.pdf?v=20260911',
+        href: '/Hetav_Shah_Resume.pdf?v=20261117',
         description: 'Current resume — projects, stack, experience',
     },
-    {
-        // The institute's placement cell mandates this format and signs off on it.
-        // Flagging that here stops a recruiter reading it as Hetav's own resume
-        // and judging him on a template he didn't choose.
-        label: 'IMNU Resume',
-        href: '/Hetav_Shah_IMNU.pdf?v=20260911',
-        description: 'SPOC-approved institute format — not my own resume',
-    },
 ];
+
+/**
+ * Public contact channels. The agent's "contact" buttons (server/lib/actions.js)
+ * read these, so a changed email or handle is a single edit.
+ */
+export const contact = {
+    email: 'hetavs145@gmail.com',
+    phone: '+918200135258',
+    phoneDisplay: '+91 82001 35258',
+    linkedin: 'https://www.linkedin.com/in/hetav-shah-26601722b/',
+    github: 'https://github.com/Hetavs145',
+};
