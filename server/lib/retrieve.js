@@ -7,7 +7,7 @@
  */
 
 import { embedOne, chat, stripMarkdown } from './openrouter.js';
-import { parseTrailer, citedSources, StreamFilter, sanitizeReply } from './citations.js';
+import { parseTrailer, citedSources, StreamFilter, sanitizeReply, allowedUrlsFor } from './citations.js';
 import { siteChunks } from './sources/site.js';
 import { resumeChunks } from './sources/resume.js';
 import {
@@ -20,7 +20,7 @@ import {
 } from './vectorstore.js';
 import { buildSystemPrompt, sanitizeHistory } from './prompt.js';
 import { parseIntent, recencyPins } from './recency.js';
-import { hasContactIntent, contactChunks } from './actions.js';
+import { hasContactIntent, contactChunks, contactActions } from './actions.js';
 import { topicPins } from './intents.js';
 import { TOP_K, MAX_HISTORY_TURNS, MAX_MESSAGE_CHARS, RECENCY_PINS } from './config.js';
 
@@ -266,11 +266,15 @@ export async function answer(messages, { onToken } = {}) {
         onToken?.(stripMarkdown(text));
     }
 
-    text = sanitizeReply(text);
+    text = sanitizeReply(text, { allowedUrls: allowedUrlsFor(hits) });
     const result = {
         message: stripMarkdown(text),
         // Chips for the visitor: the blocks the model says it used.
-        sources: unanswered ? [] : citedSources(hits, cited, { answer: text, question: latest.content }),
+        // A declined recruiter question ("relocate?", "salary?") still gets the
+        // contact buttons: the answer is "ask Hetav", so make that one tap.
+        sources: unanswered
+            ? hasContactIntent(latest.content) ? contactActions() : []
+            : citedSources(hits, cited, { answer: text, question: latest.content }),
         unanswered,
         // Everything retrieved, for debugging and the eval harness.
         retrieved: hits.map(({ chunk, score }) => ({

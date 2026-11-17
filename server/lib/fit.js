@@ -10,7 +10,7 @@
 import { retrieve, current } from './retrieve.js';
 import { allChunks } from './vectorstore.js';
 import { chat, stripMarkdown } from './openrouter.js';
-import { parseTrailer, citedSources, StreamFilter, sanitizeReply } from './citations.js';
+import { parseTrailer, citedSources, StreamFilter, sanitizeReply, allowedUrlsFor } from './citations.js';
 
 export const MIN_JD_CHARS = 80;
 export const MAX_JD_CHARS = 8000;
@@ -72,7 +72,7 @@ export async function fitSummary(jd, { onToken } = {}) {
     filter?.end();
 
     const { text: parsed, cited } = parseTrailer(raw);
-    const body = sanitizeReply(parsed);
+    const body = sanitizeReply(parsed, { allowedUrls: allowedUrlsFor(hits) });
     return {
         message: stripMarkdown(body),
         sources: citedSources(hits, cited, { answer: body }),

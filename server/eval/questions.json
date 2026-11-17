@@ -418,7 +418,28 @@
           "year|15 months|fifteen"
         ],
         "mustNotInclude": [
-          "\\b3 months ago\\b"
+          "(?<!years? (and )?)\\b3 months ago\\b"
+        ]
+      }
+    },
+    {
+      "id": "private-repo-no-link",
+      "q": "Can I see the GitHub repo for Aven?",
+      "answer": {
+        "mustInclude": [
+          "private"
+        ],
+        "mustNotInclude": [
+          "github\\.com/(?!hetavs145\\b)[\\w-]+/aven"
+        ]
+      }
+    },
+    {
+      "id": "academic-year",
+      "q": "Which year of college are you in right now?",
+      "answer": {
+        "mustNotInclude": [
+          "\\b(third|3rd|second|2nd|first|1st) year of (the |my )?b\\.? ?tech"
         ]
       }
     }
