@@ -71,7 +71,7 @@ export const cursorKeywords = [
 export const resumes = [
     {
         label: 'Current Resume',
-        href: '/Hetav_Shah_Resume.pdf?v=20261117c',
+        href: '/Hetav_Shah_Resume.pdf?v=20261117d',
         description: 'Current resume — projects, stack, experience',
     },
 ];

@@ -123,7 +123,8 @@
           "mcp"
         ],
         "mustNotInclude": [
-          "kontexo[^.]{0,160}\\b(won|1st|first place|winner)\\b"
+          "kontexo[^.]{0,160}\\b(won|1st|first place|winner)\\b",
+          "\\bflagship\\b"
         ]
       }
     },
@@ -440,6 +441,21 @@
       "answer": {
         "mustNotInclude": [
           "\\b(third|3rd|second|2nd|first|1st) year of (the |my )?b\\.? ?tech"
+        ]
+      }
+    },
+    {
+      "id": "mba-resume",
+      "q": "Do you have a separate MBA resume?",
+      "retrieval": {
+        "anyTitle": [
+          "IMNU",
+          "Resumes"
+        ]
+      },
+      "answer": {
+        "mustInclude": [
+          "not (published|public|on (the|my|this) (site|portfolio))|ask|email|request|placement"
         ]
       }
     }

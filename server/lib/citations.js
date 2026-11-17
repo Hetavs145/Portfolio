@@ -106,6 +106,10 @@ export function sanitizeReply(text, { allowedUrls = null } = {}) {
             .join(' ');
     }
     return out
+        // Unfilled template slots: "email him at [email address from context]".
+        .replace(/\[([^\]]{0,60}\b(email|e-mail|linkedin|link|url|phone|number|context|name)\b[^\]]{0,60})\]/gi, (m, inner) =>
+            /e-?mail/i.test(inner) ? EMAIL : /linkedin/i.test(inner) ? `linkedin.com/in/${LINKEDIN_HANDLE}` : '',
+        )
         .replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, (m) => (m.toLowerCase() === EMAIL ? m : EMAIL))
         .replace(/(https?:\/\/)?(www\.)?linkedin\.com\/in\/[\w-]+\/?/gi, (m) =>
             m.toLowerCase().includes(LINKEDIN_HANDLE) ? m : `linkedin.com/in/${LINKEDIN_HANDLE}`,

@@ -27,11 +27,20 @@ export function siteChunks() {
         // "Tell me about Kontexo" came back "…and won 1st place at Aetrix 2026".
         // A project that won nothing says so, in its own block.
         const won = /\bwon (1st|first|2nd|second|3rd|third)\b/i.test(p.description);
+        // "Kontexo … the flagship project in Hetav's portfolio": the site's ★ labels
+        // weren't in the block, so the model promoted a Featured row to flagship.
+        const flagshipTitle = projects.find((x) => x.featured === 'primary')?.title;
+        const label =
+            p.featured === 'primary'
+                ? `${p.title} is Hetav's flagship project.`
+                : p.featured === 'secondary'
+                  ? `On the portfolio ${p.title} is marked Featured (the flagship is ${flagshipTitle}).`
+                  : '';
         chunks.push(
             ...splitLong(
                 'site',
                 `Portfolio project — ${p.title}`,
-                `${p.title}. ${p.description} Tech: ${p.tech.join(', ')}. ${links.join('. ')}.` +
+                `${p.title}. ${label ? `${label} ` : ''}${p.description} Tech: ${p.tech.join(', ')}. ${links.join('. ')}.` +
                     (won ? '' : ` ${p.title} has no competition win or award recorded.`),
             ),
         );

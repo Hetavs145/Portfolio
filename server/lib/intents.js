@@ -21,6 +21,8 @@
  */
 
 import { siteChunks } from './sources/site.js';
+import { makeChunk } from './chunk.js';
+import { achievements } from '../../src/data/achievements.js';
 import { contactChunks } from './actions.js';
 
 const HIGHLIGHT =
@@ -45,6 +47,11 @@ export const hasSelfIntent = (q) => SELF.test(String(q ?? ''));
 export const hasEducationIntent = (q) => EDUCATION.test(String(q ?? ''));
 export const hasIdentityIntent = (q) => IDENTITY.test(String(q ?? ''));
 export const hasExperienceIntent = (q) => EXPERIENCE.test(String(q ?? ''));
+const RESUME = /\b(resumes?|résumés?|cv)\b/i;
+export const hasResumeIntent = (q) => RESUME.test(String(q ?? ''));
+/** "Do you have a separate MBA resume?" must meet the block saying the IMNU one isn't published. */
+export const resumeChunks = (all) =>
+    all.filter((c) => /^Resumes — which one/.test(c.title) || /^About the IMNU resume/.test(c.title));
 
 /** A derived site block from the index, or built from the data if the index predates it. */
 function derived(all, titleRe) {
@@ -59,9 +66,47 @@ export function selfChunks(all) {
     return all.filter((c) => c.source === 'site' && c.title === 'Portfolio project — Portfolio RAG Agent');
 }
 
+/**
+ * "Have you graduated?" got "4th year of the Integrated B.Tech (2023–2026),
+ * graduating 2026": the model mixed the B.Tech span with the programme's.
+ * Where he stands today is computed here, from the Education card's own date
+ * ranges (July academic year), and handed over as a plain fact.
+ */
+export function educationStatusChunk(now = new Date()) {
+    const edu = achievements.find((a) => a.title === 'Education');
+    if (!edu) return null;
+    const y = now.getFullYear();
+    const lateYear = now.getMonth() >= 6;
+    const status = (from, to) => {
+        if (y > to || (y === to && lateYear)) return `completed in ${to}`;
+        const k = y - from + (lateYear ? 1 : 0);
+        return k < 1 ? `starts in ${from}` : `in progress, year ${k} of ${to - from}, finishing in ${to}`;
+    };
+    const parts = [];
+    const whole = /(\d{4})\s*[–-]\s*(\d{4})/.exec(edu.subtitle ?? '');
+    for (const line of edu.details) {
+        const m = /^(.*?)\s*\((\d{4})\s*[–-]\s*(\d{4})\)/.exec(line);
+        if (m) parts.push(`${m[1].trim()}: ${status(Number(m[2]), Number(m[3]))}`);
+    }
+    if (!whole && !parts.length) return null;
+    const month = now.toLocaleString('en-GB', { month: 'long', year: 'numeric' });
+    const overall = whole ? status(Number(whole[1]), Number(whole[2])) : null;
+    return makeChunk(
+        'site',
+        'Education — where Hetav is now',
+        `As of ${month}: ${edu.details[0]} at ${(edu.subtitle ?? '').split(' · ')[0]}. ` +
+            (overall ? `The whole programme (${whole[1]}–${whole[2]}) is ${overall}. ` : '') +
+            parts.join('. ') +
+            '. ' +
+            (overall && !overall.startsWith('completed')
+                ? `So he has not graduated from the programme yet; it finishes in ${whole[2]}.`
+                : ''),
+    );
+}
+
 export function educationChunks(all) {
     const want = [/^Portfolio section — Education/, /^Education —/, /^MBA specialisation/];
-    return want.flatMap((re) => all.filter((c) => re.test(c.title)).slice(0, 1));
+    return [educationStatusChunk(), ...want.flatMap((re) => all.filter((c) => re.test(c.title)).slice(0, 1))].filter(Boolean);
 }
 
 export const identityChunks = (all) => contactChunks(all);
@@ -78,5 +123,6 @@ export function topicPins(latest, all) {
         ...(hasEducationIntent(latest) ? educationChunks(all) : []),
         ...(hasIdentityIntent(latest) ? identityChunks(all) : []),
         ...(hasExperienceIntent(latest) ? experienceChunks(all) : []),
+        ...(hasResumeIntent(latest) ? resumeChunks(all) : []),
     ];
 }
