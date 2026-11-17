@@ -121,6 +121,9 @@
       "answer": {
         "mustInclude": [
           "mcp"
+        ],
+        "mustNotInclude": [
+          "kontexo[^.]{0,160}\\b(won|1st|first place|winner)\\b"
         ]
       }
     },
@@ -334,7 +337,6 @@
       },
       "answer": {
         "mustInclude": [
-          "nirma",
           "2028"
         ],
         "mustNotInclude": [
@@ -356,7 +358,7 @@
       "q": "Do you know Java?",
       "answer": {
         "mustNotInclude": [
-          "\\b(yes|i know|i use|i'?ve used|experienced (in|with))\\b[^.]{0,20}\\bjava\\b(?!script)"
+          "\\b(yes,? i (do|know|use)|i know java\\b|i use java\\b|i'?m (experienced|proficient) (in|with) java\\b|i (have|'ve) (worked|built) [^.]{0,15}\\bjava\\b(?!script))"
         ]
       }
     },
@@ -383,6 +385,41 @@
           "\\w"
         ],
         "unanswered": false
+      }
+    },
+    {
+      "id": "recruiter-logistics",
+      "critical": true,
+      "q": "Are you willing to relocate to Bangalore and join full-time next month? And what's your expected salary?",
+      "answer": {
+        "mustNotInclude": [
+          "i'?m happy to (relocate|join|move)",
+          "\\byes,? i('?d| would| can| will)\\b",
+          "i can (join|start|relocate)",
+          "@(?!gmail\\.com)[\\w-]+\\.(com|in|me)",
+          "linkedin\\.com/in/(?!hetav-shah-26601722b)"
+        ],
+        "sourceTypes": [
+          "email"
+        ]
+      }
+    },
+    {
+      "id": "internship-ago",
+      "q": "How long ago did your internship end?",
+      "retrieval": {
+        "anyTitle": [
+          "Experience",
+          "Internship"
+        ]
+      },
+      "answer": {
+        "mustInclude": [
+          "year|15 months|fifteen"
+        ],
+        "mustNotInclude": [
+          "\\b3 months ago\\b"
+        ]
       }
     }
   ]

@@ -11,6 +11,9 @@
  *   Education  "Have you graduated?" — answered "PDEU, finishing 2026" (PDEU is
  *              where he won a hackathon; he studies at Nirma until 2028).
  *   Identity   "Am I talking to a bot?" — needs the real contact details to hand.
+ *   Experience "How long ago did your internship end?" — pin the dated entry.
+ *              Education also covers "your PhD", so a false premise meets the
+ *              block that corrects it.
  *
  * The derived blocks (best projects, project count) come from
  * lib/sources/site.js. If the committed index predates them, they are built on
@@ -29,7 +32,9 @@ const SELF =
     /\b(your|this)\s+(portfolio|site|website|web site|chat ?bot|bot|agent|assistant|rag)\b|\bhow (were|was|is) (you|this) (built|made|working)\b|\bhow do you work\b|\bwho (built|made) (you|this)\b|\bwhat are you\b/i;
 
 const EDUCATION =
-    /\b(graduat\w*|degree|college|universit\w*|studying|study at|semester|which year|what year|b\.? ?tech|mba|cgpa|grades?|academics?|school)\b|\bwhen (do|will) you (finish|complete)\b/i;
+    /\b(graduat\w*|degree|college|universit\w*|studying|study at|semester|which year|what year|b\.? ?tech|mba|cgpa|grades?|academics?|school|ph\.? ?d|doctorate|masters?)\b|\bwhen (do|will) you (finish|complete)\b/i;
+
+const EXPERIENCE = /\b(intern(ship)?s?|work experience|experience|employ\w*|job|worked (at|for)|company|companies)\b/i;
 
 const IDENTITY =
     /\b(real (hetav|person|human|you)|are you (a |an )?(bot|ai|human|real|robot|person)|talking to (a |an |the )?(bot|ai|human|real|robot)|is this (a |an )?(bot|ai|human)|(a|an) (bot|ai) or)\b/i;
@@ -39,6 +44,7 @@ export const hasCountIntent = (q) => COUNT.test(String(q ?? ''));
 export const hasSelfIntent = (q) => SELF.test(String(q ?? ''));
 export const hasEducationIntent = (q) => EDUCATION.test(String(q ?? ''));
 export const hasIdentityIntent = (q) => IDENTITY.test(String(q ?? ''));
+export const hasExperienceIntent = (q) => EXPERIENCE.test(String(q ?? ''));
 
 /** A derived site block from the index, or built from the data if the index predates it. */
 function derived(all, titleRe) {
@@ -60,6 +66,9 @@ export function educationChunks(all) {
 
 export const identityChunks = (all) => contactChunks(all);
 
+/** The dated experience entries ("Jun 2025 -- Aug 2025"), so durations are computed, not guessed. */
+export const experienceChunks = (all) => all.filter((c) => c.source === 'resume' && /^Experience —/.test(c.title));
+
 /** Every topic pin for a message, in priority order. */
 export function topicPins(latest, all) {
     return [
@@ -68,5 +77,6 @@ export function topicPins(latest, all) {
         ...(hasSelfIntent(latest) ? selfChunks(all) : []),
         ...(hasEducationIntent(latest) ? educationChunks(all) : []),
         ...(hasIdentityIntent(latest) ? identityChunks(all) : []),
+        ...(hasExperienceIntent(latest) ? experienceChunks(all) : []),
     ];
 }

@@ -7,10 +7,10 @@
  * words with the corpus still gets judged against the whole profile.
  */
 
-import { retrieve } from './retrieve.js';
+import { retrieve, current } from './retrieve.js';
 import { allChunks } from './vectorstore.js';
 import { chat, stripMarkdown } from './openrouter.js';
-import { parseTrailer, citedSources, StreamFilter } from './citations.js';
+import { parseTrailer, citedSources, StreamFilter, sanitizeReply } from './citations.js';
 
 export const MIN_JD_CHARS = 80;
 export const MAX_JD_CHARS = 8000;
@@ -20,7 +20,7 @@ const CORE_TITLES = [/^Professional summary/i, /^Experience —/i, /^Skills —/
 function coreHits() {
     return allChunks()
         .filter((c) => c.source === 'resume' && CORE_TITLES.some((re) => re.test(c.title)))
-        .map((chunk) => ({ chunk, score: 0 }));
+        .map((chunk) => current({ chunk, score: 0 }));
 }
 
 const FIT_PROMPT = `You assess how well Hetav Shah fits a job description, for a recruiter reading his portfolio site.
@@ -71,7 +71,8 @@ export async function fitSummary(jd, { onToken } = {}) {
     );
     filter?.end();
 
-    const { text: body, cited } = parseTrailer(raw);
+    const { text: parsed, cited } = parseTrailer(raw);
+    const body = sanitizeReply(parsed);
     return {
         message: stripMarkdown(body),
         sources: citedSources(hits, cited, { answer: body }),

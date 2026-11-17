@@ -51,6 +51,31 @@ export function parseTrailer(raw) {
 export const BLOCK_REF = /[ \t]?\[\d{1,2}(?:\s*,\s*\d{1,2})*\](?!\()/g;
 export const stripBlockRefs = (text) => String(text ?? '').replace(BLOCK_REF, '');
 
+const EMAIL = 'hetavs145@gmail.com';
+const LINKEDIN_HANDLE = 'hetav-shah-26601722b';
+
+/**
+ * Last line of defence for facts a model must never get wrong, applied to the
+ * final reply (the client replaces the streamed preview with it):
+ *
+ *  - Contact details. Asked about salary and relocation, the model gave
+ *    "hetav.shah@outlook.com", "hetav.shah@protonmail.com" and
+ *    "linkedin.com/in/hetavshah". Any email or LinkedIn profile that isn't
+ *    Hetav's real one is replaced with the real one.
+ *  - Internal wording. "the context" / "context blocks" leaked into replies
+ *    ("I haven't written about my weaknesses in the context").
+ */
+export function sanitizeReply(text) {
+    return String(text ?? '')
+        .replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, (m) => (m.toLowerCase() === EMAIL ? m : EMAIL))
+        .replace(/(https?:\/\/)?(www\.)?linkedin\.com\/in\/[\w-]+\/?/gi, (m) =>
+            m.toLowerCase().includes(LINKEDIN_HANDLE) ? m : `linkedin.com/in/${LINKEDIN_HANDLE}`,
+        )
+        .replace(/\s*\b(in|from|within) (the|my) (context|notes)( blocks?)?( (that )?I have( access to)?)?\b/gi, '')
+        .replace(/\bcontext blocks?\b/gi, 'notes')
+        .replace(/\s+([.,;!?])/g, '$1');
+}
+
 /** Phrases a reply uses when it couldn't answer from the context. */
 const DECLINE =
     /\b(not sure|no idea|don['’]?t (really )?(know|have|remember|recall)|can['’]?t (say|recall|remember)|haven['’]?t (shared|mentioned|written|talked)|not something i['’]?(ve)? (shared|written|mentioned|covered|talked)|(isn['’]?t|not) (in|covered in|part of) (my|the) (notes|info|context|knowledge))/i;

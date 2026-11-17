@@ -22,6 +22,9 @@ const CONTACT_INTENT = new RegExp(
         'linked ?in (profile|url|link|id|handle|account|page)', '(your|his) linked ?in(?! post| activity)',
         'find (you|him) on', 'hire', 'hiring', 'freelanc', 'work with (you|him)', 'collaborat',
         'available for', 'open to (work|opportunit|roles|internship)',
+        // Recruiting logistics: answered only by Hetav himself, so give the way to reach him.
+        'salary', 'compensation', '\\bctc\\b', 'stipend', 'notice period', 'relocat', 'full[- ]time', 'start date',
+        'join (us|our|the team|full)', 'when can you (join|start)',
         '(make|build|develop|design|create) (a |an |me a |us a )?(website|site|web ?app|app|landing page|portfolio|dashboard|bot|chatbot)',
         'for (my|our) (firm|company|startup|business|client|team|brand|shop|store)',
         'quote', 'pricing', '(your|hourly|daily|day|project) rates?\\b', 'how (do|can) i (talk|speak|meet)',

@@ -24,11 +24,15 @@ export function siteChunks() {
             p.youtube ? `Video: ${p.youtube}` : null,
         ].filter(Boolean);
 
+        // "Tell me about Kontexo" came back "…and won 1st place at Aetrix 2026".
+        // A project that won nothing says so, in its own block.
+        const won = /\bwon (1st|first|2nd|second|3rd|third)\b/i.test(p.description);
         chunks.push(
             ...splitLong(
                 'site',
                 `Portfolio project — ${p.title}`,
-                `${p.title}. ${p.description} Tech: ${p.tech.join(', ')}. ${links.join('. ')}`,
+                `${p.title}. ${p.description} Tech: ${p.tech.join(', ')}. ${links.join('. ')}.` +
+                    (won ? '' : ` ${p.title} has no competition win or award recorded.`),
             ),
         );
     }

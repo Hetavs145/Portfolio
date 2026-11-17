@@ -7,7 +7,9 @@
  */
 
 import { embedOne, chat, stripMarkdown } from './openrouter.js';
-import { parseTrailer, citedSources, StreamFilter } from './citations.js';
+import { parseTrailer, citedSources, StreamFilter, sanitizeReply } from './citations.js';
+import { siteChunks } from './sources/site.js';
+import { resumeChunks } from './sources/resume.js';
 import {
     topK,
     lexicalTopK,
@@ -154,10 +156,25 @@ export async function retrieve(query, k = TOP_K, { latest = query } = {}) {
     const rest = hits.filter((h) => !pinnedIds.has(h.chunk.id)).slice(0, slots);
 
     return {
-        hits: [...pins, ...rest],
+        hits: [...pins, ...rest].map(current),
         mode: pins.some((p) => p.pinned === true) ? `${mode}+recency` : pins.length ? `${mode}+pinned` : mode,
         temporal: intent.temporal,
     };
+}
+
+/**
+ * Site and resume blocks are derived from data in this repo (src/data/*.js,
+ * server/data/resume*.json), so the repo, not the committed index, is the truth
+ * for their text. The index can lag a change by up to a nightly rebuild: the
+ * resume summary was fixed to name its projects, yet answers kept merging them
+ * from the old indexed text. Retrieval still ranks on the indexed vectors; the
+ * text handed to the model is always current.
+ */
+let freshText = null;
+export function current(hit) {
+    freshText ??= new Map([...siteChunks(), ...resumeChunks()].map((c) => [`${c.source}|${c.title}`, c.text]));
+    const text = freshText.get(`${hit.chunk.source}|${hit.chunk.title}`);
+    return text && text !== hit.chunk.text ? { ...hit, chunk: { ...hit.chunk, text } } : hit;
 }
 
 /** Words that make a question lean on the previous turn. */
@@ -249,6 +266,7 @@ export async function answer(messages, { onToken } = {}) {
         onToken?.(stripMarkdown(text));
     }
 
+    text = sanitizeReply(text);
     const result = {
         message: stripMarkdown(text),
         // Chips for the visitor: the blocks the model says it used.
