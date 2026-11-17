@@ -135,7 +135,11 @@ const Contact = () => {
         mq.addEventListener('change', updateTouch);
 
         // Listen for touch event dispatched from Background3D when robot or Arc Reactor is tapped on mobile
+        // Only while the hub is on screen: a robot tap up in the hero shouldn't
+        // flip the hidden hub's state.
         const handleRoboTouch = () => {
+            const rect = hubRef.current?.getBoundingClientRect();
+            if (!rect || rect.bottom < 0 || rect.top > window.innerHeight) return;
             toggleNear();
         };
         window.addEventListener('robo-touch', handleRoboTouch);

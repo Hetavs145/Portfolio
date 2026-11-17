@@ -535,6 +535,11 @@ const Background3D = () => {
         mouse.screenY = touch.clientY;
         mouse.lastMoveAt = performance.now();
 
+        // A tap on a link or button (e.g. a contact icon orbiting the reactor)
+        // is that control's own tap. Treating it as a robot tap toggled the
+        // contact hub shut before the icon's click could land.
+        if (e.target?.closest?.('a, button, input, textarea, select, label, [role="button"]')) return;
+
         // Check if touch is on or near the Arc Reactor or robot body
         const arcWorld = new THREE.Vector3();
         arcLight.getWorldPosition(arcWorld);
