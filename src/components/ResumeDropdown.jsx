@@ -117,6 +117,31 @@ const ResumeDropdown = ({ variant = 'cta', onNavigate }) => {
 
     const upwards = placement?.upwards ?? false;
 
+    // A single resume needs no menu: the button opens it directly.
+    if (resumes.length === 1) {
+        const [only] = resumes;
+        return (
+            <div className={`relative ${variant === 'cta' ? 'w-full sm:w-auto' : 'inline-block'}`}>
+                <a
+                    href={only.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onPointerDown={(e) => {
+                        e.currentTarget.href = getFreshHref(only.href);
+                    }}
+                    onClick={(e) => {
+                        e.currentTarget.href = getFreshHref(only.href);
+                        onNavigate?.();
+                    }}
+                    className={variant === 'nav' ? 'btn-ink h-11 px-4' : 'btn-line w-full sm:w-auto'}
+                >
+                    {variant === 'nav' ? 'Resume' : 'Get Resume'}
+                    <FileText size={14} />
+                </a>
+            </div>
+        );
+    }
+
     return (
         <div className={`relative ${variant === 'cta' ? 'w-full sm:w-auto' : 'inline-block'}`}>
             <button

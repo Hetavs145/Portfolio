@@ -63,22 +63,16 @@ export const cursorKeywords = [
 ];
 
 /**
- * Resume downloads. The "Get Resume" dropdown in the Hero and both Navbar
- * entries render from this one array, so a filename change is a single edit.
+ * Resume downloads. The Hero and Navbar resume buttons render from this one
+ * array, so a filename change is a single edit. With one entry they are plain
+ * links; add a second and they become a dropdown again. The institute-format
+ * IMNU resume is deliberately not listed: it isn't Hetav's own resume.
  */
 export const resumes = [
     {
         label: 'Current Resume',
         href: '/Hetav_Shah_Resume.pdf?v=20261117',
         description: 'Current resume — projects, stack, experience',
-    },
-    {
-        // The institute's placement cell mandates this format and signs off on it.
-        // Flagging that here stops a recruiter reading it as Hetav's own resume
-        // and judging him on a template he didn't choose.
-        label: 'IMNU Resume',
-        href: '/Hetav_Shah_IMNU.pdf?v=20260911',
-        description: 'SPOC-approved institute format — not my own resume',
     },
 ];
 

@@ -82,7 +82,8 @@ export function sourceRef(chunk) {
         case 'resume':
             return { type: 'resume', label: 'Resume', url: '/Hetav_Shah_Resume.pdf' };
         case 'resume-imnu':
-            return { type: 'resume', label: 'IMNU Resume', url: '/Hetav_Shah_IMNU.pdf' };
+            // Not published on the site any more, so the chip names it without linking.
+            return { type: 'resume', label: 'IMNU Resume', url: null };
         case 'site': {
             const project = projects.find((p) => title.endsWith(p.title));
             if (project) return { type: 'project', label: project.title, url: project.live || project.github || '#work' };
