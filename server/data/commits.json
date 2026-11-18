@@ -2,6 +2,10 @@
   "Hetavs145/Portfolio": [
     {
       "date": "2026-11-17",
+      "message": "chore: refresh knowledge base [skip ci]"
+    },
+    {
+      "date": "2026-11-17",
       "message": "Merge pull request #25"
     },
     {
@@ -15,10 +19,6 @@
     {
       "date": "2026-11-17",
       "message": "Second probe round: guard contact details, fresh derived text, dates, commitments"
-    },
-    {
-      "date": "2026-11-17",
-      "message": "Fix reasoning errors found by the probe run"
     }
   ],
   "Hetavs145/Sai-AC-Services-Micro-WebApp": [
